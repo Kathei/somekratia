@@ -15,10 +15,12 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-from app.views import index
+from app.views import index, login_view, issues_bbox
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'index.html', index),
-    url(r'^$', index,)
+    url(r'^$', index),
+    url(r'^login', login_view),
+    url(r'^issues/area$', issues_bbox),
 ]
