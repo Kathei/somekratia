@@ -15,8 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-from app.views import index, login_view, issues_bbox
-from app.views import index
+from app.views import index, login_view, issues_bbox, logout_view
 from app.views import issue
 from app.views import post_message
 
@@ -26,6 +25,7 @@ urlpatterns = [
     url(r'index.html', index),
     url(r'^$', index),
     url(r'^login', login_view),
+    url(r'^logout', logout_view),
     url(r'^issues/area$', issues_bbox),
     url(r'^$', index),
     url(r'^issue/(?P<issueID>[0-9]+)/$', issue),

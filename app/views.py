@@ -1,7 +1,7 @@
 from django.shortcuts import loader, redirect
 from django.http import HttpResponse
-from django.template import Context
-from django.contrib.auth import authenticate, login
+from django.template import RequestContext, Context
+from django.contrib.auth import authenticate, login, logout
 from urllib.request import urlopen
 from django.template.context_processors import csrf
 
@@ -13,7 +13,9 @@ from app.models import Message
 
 def index(request):
     t = loader.get_template('index.html')
-    c = Context()
+    c = RequestContext(request)
+    if request is not None:
+        c['request'] = request
     c.update(csrf(request))
     return HttpResponse(t.render(c), request)
 
@@ -33,8 +35,10 @@ def login_view(request):
     else:
         return HttpResponse('Invalid password or username', status=403)
 
+
 def logout_view(request):
-    logout(request.user)
+    logout(request)
+    return HttpResponse('Logged out')
 
 
 def issues_bbox(request):

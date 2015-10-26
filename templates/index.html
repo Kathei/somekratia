@@ -14,23 +14,33 @@
             <li><a href=""></a></li>
         </ul>
     </nav>
-    <article>
-        <form id="login" action="/login" method="post">
-            {% csrf_token %}
-            <!--<input type="button" id="signup" value="Sign up" />-->
-            <label for="usernameinput">
-                <input type="text" id="usernameimput" name="username" placeholder="Username" />
-            </label>
-            <label for="passwordinput">
-                <input type="password" id="passwordinput" name="password" placeholder="Password" />
-            </label>
-            <div class="button">
-                <button type="submit">Login</button>
-            </div>
 
-        </form>
+    <article>
+        {% if user.is_authenticated %}
+            <form id="logout" action="/logout" method="post">
+                {% csrf_token %}
+                <div class="button">
+                    <button type="submit">Logout</button>
+                </div>
+            </form>
+        {% else %}
+            <form id="login" action="/login" method="post">
+                {% csrf_token %}
+                <!--<input type="button" id="signup" value="Sign up" />-->
+                <label for="usernameinput">
+                    <input type="text" id="usernameimput" name="username" placeholder="Username" />
+                </label>
+                <label for="passwordinput">
+                    <input type="password" id="passwordinput" name="password" placeholder="Password" />
+                </label>
+                <div class="button">
+                    <button type="submit">Login</button>
+                </div>
+            </form>
+        {% endif %}
         <p></p>
         <div id="map-canvas"></div>
     </article>
+
 </body>
 </html>
