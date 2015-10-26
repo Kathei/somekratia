@@ -7,6 +7,7 @@ from django.template.context_processors import csrf
 
 import json
 
+from app.models import Message
 # Create your views here.
 
 
@@ -49,6 +50,27 @@ def issues_bbox(request):
 
 
 
+
+
+
+def issue(request, issueID):
+    t = loader.get_template('issue.html')
+    messages = Message.objects.filter(issue=issueID)
+    c = Context( {'message_list': messages, 'issueID': issueID})
+    c.update(csrf(request))
+    return HttpResponse(t.render(c))
+
+
+def post_message(request, issueID):
+    if request.user is not None:
+        m = Message()
+        m.text = request.POST['messagefield']
+        m.poster = request.user
+        m.issue_id = issueID
+        m.save()
+        return HttpResponse('Message posted')
+    else:
+        return HttpResponse('Please login before posting', status=403)
 
 
 

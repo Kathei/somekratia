@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Somekratia</title>
+    <link rel="stylesheet" type="text/css" media="screen" href="../static/style.css" />
+</head>
+<body>
+    {% for message in message_list %}
+        <h2>{{ message.poster }}</h2>
+        <p>{{ message.text }}</p>
+    {% endfor %}
+    <form id="messageform" action="/issue/{{ issueID }}/messages/" method="post">
+        {% csrf_token %}
+        <label for="messagefield">
+                <textarea id="messagefield" name="messagefield" rows="6" cols="50"></textarea>
+        </label>
+        <div class="button">
+                <button type="submit">Send message</button>
+        </div>
+    </form>
+</body>
+</html>
