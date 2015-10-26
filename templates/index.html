@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Somekratia</title>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;signed_in=true"></script>
+    <script src="/static/googlemap.js"></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="../static/style.css" />
 </head>
 <body>
     <nav>
@@ -11,6 +14,19 @@
             <li><a href=""></a></li>
         </ul>
     </nav>
-
+    <article>
+        <form id="login">
+            <input type="button" id="login" value="Login" />
+            <input type="button" id="signup" value="Sign up" />
+            <label for="usernameinput">
+                <input type="text" id="usernameimput" name="username" placeholder="Username" />
+            </label>
+            <label for="passwordinput">
+                <input type="text" id="passwordinput" name="password" placeholder="Password" />
+            </label>
+        </form>
+        <p></p>
+        <div id="map-canvas"></div>
+    </article>
 </body>
 </html>
