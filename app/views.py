@@ -2,7 +2,9 @@ from django.shortcuts import loader, redirect
 from django.http import HttpResponse
 from django.template import Context
 from django.contrib.auth import authenticate, login
-from urllib.request import urlopen, HTTPError
+from urllib.request import urlopen
+from django.template.context_processors import csrf
+
 import json
 
 # Create your views here.
@@ -11,7 +13,8 @@ import json
 def index(request):
     t = loader.get_template('index.html')
     c = Context()
-    return HttpResponse(t.render(c))
+    c.update(csrf(request))
+    return HttpResponse(t.render(c), request)
 
 
 def login_view(request):
@@ -28,6 +31,9 @@ def login_view(request):
             return HttpResponse('Account no longer active')
     else:
         return HttpResponse('Invalid password or username', status=403)
+
+def logout_view(request):
+    logout(request.user)
 
 
 def issues_bbox(request):
