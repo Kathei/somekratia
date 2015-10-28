@@ -76,6 +76,10 @@ def issues_category(request, category_id):
     return HttpResponse(get_url_as_json(url))
 
 
+def categories(request, text):
+    url = 'http://dev.hel.fi:80/paatokset/v1/category/?level=0'
+    return HttpResponse(get_url_as_json(url))
+
 def issue(request, issueID):
     t = loader.get_template('issue.html')
     messages = Message.objects.filter(issue=issueID)
