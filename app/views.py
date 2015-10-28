@@ -41,20 +41,39 @@ def logout_view(request):
     return HttpResponse('Logged out')
 
 
+def get_paging_info(request):
+    page = request.GET.get('page')
+    page_size = request.GET.get('pageSize')
+    if page is None or page_size is None:
+        return ""
+    else:
+        return "&page=%s&limit=%s" % (page, page_size)
+
+
+def get_url_as_json(url):
+    return urlopen(url).read().decode('utf-8')
+
+
 def issues_bbox(request):
     minLat = request.GET.get('minLat')
     maxLat = request.GET.get('maxLat')
     minLong = request.GET.get('minLong')
     maxLong = request.GET.get('maxLong')
-    params = 'bbox=%s,%s,%s,%s' % (minLong, minLat, maxLong, maxLat)
-    jsonurl = urlopen('http://dev.hel.fi/paatokset/v1/issue/search/?' + params)
-    json_text = jsonurl.read().decode('utf-8')
-    return HttpResponse(json_text)
+    url = 'http://dev.hel.fi/paatokset/v1/issue/search/?bbox=%s,%s,%s,%s%s'\
+          % (minLong, minLat, maxLong, maxLat, get_paging_info(request))
+    return HttpResponse(get_url_as_json(url))
 
 
+def issues_search_text(request, text):
+    url = 'http://dev.hel.fi/openahjo/v1/issue/search/?text=%s&format=json%s'\
+          % (text, get_paging_info(request))
+    return HttpResponse(get_url_as_json(url))
 
 
-
+def issues_category(request, category_id):
+    url = 'http://dev.hel.fi/openahjo/v1/issue/search/?category=%d&format=json%s'\
+          % (int(category_id), get_paging_info(request))
+    return HttpResponse(get_url_as_json(url))
 
 
 def issue(request, issueID):
@@ -75,6 +94,5 @@ def post_message(request, issueID):
         return HttpResponse('Message posted')
     else:
         return HttpResponse('Please login before posting', status=403)
-
 
 
