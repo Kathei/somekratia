@@ -28,7 +28,7 @@ urlpatterns = [
     url(r'^login', login_view),
     url(r'^logout', logout_view),
     url(r'^issues/area$', issues_bbox),
-    url(r'^issues/text/(?P<text>.*$)', issues_search_text),
+    url(r'^issues/text/$', issues_search_text),
     url(r'^issues/category/(?P<category_id>[0-9]+)/$', issues_category),
     url(r'^$', index),
     url(r'^issue/(?P<issueID>[0-9]+)/$', issue),

@@ -1,5 +1,5 @@
 from django.shortcuts import loader, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.template import RequestContext, Context
 from django.contrib.auth import authenticate, login, logout
 from urllib.request import urlopen
@@ -50,8 +50,13 @@ def get_paging_info(request):
         return "&page=%s&limit=%s" % (page, page_size)
 
 
+def get_url_as_string(url):
+    json_str = urlopen(url).read().decode('utf-8')
+    return json_str
+
+
 def get_url_as_json(url):
-    return urlopen(url).read().decode('utf-8')
+    return json.loads(get_url_as_string(url))
 
 
 def issues_bbox(request):
@@ -61,24 +66,28 @@ def issues_bbox(request):
     maxLong = request.GET.get('maxLong')
     url = 'http://dev.hel.fi/paatokset/v1/issue/search/?bbox=%s,%s,%s,%s%s'\
           % (minLong, minLat, maxLong, maxLat, get_paging_info(request))
-    return HttpResponse(get_url_as_json(url))
+    return JsonResponse(get_url_as_json(url))
 
 
-def issues_search_text(request, text):
+def issues_search_text(request):
+    text = request.GET.get('search')
+    if text is None or len(text) < 4:
+        return HttpResponse('{ "msg": "Search term must be at least 4 characters long" }', 400)
     url = 'http://dev.hel.fi/openahjo/v1/issue/search/?text=%s&format=json%s'\
           % (text, get_paging_info(request))
-    return HttpResponse(get_url_as_json(url))
+    return JsonResponse(get_url_as_json(url))
 
 
 def issues_category(request, category_id):
     url = 'http://dev.hel.fi/openahjo/v1/issue/search/?category=%d&format=json%s'\
           % (int(category_id), get_paging_info(request))
-    return HttpResponse(get_url_as_json(url))
+    return JsonResponse(get_url_as_json(url))
 
 
 def categories(request, text):
     url = 'http://dev.hel.fi:80/paatokset/v1/category/?level=0'
     return HttpResponse(get_url_as_json(url))
+
 
 def issue(request, issueID):
     t = loader.get_template('issue.html')
