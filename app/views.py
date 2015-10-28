@@ -2,7 +2,7 @@ from django.shortcuts import loader, redirect
 from django.http import HttpResponse, JsonResponse
 from django.template import RequestContext, Context
 from django.contrib.auth import authenticate, login, logout
-from urllib.request import urlopen
+from urllib.request import urlopen, quote
 from django.template.context_processors import csrf
 
 import json
@@ -74,7 +74,7 @@ def issues_search_text(request):
     if text is None or len(text) < 4:
         return HttpResponse('{ "msg": "Search term must be at least 4 characters long" }', 400)
     url = 'http://dev.hel.fi/openahjo/v1/issue/search/?text=%s&format=json%s'\
-          % (text, get_paging_info(request))
+          % (quote(text), get_paging_info(request))
     return JsonResponse(get_url_as_json(url))
 
 
