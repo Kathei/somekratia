@@ -5,6 +5,7 @@
     <title>Somekratia</title>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;signed_in=true"></script>
     <script src="/static/googlemap.js"></script>
+    <script src="/static/search.js"></script>
     <link rel="stylesheet" type="text/css" media="screen" href="../static/style.css" />
 </head>
 <body>
@@ -38,6 +39,12 @@
                 </div>
             </form>
         {% endif %}
+        <form id="searchform" action="/issues/text/?page=1&pagesize=20" method="get">
+            <input type="text" id="search" name="search" placeholder="Search" />
+            <div class="button">
+                <button type="submit">Search</button>
+            </div>
+        </form>
         <p></p>
         <div id="map-canvas"></div>
     </article>
