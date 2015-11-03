@@ -4,50 +4,63 @@
     <meta charset="UTF-8">
     <title>Somekratia</title>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;signed_in=true"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!--<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0rc1/angular-route.min.js"></script>-->
     <script src="/static/googlemap.js"></script>
+    <script src="/static/navigation.js"></script>
     <script src="/static/search.js"></script>
+    <script src="/static/issue.js"></script>
     <link rel="stylesheet" type="text/css" media="screen" href="../static/style.css" />
 </head>
 <body>
-    <nav>
-        <ul id="mainnav">
-            <li><a href="index.html">Home</a></li>
-            <li><a href=""></a></li>
-        </ul>
-    </nav>
+    <div class="navbar">
+        <div class="nav-contents">
+            <img src="/static/img/somekratia_logo.png" class="logo"/>
+            <ul id="mainnav">
+                <li class="nav-item"><a href="index.html">HOME</a></li>
+                <li class="nav-item"><a href=""></a>RECENT</li>
+                <li class="nav-item"><a href=""></a>CATEGORIES</li>
+            </ul>
 
-    <article>
-        {% if user.is_authenticated %}
-            <form id="logout" action="/logout" method="post">
-                {% csrf_token %}
-                <div class="button">
-                    <button type="submit">Logout</button>
+            {% if user.is_authenticated %}
+                <form class="nav-field" id="logout" action="/logout" method="post">
+                    {% csrf_token %}
+                    <div class="button">
+                        <button class="nav-item" type="submit">LOGOUT</button>
+                    </div>
+                </form>
+            {% else %}
+                <button class="nav-item" type="openLogin">LOGIN</button>
+                <div class="hide">
+                    <form class="nav-field" id="login" action="/login" method="post">
+                        {% csrf_token %}
+                        <!--<input type="button" id="signup" value="Sign up" />-->
+                        <label for="usernameinput">
+                            <input type="text" id="usernameimput" name="username" placeholder="Username" />
+                        </label>
+                        <label for="passwordinput">
+                            <input type="password" id="passwordinput" name="password" placeholder="Password" />
+                        </label>
+                        <div class="button">
+                            <button type="submit">Login</button>
+                        </div>
+                    </form>
                 </div>
-            </form>
-        {% else %}
-            <form id="login" action="/login" method="post">
-                {% csrf_token %}
-                <!--<input type="button" id="signup" value="Sign up" />-->
-                <label for="usernameinput">
-                    <input type="text" id="usernameimput" name="username" placeholder="Username" />
-                </label>
-                <label for="passwordinput">
-                    <input type="password" id="passwordinput" name="password" placeholder="Password" />
-                </label>
-                <div class="button">
-                    <button type="submit">Login</button>
-                </div>
-            </form>
-        {% endif %}
-        <form id="searchform" action="/issues/text/?page=1&pagesize=20" method="get">
-            <input type="text" id="search" name="search" placeholder="Search" />
-            <div class="button">
-                <button type="submit">Search</button>
-            </div>
-        </form>
-        <p></p>
-        <div id="map-canvas"></div>
-    </article>
+            {% endif %}
+
+                <form class="nav-field nav-item" id="searchform" action="/issues/text/?page=1&pagesize=20" method="get">
+                    <input type="text" id="search" name="search" placeholder="Search" />
+
+                        <button type="submit" class=" nav-item search-button">SEARCH</button>
+
+                </form>
+        </div>
+
+    </div>
+
+            <div id="map-canvas"></div>
+
 
 </body>
 </html>

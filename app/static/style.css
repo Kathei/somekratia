@@ -1,6 +1,55 @@
 
 
 #map-canvas {
-  width: 1000px;
-  height: 500px;
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1000;
   }
+
+#mainnav li {
+  display: inline;
+  font-size: 23px;
+
+}
+
+#mainnav {
+  display: inline;
+}
+
+.hide {
+  display: none;
+}
+
+.navbar {
+  background-color: white;
+  padding: 2vw 0;
+  margin-top: 2vw;
+  width: 100vw;
+  margin-top: 1.5vw;
+  position: absolute;
+  left: 0;
+}
+
+.nav-item {
+  display: inline;
+  padding-right: 40px;
+}
+
+.nav-contents {
+  float: right;
+  margin-right: 5vw;
+}
+
+form {
+  display: inline;
+}
+
+.logo {
+  width: 17vw;
+  position: absolute;
+  left: 5vw;
+  top: 0.5vw;
+}
