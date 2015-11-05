@@ -1,16 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="myApp">
 <head>
     <meta charset="UTF-8">
     <title>Somekratia</title>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;signed_in=true"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <!--<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0rc1/angular-route.min.js"></script>-->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-route.js"></script>
+
     <script src="/static/googlemap.js"></script>
-    <script src="/static/navigation.js"></script>
     <script src="/static/search.js"></script>
     <script src="/static/issue.js"></script>
+    <script src="/static/navigation.js"></script>
     <link rel="stylesheet" type="text/css" media="screen" href="../static/style.css" />
 </head>
 <body>
@@ -49,12 +50,12 @@
                 </div>
             {% endif %}
 
-                <form class="nav-field nav-item" id="searchform" action="/issues/text/?page=1&pagesize=20" method="get">
-                    <input type="text" id="search" name="search" placeholder="Search" />
+                <div class="nav-field nav-item">
+                    <input type="text" id="search" name="search" placeholder="Search" data-ng-model="text"/>
 
-                        <button type="submit" class=" nav-item search-button">SEARCH</button>
+                        <button type="submit" class=" nav-item search-button" ng-controller="searchController" ng-click="search(text)"">SEARCH</button>
 
-                </form>
+                </div>
         </div>
 
     </div>
