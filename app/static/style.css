@@ -1,12 +1,12 @@
 
 
-#map-canvas {
+#map-container {
   width: 100vw;
   height: 100vh;
   position: absolute;
   top: 0;
   left: 0;
-  z-index: -1000;
+  z-index: -1001;
   }
 
 #mainnav li {
@@ -52,4 +52,9 @@ form {
   position: absolute;
   left: 5vw;
   top: 0.5vw;
+}
+
+
+.angular-google-map-container {
+  height: 100vh;
 }

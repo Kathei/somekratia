@@ -4,14 +4,21 @@
 
 var searchIssues = new SearchIssues();
 
-var app = angular.module('myApp', ['ngRoute']);
-app.controller('myCtrl', function($scope) {
-
-});
+var app = angular.module('myApp', ['ngRoute', 'uiGmapgoogle-maps']);
 
 app.controller('searchController', function($scope, $http){
+   $scope.map = {
+       center: {
+           latitude: 60.1728365,
+           longitude: 24.9399135,
+       },
+       zoom: 13,
+   }
+    $scope.coordinateSearch = function(bounds) {
 
-    $scope.search = function(text) {
+    }
+
+    $scope.textSearch = function(text) {
 
         console.log("test");
         var config = {

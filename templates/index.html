@@ -3,12 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <title>Somekratia</title>
-    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;signed_in=true"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+   <!--  <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;signed_in=true"></script> -->
+
+   <!-- <script src='/path/to/lodash[.min].js'></script>
+    <script src='/path/to/angular[.min].js'></script>
+    <script src='/path/to/angular-simple-logger/angular-simple-logger[.min].js'></script>
+    <script src='/path/to/angular-google-maps[.min].js'></script> -->
+
+ <!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-route.js"></script>
 
-    <script src="/static/googlemap.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-google-maps/2.1.6/angular-google-maps.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js"></script>
+
+
+  <!--  <script src="/static/googlemap.js"></script> -->
     <script src="/static/search.js"></script>
     <script src="/static/issue.js"></script>
     <script src="/static/navigation.js"></script>
@@ -53,14 +63,17 @@
                 <div class="nav-field nav-item">
                     <input type="text" id="search" name="search" placeholder="Search" data-ng-model="text"/>
 
-                        <button type="submit" class=" nav-item search-button" ng-controller="searchController" ng-click="search(text)"">SEARCH</button>
+                        <button type="submit" class=" nav-item search-button" ng-controller="searchController" ng-click="textSearch(text)">SEARCH</button>
 
                 </div>
         </div>
 
     </div>
 
-            <div id="map-canvas"></div>
+          <!--  <div id="map-canvas" ng-model="map" ng-controller="searchController" ></div> -->
+     <div id= 'map-container' ng-controller="searchController" >
+           <ui-gmap-google-map center='map.center' zoom='map.zoom' ></ui-gmap-google-map>
+       </div>
 
 
 </body>
