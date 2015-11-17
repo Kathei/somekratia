@@ -9,6 +9,23 @@
     {% for message in message_list %}
         <h2>{{ message.poster }}</h2>
         <p>{{ message.text }}</p>
+        {%  if message.poster == user %}
+            <form id="delete_form" action="/message/{{ message.id }}" method="DELETE">
+                <div class="button">
+                    <button type="submit">Delete message</button>
+                </div>
+            </form>
+        {% csrf_token %}
+        <label for="messagefield">
+                <textarea id="messagefield" name="messagefield" rows="6" cols="50"></textarea>
+        </label>
+        <div class="button">
+                <button type="submit">Send message</button>
+        </div>
+    </form>
+            <div class="edit">Edit</div>
+            <div class="delete">Delete</div>
+        {% endif %}
     {% endfor %}
     <form id="messageform" action="/issue/{{ issueID }}/messages/" method="post">
         {% csrf_token %}

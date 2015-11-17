@@ -18,7 +18,7 @@ from django.contrib import admin
 from app.views import index, login_view, issues_bbox, logout_view
 from app.views import issue
 from app.views import issues_search_text, issues_category
-from app.views import post_message
+from app.views import post_message, edit_message
 from app.views import categories
 
 
@@ -35,5 +35,6 @@ urlpatterns = [
     url(r'^issue/(?P<issueID>[0-9]+)/$', issue),
     url(r'^issue/(?P<issueID>[0-9]+)/messages/$', post_message),
     url(r'^categories/', categories),
+    url(r'^message/(?P<messageID>[0-9]+)/$', edit_message),
 
 ]

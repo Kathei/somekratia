@@ -25,6 +25,8 @@ class Message(models.Model):
     poster = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     reply_to = models.ForeignKey('self', blank=True, null=True)
     issue = models.ForeignKey(Issue)
+    created = models.DateTimeField(auto_now_add=True)
+    edited = models.DateTimeField(auto_now=True)
 
 
 class Subscriptions(models.Model):

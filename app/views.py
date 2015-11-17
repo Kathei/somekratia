@@ -1,5 +1,5 @@
 from django.shortcuts import loader, redirect
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseNotFound
 from django.template import RequestContext, Context
 from django.contrib.auth import authenticate, login, logout
 from urllib.request import urlopen, quote
@@ -95,25 +95,46 @@ def categories(request):
 def issue(request, issueID):
     t = loader.get_template('issue.html')
     messages = Message.objects.filter(issue=issueID)
-    c = Context( {'message_list': messages, 'issueID': issueID})
+    c = Context( {'message_list': messages, 'issueID': issueID, 'user': request.user})
     c.update(csrf(request))
     return HttpResponse(t.render(c))
 
 
+def edit_message(request, messageID):
+    if request.user is None or request.user.is_anonymous():
+        return HttpResponseForbidden()
+    if request.method == 'PUT':
+        message = Message.objects.get_or_404(poster=request.user, id=messageID)
+        message.text = request.PUT['messagefield']
+        message.save()
+        return JsonResponse(message)
+        return JsonResponse(message)
+    elif request.method == 'DELETE':
+        message = Message.objects.get_or_404(poster=request.user, id=messageID)
+        message.delete()
+        return HttpResponse('Deleted')
+    else:
+        return HttpResponseBadRequest('Only PUT and DELETE methods are allowed')
+
+
 def post_message(request, issueID):
-    if request.user is not None and request.user.is_authenticated():
+    if request.user is None or request.user.is_anonymous():
+        return HttpResponseForbidden('Please login before posting')
+    elif request.method == 'POST':
+        #create new issue to the database if the one with id=issueID is not found
+        #Issues are foreign keys for messages
         issue = Issue.objects.get_or_create(id=issueID, ahjo_id=issueID)
         if issue[1] is True:
             issue[0].save()
             logging.info("Created object with id %s" % issueID)
 
-        m = Message()
-        m.text = request.POST['messagefield']
-        m.poster = request.user
-        m.issue_id = issueID
+        m = Message(text=request.POST['messagefield'], poster=request.user, issue_id=issueID)
+        #m.text = request.POST['messagefield']
+        #m.poster = request.user
+        #m.issue_id = issueID
         m.save()
-
-        return HttpResponse('Message posted')
+        response = {'text': m.text, 'poster': m.poster.username, 'created':m.created, 'edited':m.edited }
+        return JsonResponse(response)
     else:
-        return HttpResponse('Please login before posting', status=403)
+        return HttpResponseBadRequest("Only POST method is allowed")
 
