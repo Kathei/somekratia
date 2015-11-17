@@ -2,9 +2,9 @@
  * Created by katriinaheiskanen on 26/10/15.
  */
 function initialize() {
-  var myLatlng = new google.maps.LatLng(60.1628365,24.9399135);
+  var myLatlng = new google.maps.LatLng(60.1728365,24.9399135);
   var mapOptions = {
-    zoom: 16,
+    zoom: 13,
     center: myLatlng
   }
   var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
