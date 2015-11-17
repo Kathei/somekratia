@@ -8,6 +8,7 @@ from django.template.context_processors import csrf
 import json
 import logging
 
+
 from app.models import Message
 from app.models import Issue
 
@@ -95,7 +96,9 @@ def categories(request):
 def issue(request, issueID):
     t = loader.get_template('issue.html')
     messages = Message.objects.filter(issue=issueID)
-    c = Context( {'message_list': messages, 'issueID': issueID, 'user': request.user})
+    url = 'http://dev.hel.fi/paatokset/v1/issue/%s/?format=json' % issueID
+    details = get_url_as_json(url)
+    c = Context({'message_list': messages, 'issueID': issueID, 'user': request.user, 'jsondetails': details})
     c.update(csrf(request))
     return HttpResponse(t.render(c))
 

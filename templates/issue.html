@@ -14,6 +14,10 @@
     <script src="/static/navigation.js"></script>
 </head>
 <body>
+    <h2>{{ jsondetails.subject }} </h2>
+    <h4>Date: {{ jsondetails.latest_decision_date }}</h4>
+    <p>{{ jsondetails.summary }} </p>
+
     {% for message in message_list %}
         <h2>{{ message.poster }}</h2>
         <p>{{ message.text }}</p>
