@@ -1,4 +1,4 @@
-from django.shortcuts import loader, redirect
+from django.shortcuts import loader, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseNotFound
 from django.template import RequestContext, Context
 from django.contrib.auth import authenticate, login, logout
@@ -104,13 +104,13 @@ def edit_message(request, messageID):
     if request.user is None or request.user.is_anonymous():
         return HttpResponseForbidden()
     if request.method == 'PUT':
-        message = Message.objects.get_or_404(poster=request.user, id=messageID)
+        message = get_object_or_404(Message, poster=request.user, id=messageID)
         message.text = request.PUT['messagefield']
         message.save()
         return JsonResponse(message)
         return JsonResponse(message)
     elif request.method == 'DELETE':
-        message = Message.objects.get_or_404(poster=request.user, id=messageID)
+        message = get_object_or_404(Message, poster=request.user, id=messageID)
         message.delete()
         return HttpResponse('Deleted')
     else:

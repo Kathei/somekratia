@@ -6,6 +6,26 @@ var searchIssues = new SearchIssues();
 
 var app = angular.module('myApp', ['ngRoute', 'uiGmapgoogle-maps']);
 
+app.config(['$httpProvider', function($httpProvider) {
+    $httpProvider.defaults.xsrfCookieName = 'csrftoken';
+    $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
+}]);
+
+app.controller('messageController', function($scope, $http) {
+    $scope.deleteMessage = function(messageId){
+        console.log("test");
+        var config = {
+            method: 'DELETE',
+        };
+        $http.delete("/message/" + messageId + '/', config)
+            .success(function() {
+                alert("deleted: " + messageId);
+            }).error(function() {
+                alert("delete failed!");
+            });
+    };
+});
+
 app.controller('searchController', function($scope, $http){
    $scope.map = {
        center: {
