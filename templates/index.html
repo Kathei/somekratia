@@ -5,13 +5,8 @@
     <title>Somekratia</title>
    <!--  <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;signed_in=true"></script> -->
 
-   <!-- <script src='/path/to/lodash[.min].js'></script>
-    <script src='/path/to/angular[.min].js'></script>
-    <script src='/path/to/angular-simple-logger/angular-simple-logger[.min].js'></script>
-    <script src='/path/to/angular-google-maps[.min].js'></script> -->
-
  <!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> -->
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.js"></script>
+  <!--  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-route.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-google-maps/2.1.6/angular-google-maps.js"></script>
@@ -19,9 +14,15 @@
 
 
   <!--  <script src="/static/googlemap.js"></script> -->
+    <script src="/static/angular.js"></script>
+    <script src="/static/angular-route.js"></script>
+    <script src="/static/angular-google-maps.js"></script>
+    <script src="/static/angular-simple-logger.js"></script>
+    <script src="/static/lodash.js"></script>
     <script src="/static/search.js"></script>
     <script src="/static/issue.js"></script>
     <script src="/static/navigation.js"></script>
+
     <link rel="stylesheet" type="text/css" media="screen" href="../static/style.css" />
 </head>
 <body>
@@ -70,9 +71,14 @@
 
     </div>
 
-          <!--  <div id="map-canvas" ng-model="map" ng-controller="searchController" ></div> -->
      <div id= 'map-container' ng-controller="searchController" >
-           <ui-gmap-google-map center='map.center' zoom='map.zoom' ></ui-gmap-google-map>
+           <ui-gmap-google-map center='map.center' zoom='map.zoom' events="map.mapEvents">
+               <ui-gmap-markers models="issueMarkers" coords="'self'" icon="'icon'" click="onClick()" events="marker.events">
+                   <ui-gmap-window options="windowOptions" closeClick="closeClick()">
+                        <div>{{title}}</div>
+                    </ui-gmap-window>
+               </ui-gmap-markers>
+           </ui-gmap-google-map>
        </div>
 
 
