@@ -6,8 +6,11 @@ from urllib.request import urlopen, quote
 from django.template.context_processors import csrf
 
 import json
+import logging
 
 from app.models import Message
+from app.models import Issue
+
 # Create your views here.
 
 
@@ -17,7 +20,7 @@ def index(request):
     if request is not None:
         c['request'] = request
     c.update(csrf(request))
-    return HttpResponse(t.render(c), request)
+    return HttpResponse(t.render(c))
 
 
 def login_view(request):
@@ -84,9 +87,9 @@ def issues_category(request, category_id):
     return JsonResponse(get_url_as_json(url))
 
 
-def categories(request, text):
+def categories(request):
     url = 'http://dev.hel.fi:80/paatokset/v1/category/?level=0'
-    return HttpResponse(get_url_as_json(url))
+    return JsonResponse(get_url_as_json(url))
 
 
 def issue(request, issueID):
@@ -98,14 +101,19 @@ def issue(request, issueID):
 
 
 def post_message(request, issueID):
-    if request.user is not None:
+    if request.user is not None and request.user.is_authenticated():
+        issue = Issue.objects.get_or_create(id=issueID, ahjo_id=issueID)
+        if issue[1] is True:
+            issue[0].save()
+            logging.info("Created object with id %s" % issueID)
+
         m = Message()
         m.text = request.POST['messagefield']
         m.poster = request.user
         m.issue_id = issueID
         m.save()
+
         return HttpResponse('Message posted')
     else:
         return HttpResponse('Please login before posting', status=403)
-
 

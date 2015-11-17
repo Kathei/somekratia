@@ -19,6 +19,7 @@ from app.views import index, login_view, issues_bbox, logout_view
 from app.views import issue
 from app.views import issues_search_text, issues_category
 from app.views import post_message
+from app.views import categories
 
 
 urlpatterns = [
@@ -33,5 +34,6 @@ urlpatterns = [
     url(r'^$', index),
     url(r'^issue/(?P<issueID>[0-9]+)/$', issue),
     url(r'^issue/(?P<issueID>[0-9]+)/messages/$', post_message),
+    url(r'^categories/', categories),
 
 ]
