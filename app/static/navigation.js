@@ -82,8 +82,9 @@ app.controller('searchController', function($scope, $http){
     $scope.markerClick = function (generated, event, marker){
         console.log(marker);
         $scope.MapOptions.markers.selected = marker;
-        var issue = marker.issue;
-        console.log(issue);
+        var issueId = marker.issue.id;
+        console.log(issueId);
+        document.location.href = '/issue/' + issueId;
 
         //createInfoWindow(issue).open($scope.map, marker);
         //$scope.windowOptions.visible = true;
