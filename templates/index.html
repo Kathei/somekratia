@@ -73,11 +73,10 @@
 
      <div id= 'map-container' ng-controller="searchController" >
            <ui-gmap-google-map center='map.center' zoom='map.zoom' events="map.mapEvents">
-               <ui-gmap-markers models="issueMarkers" coords="'self'" icon="'icon'" click="onClick()" events="marker.events">
-                   <ui-gmap-window options="windowOptions" closeClick="closeClick()">
-                        <div>{{title}}</div>
-                    </ui-gmap-window>
+               <ui-gmap-markers models="issueMarkers" coords="'self'" icon="'icon'" click="markerClick" events="marker.events">
+
                </ui-gmap-markers>
+
            </ui-gmap-google-map>
        </div>
 

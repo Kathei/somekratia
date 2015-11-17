@@ -27,12 +27,20 @@ app.controller('messageController', function($scope, $http) {
 });
 
 app.controller('searchController', function($scope, $http){
+
+    $scope.MapOptions = {
+        markers: {
+            selected: {}
+        },
+     };
+
    $scope.map = {
        center: {
            latitude: 60.1728365,
            longitude: 24.9399135,
        },
        zoom: 13,
+       options: $scope.mapOptions,
    }
 
     $scope.map.mapEvents = {};
@@ -60,6 +68,7 @@ app.controller('searchController', function($scope, $http){
     }
     $scope.issueMarkers = [];
 
+
    function createInfoWindow(issue) {
 
         console.log("infoikkuna");
@@ -71,9 +80,15 @@ app.controller('searchController', function($scope, $http){
     }
 
     $scope.markerClick = function (generated, event, marker){
+        console.log(marker);
+        $scope.MapOptions.markers.selected = marker;
         var issue = marker.issue;
         console.log(issue);
-        createInfoWindow(issue).open($scope.map, marker);
+
+        //createInfoWindow(issue).open($scope.map, marker);
+        //$scope.windowOptions.visible = true;
+        //$scope.title = "Window Title!";
+        //marker.show = !marker.show;
     };
 
     function addMarkers(issue, index, array) {
@@ -111,6 +126,7 @@ app.controller('searchController', function($scope, $http){
 
         $http.get("/issues/area", config)
             .success(function(searchResult) {
+                $scope.issueMarkers.length = 0;
                 searchResult.objects.forEach(addMarkers);
                 markersUpdating = false;
 
@@ -133,6 +149,8 @@ app.controller('searchController', function($scope, $http){
         };
 
         $scope.title = "Window Title!";
+
+
 });
 
 
