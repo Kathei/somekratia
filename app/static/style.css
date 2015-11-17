@@ -1,4 +1,22 @@
+@font-face {
+  font-family: Neou;
+  src: url('fonts/Neou-Thin.otf');
+}
+@font-face {
+   font-family: Neou Bold;
+   font-weight: bold;
+     src: url('fonts/Neou-Bold.otf');
+}
 
+@font-face {
+    font-family: Tw Cen MT;
+    src: url('fonts/Tw-Cen-MT.ttf');
+}
+
+@font-face {
+    font-family: Tw Cen MT Bold;
+    src: url('fonts/Tw-Cen-MT-Bold.ttf');
+}
 
 #map-container {
   width: 100vw;
@@ -10,9 +28,14 @@
   }
 
 #mainnav li {
-  display: inline;
-  font-size: 23px;
+  font-size: 25px;
+    font-family: Neou Bold;
+    color: #939291;
 
+}
+
+li.selected a {
+    color: #d8752f;
 }
 
 #mainnav {
@@ -52,6 +75,14 @@ form {
   position: absolute;
   left: 5vw;
   top: 0.5vw;
+}
+
+#login-button {
+
+}
+
+.navbar button {
+    padding: 3px;
 }
 
 

@@ -30,7 +30,7 @@
         <div class="nav-contents">
             <img src="/static/img/somekratia_logo.png" class="logo"/>
             <ul id="mainnav">
-                <li class="nav-item"><a href="index.html">HOME</a></li>
+                <li class="nav-item selected"><a href="index.html">HOME</a></li>
                 <li class="nav-item"><a href=""></a>RECENT</li>
                 <li class="nav-item"><a href=""></a>CATEGORIES</li>
             </ul>
@@ -43,13 +43,13 @@
                     </div>
                 </form>
             {% else %}
-                <button class="nav-item" type="openLogin">LOGIN</button>
+                <button class="nav-item login-button" type="openLogin">LOGIN</button>
                 <div class="hide">
                     <form class="nav-field" id="login" action="/login" method="post">
                         {% csrf_token %}
                         <!--<input type="button" id="signup" value="Sign up" />-->
                         <label for="usernameinput">
-                            <input type="text" id="usernameimput" name="username" placeholder="Username" />
+                            <input type="text" id="usernameinput" name="username" placeholder="Username" />
                         </label>
                         <label for="passwordinput">
                             <input type="password" id="passwordinput" name="password" placeholder="Password" />
@@ -64,7 +64,7 @@
                 <div class="nav-field nav-item">
                     <input type="text" id="search" name="search" placeholder="Search" data-ng-model="text"/>
 
-                        <button type="submit" class=" nav-item search-button" ng-controller="searchController" ng-click="textSearch(text)">SEARCH</button>
+                        <button type="submit" class="nav-item search-button" ng-controller="searchController" ng-click="textSearch(text)">SEARCH</button>
 
                 </div>
         </div>
