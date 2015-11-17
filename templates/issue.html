@@ -14,27 +14,76 @@
     <script src="/static/navigation.js"></script>
 </head>
 <body>
-    <h2>{{ jsondetails.subject }} </h2>
-    <h4>Date: {{ jsondetails.latest_decision_date }}</h4>
-    <p>{{ jsondetails.summary }} </p>
+    <div class="issue">
+        <div class="navbar">
+            <div class="nav-contents">
+                <img src="/static/img/somekratia_logo.png" class="logo"/>
+                <ul id="mainnav">
+                    <li class="nav-item selected"><a href="index.html">HOME</a></li>
+                    <li class="nav-item"><a href=""></a>RECENT</li>
+                    <li class="nav-item"><a href=""></a>CATEGORIES</li>
+                </ul>
 
-    {% for message in message_list %}
-        <h2>{{ message.poster }}</h2>
-        <p>{{ message.text }}</p>
-        {% if message.poster == user %}
-            <div class="button" ng-controller="messageController">
-                <button type="submit" ng-click="deleteMessage({{ message.id }})">Delete message</button>
-             </div>
-        {% endif %}
-    {% endfor %}
-    <form id="messageform" action="/issue/{{ issueID }}/messages/" method="post">
-        {% csrf_token %}
-        <label for="messagefield">
-                <textarea id="messagefield" name="messagefield" rows="6" cols="50"></textarea>
-        </label>
-        <div class="button">
-                <button type="submit">Send message</button>
+                {% if user.is_authenticated %}
+                    <form class="nav-field" id="logout" action="/logout" method="post">
+                        {% csrf_token %}
+                        <div class="button">
+                            <button class="nav-item" type="submit">LOGOUT</button>
+                        </div>
+                    </form>
+                {% else %}
+                    <button class="nav-item login-button" type="openLogin">LOGIN</button>
+                    <div class="hide">
+                        <form class="nav-field" id="login" action="/login" method="post">
+                            {% csrf_token %}
+                            <!--<input type="button" id="signup" value="Sign up" />-->
+                            <label for="usernameinput">
+                                <input type="text" id="usernameinput" name="username" placeholder="Username" />
+                            </label>
+                            <label for="passwordinput">
+                                <input type="password" id="passwordinput" name="password" placeholder="Password" />
+                            </label>
+                            <div class="button">
+                                <button type="submit">Login</button>
+                            </div>
+                        </form>
+                    </div>
+                {% endif %}
+
+                    <div class="nav-field nav-item">
+                        <input type="text" id="search" name="search" placeholder="Search" data-ng-model="text"/>
+
+                            <button type="submit" class="nav-item search-button" ng-controller="searchController" ng-click="textSearch(text)">SEARCH</button>
+
+                    </div>
+            </div>
+
         </div>
-    </form>
+        <div class="placeholder-timeline">&nbsp;</div>
+        <div class="issueDetails">
+            <h2>{{ jsondetails.subject }} </h2>
+            <h4>Date: {{ jsondetails.latest_decision_date }}</h4>
+            <p>{{ jsondetails.summary }} </p>
+
+            {% for message in message_list %}
+                <h2>{{ message.poster }}</h2>
+                <p>{{ message.text }}</p>
+                {% if message.poster == user %}
+                    <div class="button" ng-controller="messageController">
+                        <button type="submit" ng-click="deleteMessage({{ message.id }})">Delete message</button>
+                     </div>
+                {% endif %}
+            {% endfor %}
+            <form id="messageform" action="/issue/{{ issueID }}/messages/" method="post">
+                {% csrf_token %}
+                <label for="messagefield">
+                        <textarea id="messagefield" name="messagefield" rows="6" cols="50"></textarea>
+                </label>
+                <div class="button">
+                        <button type="submit">Send message</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </body>
 </html>

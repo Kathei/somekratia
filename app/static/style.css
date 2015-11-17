@@ -18,6 +18,18 @@
     src: url('fonts/Tw-Cen-MT-Bold.ttf');
 }
 
+p {
+    font-size: 18px;
+}
+
+h4 {
+    font-size: 22px;
+}
+
+h2 {
+    font-size: 27px;
+}
+
 #map-container {
   width: 100vw;
   height: 100vh;
@@ -88,4 +100,33 @@ form {
 
 .angular-google-map-container {
   height: 100vh;
+}
+
+.issue .navbar {
+    position: relative;
+}
+
+.issueDetails {
+    display: inline-block;
+    width: 45vw;
+    margin: 3vw 0 0 6vw;
+}
+
+.issueDetails h2 {
+    font-family: Tw Cen MT;
+    text-decoration: underline;
+    color: #555555;
+}
+
+.issueDetails h4, .issueDetails p {
+    font-family: Tw Cen MT;
+    color: #939291;
+}
+
+.placeholder-timeline {
+    width: 86vw;
+    background-color: #939291;
+    height: 3px;
+    margin: 4vw 0 0 6vw;
+
 }
