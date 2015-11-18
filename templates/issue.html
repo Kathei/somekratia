@@ -20,7 +20,7 @@
             <div class="nav-contents">
                 <img src="/static/img/somekratia_logo.png" class="logo"/>
                 <ul id="mainnav">
-                    <li class="nav-item selected"><a href="index.html">HOME</a></li>
+                    <li class="nav-item selected"><a href="../index.html">HOME</a></li>
                     <li class="nav-item"><a href=""></a>RECENT</li>
                     <li class="nav-item"><a href=""></a>CATEGORIES</li>
                 </ul>
@@ -30,7 +30,7 @@
                         {% csrf_token %}
 
                             <button class="nav-item" type="submit">LOGOUT</button>
-                        
+
                     </form>
                 {% else %}
                     <button class="nav-item login-button" type="openLogin">LOGIN</button>
@@ -69,7 +69,7 @@
 
                 <div>
                     <label for="messagefield">
-                            <textarea ng-model="messageText" id="messagefield" name="messagefield" rows="6" cols="50"></textarea>
+                            <textarea ng-model="messageText" id="messagefield" name="messagefield" rows="6" cols="70"></textarea>
                     </label>
                     <div class="button">
                             <button ng-click="postMessage({{ issueID }},messageText)">Send message</button>
