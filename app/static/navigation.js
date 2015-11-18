@@ -23,7 +23,20 @@ app.controller('messageController', function($scope, $http) {
             }).error(function() {
                 alert("delete failed!");
             });
+        //TODO remove message with messageId from $scope.messages
     };
+
+    $scope.postMessage = function(issueId, newMessageText) {
+        alert(issueId + ": " + newMessageText);
+        //TODO httppost to /issue/issueId/messages/
+        $scope.messages.push({text: newMessageText, poster: 'dynamic'});
+    };
+    $http.get("/issue/"+$scope.issueID +"/messages/").success(function(messages) {
+        console.log(messages);
+        $scope.messages = messages.messages;
+    }).error(function(foo, bar, baz){
+        alert("Error getting messages!");
+    });
 });
 
 app.controller('searchController', function($scope, $http){

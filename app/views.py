@@ -4,6 +4,7 @@ from django.template import RequestContext, Context
 from django.contrib.auth import authenticate, login, logout
 from urllib.request import urlopen, quote
 from django.template.context_processors import csrf
+from django.core import serializers
 
 import json
 import logging
@@ -121,7 +122,14 @@ def edit_message(request, messageID):
 
 
 def post_message(request, issueID):
-    if request.user is None or request.user.is_anonymous():
+    if request.method == 'GET':
+        messages = Message.objects.filter(issue=issueID)
+        response = {}
+        response['messages'] = [];
+        for m in messages:
+            response['messages'].append({'text': m.text, 'poster': m.poster.username, 'created':m.created, 'edited':m.edited })
+        return JsonResponse(response)
+    elif request.user is None or request.user.is_anonymous():
         return HttpResponseForbidden('Please login before posting')
     elif request.method == 'POST':
         #create new issue to the database if the one with id=issueID is not found
