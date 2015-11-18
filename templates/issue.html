@@ -62,36 +62,47 @@
         </div>
         <div class="placeholder-timeline">&nbsp;</div>
         <div class="issueDetails" ng-controller="messageController">
-            <h2>{{ jsondetails.subject }} </h2>
-            <h4>Date: {{ jsondetails.latest_decision_date }}</h4>
-            <p>{{ jsondetails.summary }} </p>
+            <div class="issueInfo">
+                <h2>{{ jsondetails.subject }} </h2>
+                <h4>Date: {{ jsondetails.latest_decision_date }}</h4>
+                <p>{{ jsondetails.summary }} </p>
 
-            <!--{% for message in message_list %}
-                <h2>{{ message.poster }}</h2>
-                <p>{{ message.text }}</p>
-                {% if message.poster == user %}
-                    <div class="button" ng-controller="messageController">
-                        <button type="submit" ng-click="deleteMessage({{ message.id }})">Delete message</button>
-                     </div>
-                {% endif %}
-            {% endfor %} -->
-        {% verbatim %}
-            <div ng-repeat="m in messages">
-                <div>Viesti
-                    {{m.poster}} - {{m.text}}</div>
-            </div>
-        {% endverbatim%}
-            <!--<form id="messageform" action="/issue/{{ issueID }}/messages/" method="post">
-                {% csrf_token %} -->
-            <div>
-                <label for="messagefield">
-                        <textarea ng-model="messageText" id="messagefield" name="messagefield" rows="6" cols="50"></textarea>
-                </label>
-                <div class="button">
-                        <button ng-click="postMessage({{ issueID }},messageText)">Send message</button>
+                <div>
+                    <label for="messagefield">
+                            <textarea ng-model="messageText" id="messagefield" name="messagefield" rows="6" cols="50"></textarea>
+                    </label>
+                    <div class="button">
+                            <button ng-click="postMessage({{ issueID }},messageText)">Send message</button>
+                    </div>
+                <!--</form>-->
                 </div>
-            <!--</form>-->
             </div>
+
+            <div class="messages">
+                <!--{% for message in message_list %}
+                    <div class="messageBubble">
+                        <h2>{{ message.poster }}</h2>
+                        <p>{{ message.text }}</p>
+                        {% if message.poster == user %}
+                            <div class="button" ng-controller="messageController">
+                                <button type="submit" ng-click="deleteMessage({{ message.id }})">Delete message</button>
+                             </div>
+                        {% endif %}
+                    </div>
+                {% endfor %} -->
+
+                {% verbatim %}
+                    <div ng-repeat="m in messages">
+                        <div class="messageBubble">
+                            <div class="messageText">Viesti
+                                {{m.poster}} - {{m.text}}</div>
+                        </div>
+                    </div>
+                {% endverbatim%}
+                    <!--<form id="messageform" action="/issue/{{ issueID }}/messages/" method="post">
+                        {% csrf_token %} -->
+            </div>
+
         </div>
     </div>
 </body>

@@ -108,7 +108,7 @@ form {
 
 .issueDetails {
     display: inline-block;
-    width: 45vw;
+    width: 86vw;
     margin: 3vw 0 0 6vw;
 }
 
@@ -130,3 +130,28 @@ form {
     margin: 4vw 0 0 6vw;
 
 }
+
+.issueInfo {
+    float: left;
+    width: 40vw;
+}
+
+.messages {
+    float: right;
+    width: 40vw;
+    margin-top: 2vw;
+}
+
+.messageBubble {
+    padding: 2vw;
+    background-color: #6fc1dd;
+    margin-bottom: 1vw;
+    border-radius: 1vw;
+}
+
+.messageText {
+    font-family: Tw Cen MT;
+    color: #ffffff;
+}
+
+
