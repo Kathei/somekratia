@@ -28,9 +28,9 @@
                 {% if user.is_authenticated %}
                     <form class="nav-field" id="logout" action="/logout" method="post">
                         {% csrf_token %}
-                        <div class="button">
+
                             <button class="nav-item" type="submit">LOGOUT</button>
-                        </div>
+                        
                     </form>
                 {% else %}
                     <button class="nav-item login-button" type="openLogin">LOGIN</button>

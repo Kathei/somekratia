@@ -36,15 +36,15 @@
             </ul>
 
             {% if user.is_authenticated %}
-                <form class="nav-field" id="logout" action="/logout" method="post">
+                <form class="nav-field logout-button" id="logout" action="/logout" method="post">
                     {% csrf_token %}
-                    <div class="button">
+
                         <button class="nav-item" type="submit">LOGOUT</button>
-                    </div>
+
                 </form>
             {% else %}
                 <button class="nav-item login-button" type="openLogin">LOGIN</button>
-                <div class="hide">
+                <div class="">
                     <form class="nav-field" id="login" action="/login" method="post">
                         {% csrf_token %}
                         <!--<input type="button" id="signup" value="Sign up" />-->
