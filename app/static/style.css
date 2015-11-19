@@ -159,7 +159,6 @@ form {
     color: #ffffff;
 }
 
-<<<<<<< HEAD
 .messageBubble h3 {
     margin-top: 0.5vh;
 }
@@ -197,9 +196,8 @@ form {
 }
 
 
-=======
 #recentMessages {
     float: right;
     width: 20%;
 }
->>>>>>> origin/master
+

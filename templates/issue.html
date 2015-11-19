@@ -94,16 +94,13 @@
                 {% verbatim %}
                     <div ng-repeat="m in messages">
                         <div class="messageBubble">
-<<<<<<< HEAD
+
                                 <h3 class="poster">{{m.poster}}</h3>
                                 <h3 class="time-posted">{{m.time}}</h3>
                                 <p class="messageText">{{m.text}}</p>
-=======
-                            <div class="messageText">Viesti
-                                {{m.poster}} - {{m.text}}
+
                                 <input type="checkbox" ng-model="m.liked" ng-change="likeMessage(m)">
-                            </div>
->>>>>>> origin/master
+
                         </div>
                     </div>
                 {% endverbatim%}
