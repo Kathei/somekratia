@@ -66,7 +66,6 @@ li.selected a {
     margin-top: 1.5vw;
     position: absolute;
     left: 0;
-    z-index: -1;
 }
 
 .nav-item {
