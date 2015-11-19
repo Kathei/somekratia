@@ -28,6 +28,14 @@ app.controller('messageController', function($scope, $http) {
 
     $scope.postMessage = function(issueId, newMessageText) {
         //alert(issueId + ": " + newMessageText);
+        var config = {headers: { 'Content-Type': 'application/x-www-form-urlencoded'}}
+        $http.post("/issue/" + issueId + "/messages/", "messagefield="+encodeURIComponent(newMessageText), config).success(function() {
+            //TODO show loading icon
+            alert("POST TOIMII");
+        }).error(function(){
+            alert("Post doesn't work");
+        });
+
         //TODO httppost to /issue/issueId/messages/
         $scope.messages.push({text: newMessageText, poster: 'dynamic'});
     };
