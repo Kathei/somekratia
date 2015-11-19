@@ -20,11 +20,14 @@ from app.views import issue
 from app.views import issues_search_text, issues_category
 from app.views import post_message, edit_message
 from app.views import categories
+from app.views import vote_message
+from app.views import issues_with_messages
+
 
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'index.html', index),
+    url(r'ndex.html', index),
     url(r'^$', index),
     url(r'^login', login_view),
     url(r'^logout', logout_view),
@@ -36,5 +39,7 @@ urlpatterns = [
     url(r'^issue/(?P<issueID>[0-9]+)/messages/$', post_message),
     url(r'^categories/', categories),
     url(r'^message/(?P<messageID>[0-9]+)/$', edit_message),
+    url(r'^message/(?P<messageID>[0-9]+)/vote$', vote_message),
+    url(r'^issues/recent/comments', issues_with_messages),
 
 ]

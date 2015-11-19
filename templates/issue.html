@@ -18,9 +18,9 @@
     <div class="issue">
         <div class="navbar">
             <div class="nav-contents">
-                <img src="/static/img/somekratia_logo.png" class="logo"/>
+                <a href="../../index.html"><img src="/static/img/somekratia_logo.png" class="logo"/></a>
                 <ul id="mainnav">
-                    <li class="nav-item selected"><a href="../index.html">HOME</a></li>
+                    <li class="nav-item selected"><a href="../../index.html">HOME</a></li>
                     <li class="nav-item"><a href=""></a>RECENT</li>
                     <li class="nav-item"><a href=""></a>CATEGORIES</li>
                 </ul>
@@ -94,9 +94,16 @@
                 {% verbatim %}
                     <div ng-repeat="m in messages">
                         <div class="messageBubble">
+<<<<<<< HEAD
                                 <h3 class="poster">{{m.poster}}</h3>
                                 <h3 class="time-posted">{{m.time}}</h3>
                                 <p class="messageText">{{m.text}}</p>
+=======
+                            <div class="messageText">Viesti
+                                {{m.poster}} - {{m.text}}
+                                <input type="checkbox" ng-model="m.liked" ng-change="likeMessage(m)">
+                            </div>
+>>>>>>> origin/master
                         </div>
                     </div>
                 {% endverbatim%}

@@ -29,8 +29,19 @@ app.controller('messageController', function($scope, $http) {
 
     $scope.postMessage = function(issueId, newMessageText) {
         //alert(issueId + ": " + newMessageText);
+        var config = {headers: { 'Content-Type': 'application/x-www-form-urlencoded'}}
+        $http.post("/issue/" + issueId + "/messages/", "messagefield="+encodeURIComponent(newMessageText), config).success(function(response) {
+            //TODO show loading icon
+            alert("POST TOIMII");
+            $scope.messages.push(response);
+        }).error(function(){
+            alert("Post doesn't work");
+        });
+
         //TODO httppost to /issue/issueId/messages/
+
         $scope.messages.push({text: newMessageText, poster: 'dynamic', time: timeStamp() });
+
     };
     $http.get("/issue/"+$scope.issueID +"/messages/").success(function(messages) {
         console.log(messages);
@@ -38,6 +49,28 @@ app.controller('messageController', function($scope, $http) {
     }).error(function(foo, bar, baz){
         alert("Error getting messages!");
     });
+
+    $scope.likeMessage = function(message) {
+        var config = {headers: { 'Content-Type': 'application/x-www-form-urlencoded'}};
+        if(message.liked) {
+            $http.post("/message/" + message.id + "/vote", "value=1", config).success(function(response) {
+            }).error(function(foo, bar, baz) {
+                alert("like failed")
+            });
+        } else {
+            $http.delete("/message/" + message.id + "/vote", config).success(function(response) {
+            }).error(function(foo, bar, baz) {
+                alert("unlike failed");
+            });
+        }
+    };
+});
+
+app.controller('recentController', function($scope, $http) {
+    $http.get('/issues/recent/comments').success(function(response){
+        console.log(response);
+        $scope.recentlyCommented = response.issues;
+    })
 });
 
 function timeStamp() {

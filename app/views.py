@@ -4,6 +4,7 @@ from django.template import RequestContext, Context
 from django.contrib.auth import authenticate, login, logout
 from urllib.request import urlopen, quote
 from django.template.context_processors import csrf
+from django.contrib.auth.decorators import login_required
 from django.core import serializers
 
 import json
@@ -12,6 +13,7 @@ import logging
 
 from app.models import Message
 from app.models import Issue
+from app.models import MessageVote
 
 # Create your views here.
 
@@ -103,6 +105,14 @@ def issue(request, issueID):
     c.update(csrf(request))
     return HttpResponse(t.render(c))
 
+def issues_with_messages(request):
+    messages = Message.objects.order_by('edited')[:10]
+    issuelist = {}
+    issuelist['issues'] = []
+    for message in messages:
+        issue = message.issue
+        issuelist['issues'].append({'message' : message.text, 'issueID' : issue.ahjo_id})
+    return JsonResponse(issuelist)
 
 def edit_message(request, messageID):
     if request.user is None or request.user.is_anonymous():
@@ -112,7 +122,6 @@ def edit_message(request, messageID):
         message.text = request.PUT['messagefield']
         message.save()
         return JsonResponse(message)
-        return JsonResponse(message)
     elif request.method == 'DELETE':
         message = get_object_or_404(Message, poster=request.user, id=messageID)
         message.delete()
@@ -121,13 +130,16 @@ def edit_message(request, messageID):
         return HttpResponseBadRequest('Only PUT and DELETE methods are allowed')
 
 
+@login_required
 def post_message(request, issueID):
     if request.method == 'GET':
         messages = Message.objects.filter(issue=issueID)
         response = {}
         response['messages'] = [];
+        votes = MessageVote.objects.filter(user=request.user);
         for m in messages:
-            response['messages'].append({'text': m.text, 'poster': m.poster.username, 'created':m.created, 'edited':m.edited })
+            voted = votes.filter(message=m).count() > 0
+            response['messages'].append({'text': m.text, 'poster': m.poster.username, 'created':m.created, 'edited':m.edited, 'id': m.id, 'liked': voted})
         return JsonResponse(response)
     elif request.user is None or request.user.is_anonymous():
         return HttpResponseForbidden('Please login before posting')
@@ -144,8 +156,24 @@ def post_message(request, issueID):
         #m.poster = request.user
         #m.issue_id = issueID
         m.save()
-        response = {'text': m.text, 'poster': m.poster.username, 'created':m.created, 'edited':m.edited }
+        response = {'text': m.text, 'poster': m.poster.username, 'created':m.created, 'edited':m.edited, 'id': m.id }
         return JsonResponse(response)
     else:
         return HttpResponseBadRequest("Only POST method is allowed")
+
+
+@login_required
+def vote_message(request, messageID):
+    if request.method == 'POST':
+        value = request.POST['value']
+        value = min(int(value), 1)  # only +1 or 0 votes for now
+        data = MessageVote.objects.get_or_create(user=request.user, message_id=messageID, vote_value=value)
+        vote = data[0];
+        vote.save();
+        return JsonResponse({'messageId': vote.message.id, 'user': vote.user.username, 'value': vote.vote_value})
+
+    elif request.method == 'DELETE':
+        vote = get_object_or_404(MessageVote, user=request.user, message_id=messageID)
+        vote.delete()
+        return JsonResponse({'commentId': vote.id})
 
