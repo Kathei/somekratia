@@ -105,6 +105,14 @@ def issue(request, issueID):
     c.update(csrf(request))
     return HttpResponse(t.render(c))
 
+def issues_with_messages(request):
+    messages = Message.objects.order_by('edited')[:10]
+    issuelist = {}
+    issuelist['issues'] = []
+    for message in messages:
+        issue = message.issue
+        issuelist['issues'].append({'message' : message.text, 'issueID' : issue.ahjo_id})
+    return JsonResponse(issuelist)
 
 def edit_message(request, messageID):
     if request.user is None or request.user.is_anonymous():
@@ -113,7 +121,6 @@ def edit_message(request, messageID):
         message = get_object_or_404(Message, poster=request.user, id=messageID)
         message.text = request.PUT['messagefield']
         message.save()
-        return JsonResponse(message)
         return JsonResponse(message)
     elif request.method == 'DELETE':
         message = get_object_or_404(Message, poster=request.user, id=messageID)

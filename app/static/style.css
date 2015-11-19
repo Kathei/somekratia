@@ -154,4 +154,7 @@ form {
     color: #ffffff;
 }
 
-
+#recentMessages {
+    float: right;
+    width: 20%;
+}

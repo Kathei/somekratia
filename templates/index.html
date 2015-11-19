@@ -79,7 +79,16 @@
 
            </ui-gmap-google-map>
        </div>
-
-
+    {% verbatim %}
+    <div id="recentMessages" ng-controller="recentController">
+        <div ng-repeat="m in recentlyCommented">
+            <div class="messageBubble">
+                <div class="messageText">
+                    Viesti: {{m.message}} - ID: {{m.issueID}}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endverbatim %}
 </body>
 </html>

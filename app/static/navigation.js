@@ -63,6 +63,13 @@ app.controller('messageController', function($scope, $http) {
     };
 });
 
+app.controller('recentController', function($scope, $http) {
+    $http.get('/issues/recent/comments').success(function(response){
+        console.log(response);
+        $scope.recentlyCommented = response.issues;
+    })
+});
+
 app.controller('searchController', function($scope, $http){
 
     $scope.MapOptions = {
