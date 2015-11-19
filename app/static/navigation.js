@@ -19,7 +19,7 @@ app.controller('messageController', function($scope, $http) {
         };
         $http.delete("/message/" + messageId + '/', config)
             .success(function() {
-                alert("deleted: " + messageId);
+                //alert("deleted: " + messageId);
             }).error(function() {
                 alert("delete failed!");
             });
@@ -27,7 +27,7 @@ app.controller('messageController', function($scope, $http) {
     };
 
     $scope.postMessage = function(issueId, newMessageText) {
-        alert(issueId + ": " + newMessageText);
+        //alert(issueId + ": " + newMessageText);
         //TODO httppost to /issue/issueId/messages/
         $scope.messages.push({text: newMessageText, poster: 'dynamic'});
     };
