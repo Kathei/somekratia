@@ -4,6 +4,7 @@
 
 var searchIssues = new SearchIssues();
 
+
 var app = angular.module('myApp', ['ngRoute', 'uiGmapgoogle-maps']);
 
 app.config(['$httpProvider', function($httpProvider) {
@@ -29,7 +30,7 @@ app.controller('messageController', function($scope, $http) {
     $scope.postMessage = function(issueId, newMessageText) {
         //alert(issueId + ": " + newMessageText);
         //TODO httppost to /issue/issueId/messages/
-        $scope.messages.push({text: newMessageText, poster: 'dynamic'});
+        $scope.messages.push({text: newMessageText, poster: 'dynamic', time: timeStamp() });
     };
     $http.get("/issue/"+$scope.issueID +"/messages/").success(function(messages) {
         console.log(messages);
@@ -38,6 +39,22 @@ app.controller('messageController', function($scope, $http) {
         alert("Error getting messages!");
     });
 });
+
+function timeStamp() {
+
+  var now = new Date();
+  var date = [ now.getDate(), now.getMonth() + 1, now.getFullYear() ];
+  var time = [ now.getHours(), now.getMinutes(), now.getSeconds() ];
+
+// If seconds and minutes are less than 10, add a zero
+  for ( var i = 1; i < 3; i++ ) {
+    if ( time[i] < 10 ) {
+      time[i] = "0" + time[i];
+    }
+  }
+
+  return date.join(".") + " " + time.join(":");
+}
 
 app.controller('searchController', function($scope, $http){
 
@@ -166,6 +183,18 @@ app.controller('searchController', function($scope, $http){
 
 
 });
+
+app.controller('loginController', function($scope){
+
+});
+
+app.controller('loginShowController', function($scope, $rootScope){
+
+    $scope.toggleShow = function() {
+        $rootScope.showLogin = true;
+    }
+});
+
 
 
 

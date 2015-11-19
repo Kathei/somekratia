@@ -94,8 +94,9 @@
                 {% verbatim %}
                     <div ng-repeat="m in messages">
                         <div class="messageBubble">
-                            <div class="messageText">Viesti
-                                {{m.poster}} - {{m.text}}</div>
+                                <h3 class="poster">{{m.poster}}</h3>
+                                <h3 class="time-posted">{{m.time}}</h3>
+                                <p class="messageText">{{m.text}}</p>
                         </div>
                     </div>
                 {% endverbatim%}

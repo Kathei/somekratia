@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <title>Somekratia</title>
-   <!--  <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;signed_in=true"></script> -->
+    <!--  <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;signed_in=true"></script> -->
 
- <!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> -->
-  <!--  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-route.js"></script>
+    <!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> -->
+    <!--  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.js"></script>
+      <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-route.js"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-google-maps/2.1.6/angular-google-maps.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-google-maps/2.1.6/angular-google-maps.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js"></script>
 
 
-  <!--  <script src="/static/googlemap.js"></script> -->
+    <!--  <script src="/static/googlemap.js"></script> -->
     <script src="/static/angular.js"></script>
     <script src="/static/angular-route.js"></script>
     <script src="/static/angular-google-maps.js"></script>
@@ -26,59 +26,63 @@
     <link rel="stylesheet" type="text/css" media="screen" href="../static/style.css" />
 </head>
 <body>
-    <div class="navbar">
-        <div class="nav-contents">
-            <img src="/static/img/somekratia_logo.png" class="logo"/>
-            <ul id="mainnav">
-                <li class="nav-item selected"><a href="index.html">HOME</a></li>
-                <li class="nav-item"><a href=""></a>RECENT</li>
-                <li class="nav-item"><a href=""></a>CATEGORIES</li>
-            </ul>
+<div class="navbar">
+    <div class="nav-contents">
+        <img src="/static/img/somekratia_logo.png" class="logo"/>
+        <ul id="mainnav">
+            <li class="nav-item selected"><a href="index.html">HOME</a></li>
+            <li class="nav-item"><a href=""></a>RECENT</li>
+            <li class="nav-item"><a href=""></a>CATEGORIES</li>
+        </ul>
 
-            {% if user.is_authenticated %}
-                <form class="nav-field logout-button" id="logout" action="/logout" method="post">
-                    {% csrf_token %}
+        {% if user.is_authenticated %}
+            <form class="nav-field logout-button" id="logout" action="/logout" method="post">
+                {% csrf_token %}
 
-                        <button class="nav-item" type="submit">LOGOUT</button>
+                <button class="nav-item" type="submit">LOGOUT</button>
 
-                </form>
-            {% else %}
-                <button class="nav-item login-button" type="openLogin">LOGIN</button>
-                <div class="hide">
-                    <form class="nav-field" id="login" action="/login" method="post">
-                        {% csrf_token %}
-                        <!--<input type="button" id="signup" value="Sign up" />-->
-                        <label for="usernameinput">
-                            <input type="text" id="usernameinput" name="username" placeholder="Username" />
-                        </label>
-                        <label for="passwordinput">
-                            <input type="password" id="passwordinput" name="password" placeholder="Password" />
-                        </label>
-                        <div class="button">
-                            <button type="submit">Login</button>
-                        </div>
-                    </form>
-                </div>
-            {% endif %}
+            </form>
+        {% else %}
+            <button  class="nav-item login-button" ng-controller="loginShowController" ng-click="toggleShow()">LOGIN</button>
+        {% endif %}
 
-                <div class="nav-field nav-item">
-                    <input type="text" id="search" name="search" placeholder="Search" data-ng-model="text"/>
+        <div class="nav-field nav-item">
+            <input type="text" id="search" name="search" placeholder="Search" data-ng-model="text"/>
 
-                        <button type="submit" class="nav-item search-button" ng-controller="searchController" ng-click="textSearch(text)">SEARCH</button>
+            <button type="submit" class="nav-item search-button" ng-controller="searchController" ng-click="textSearch(text)">SEARCH</button>
 
-                </div>
         </div>
-
     </div>
 
-     <div id= 'map-container' ng-controller="searchController" >
-           <ui-gmap-google-map center='map.center' zoom='map.zoom' events="map.mapEvents">
-               <ui-gmap-markers models="issueMarkers" coords="'self'" icon="'icon'" click="markerClick" events="marker.events">
+</div>
 
-               </ui-gmap-markers>
+<div class="login" ng-controller="loginController" ng-show="showLogin">
+    <div class="login-box">
+        <form class="" id="login" action="/login" method="post">
+            {% csrf_token %}
+            <!--<input type="button" id="signup" value="Sign up" />-->
+            <label for="usernameinput">
+                <input type="text" id="usernameinput" name="username" placeholder="Username" />
+            </label>
+            <label for="passwordinput">
+                <input type="password" id="passwordinput" name="password" placeholder="Password" />
+            </label>
+            <div class="button">
+                <button type="submit">Login</button>
+            </div>
+        </form>
+    </div>
+</div>
 
-           </ui-gmap-google-map>
-       </div>
+<div id= 'map-container' ng-controller="searchController" >
+    <ui-gmap-google-map center='map.center' zoom='map.zoom' events="map.mapEvents">
+        <ui-gmap-markers models="issueMarkers" coords="'self'" icon="'icon'" click="markerClick" events="marker.events">
+
+        </ui-gmap-markers>
+
+    </ui-gmap-google-map>
+</div>
+
 
 
 </body>

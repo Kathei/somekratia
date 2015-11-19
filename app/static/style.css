@@ -1,11 +1,11 @@
 @font-face {
-  font-family: Neou;
-  src: url('fonts/Neou-Thin.otf');
+    font-family: Neou;
+    src: url('fonts/Neou-Thin.otf');
 }
 @font-face {
-   font-family: Neou Bold;
-   font-weight: bold;
-     src: url('fonts/Neou-Bold.otf');
+    font-family: Neou Bold;
+    font-weight: bold;
+    src: url('fonts/Neou-Bold.otf');
 }
 
 @font-face {
@@ -31,16 +31,16 @@ h2 {
 }
 
 #map-container {
-  width: 100vw;
-  height: 100vh;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: -1001;
-  }
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1001;
+}
 
 #mainnav li {
-  font-size: 25px;
+    font-size: 25px;
     font-family: Neou Bold;
     color: #939291;
 
@@ -51,42 +51,43 @@ li.selected a {
 }
 
 #mainnav {
-  display: inline;
+    display: inline;
 }
 
 .hide {
-  display: none;
+    display: none;
 }
 
 .navbar {
-  background-color: white;
-  padding: 2vw 0;
-  margin-top: 2vw;
-  width: 100vw;
-  margin-top: 1.5vw;
-  position: absolute;
-  left: 0;
+    background-color: white;
+    padding: 2vw 0;
+    margin-top: 2vw;
+    width: 100vw;
+    margin-top: 1.5vw;
+    position: absolute;
+    left: 0;
+    z-index: -1;
 }
 
 .nav-item {
-  display: inline;
-  padding-right: 40px;
+    display: inline;
+    padding-right: 40px;
 }
 
 .nav-contents {
-  float: right;
-  margin-right: 5vw;
+    float: right;
+    margin-right: 5vw;
 }
 
 form {
-  display: inline;
+    display: inline;
 }
 
 .logo {
-  width: 17vw;
-  position: absolute;
-  left: 5vw;
-  top: 0.5vw;
+    width: 17vw;
+    position: absolute;
+    left: 5vw;
+    top: 0.5vw;
 }
 
 #login-button {
@@ -99,8 +100,10 @@ form {
 
 
 .angular-google-map-container {
-  height: 100vh;
+    height: 100vh;
 }
+
+/* ISSUENÄKYMÄ */
 
 .issue .navbar {
     position: relative;
@@ -136,6 +139,8 @@ form {
     width: 40vw;
 }
 
+/* KÄYTTÄJIEN VIESTIT */
+
 .messages {
     float: right;
     width: 40vw;
@@ -149,9 +154,45 @@ form {
     border-radius: 1vw;
 }
 
-.messageText {
+.messageBubble h3, .messageBubble p{
     font-family: Tw Cen MT;
     color: #ffffff;
+}
+
+.messageBubble h3 {
+    margin-top: 0.5vh;
+}
+
+.poster {
+    float: left;
+    width: 62%;
+}
+
+.time-posted {
+    float: right;
+    width: 38%;
+}
+
+/* LOGIN-IKKUNA */
+
+.login .login-box {
+    padding: 10px;
+    background: white;
+    z-index: 10000;
+    position: absolute;
+    top: 20vw;
+    left: 40vw;
+    padding: 2vw;
+     border-radius: 1vw;
+}
+
+.login {
+    background:rgba(0,0,0,0.4);
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
 
