@@ -95,7 +95,9 @@
                     <div ng-repeat="m in messages">
                         <div class="messageBubble">
                             <div class="messageText">Viesti
-                                {{m.poster}} - {{m.text}}</div>
+                                {{m.poster}} - {{m.text}}
+                                <input type="checkbox" ng-model="m.liked" ng-change="likeMessage(m)">
+                            </div>
                         </div>
                     </div>
                 {% endverbatim%}
