@@ -34,6 +34,7 @@ app.controller('messageController', function($scope, $http) {
             //TODO show loading icon
             alert("POST TOIMII");
             $scope.messages.push(response);
+
         }).error(function(){
             alert("Post doesn't work");
         });
@@ -52,13 +53,16 @@ app.controller('messageController', function($scope, $http) {
 
     $scope.likeMessage = function(message) {
         var config = {headers: { 'Content-Type': 'application/x-www-form-urlencoded'}};
+        message.liked = !message.liked;
         if(message.liked) {
             $http.post("/message/" + message.id + "/vote", "value=1", config).success(function(response) {
+                message.imagesrc = "../../static/img/thumbs-up-green.png";
             }).error(function(foo, bar, baz) {
                 alert("like failed")
             });
         } else {
             $http.delete("/message/" + message.id + "/vote", config).success(function(response) {
+                message.imagesrc = "../../static/img/thumbs-up.png";
             }).error(function(foo, bar, baz) {
                 alert("unlike failed");
             });

@@ -96,10 +96,10 @@
                         <div class="messageBubble">
 
                                 <h3 class="poster">{{m.poster}}</h3>
-                                <h3 class="time-posted">{{m.created}}</h3>
+                                <h3 class="time-posted">{{m.created | date: 'short'}}</h3>
                                 <p class="messageText">{{m.text}}</p>
 
-                                <input type="checkbox" ng-model="m.liked" ng-change="likeMessage(m)">
+                                <img ng-src="{{ m.liked ? '../../static/img/thumbs-up-green.png' : '../../static/img/thumbs-up.png' }}" ng-click="likeMessage(m)">
 
                         </div>
                     </div>
