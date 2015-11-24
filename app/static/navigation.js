@@ -38,11 +38,11 @@ app.controller('messageController', function($scope, $http) {
             alert("Post doesn't work");
         });
 
-        //TODO httppost to /issue/issueId/messages/
 
-        $scope.messages.push({text: newMessageText, poster: 'dynamic', time: timeStamp() });
+        //$scope.messages.push({text: newMessageText, poster: 'dynamic', time: timeStamp() });
 
     };
+
     $http.get("/issue/"+$scope.issueID +"/messages/").success(function(messages) {
         console.log(messages);
         $scope.messages = messages.messages;
