@@ -138,13 +138,12 @@ def edit_message(request, messageID):
         return HttpResponseBadRequest('Only PUT and DELETE methods are allowed')
 
 
-@login_required
 def post_message(request, issueID):
     if request.method == 'GET':
         messages = Message.objects.filter(issue=issueID)
         response = {}
         response['messages'] = [];
-        votes = MessageVote.objects.filter(user=request.user);
+        votes = MessageVote.objects.filter(user=request.user)
         for m in messages:
             voted = votes.filter(message=m).count() > 0
             response['messages'].append({'text': m.text, 'poster': m.poster.username, 'created':m.created, 'edited':m.edited, 'id': m.id, 'liked': voted})
@@ -167,7 +166,7 @@ def post_message(request, issueID):
         response = {'text': m.text, 'poster': m.poster.username, 'created':m.created, 'edited':m.edited, 'id': m.id }
         return JsonResponse(response)
     else:
-        return HttpResponseBadRequest("Only POST method is allowed")
+        return HttpResponseBadRequest("Only POST and GET methods are allowed")
 
 
 @login_required
