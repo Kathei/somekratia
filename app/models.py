@@ -38,7 +38,14 @@ class MessageVote(models.Model):
     message = models.ForeignKey(Message)
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     vote_value = models.IntegerField()
+
     class Meta:
         unique_together = (("message", "user"),)
 
 
+class IssueSubscription(models.Model):
+    issue = models.ForeignKey(Issue)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+
+    class Meta:
+        unique_together = (("issue", "user"),)

@@ -179,8 +179,8 @@ def vote_message(request, messageID):
         value = request.POST['value']
         value = min(int(value), 1)  # only +1 or 0 votes for now
         data = MessageVote.objects.get_or_create(user=request.user, message_id=messageID, vote_value=value)
-        vote = data[0];
-        vote.save();
+        vote = data[0]
+        vote.save()
         return JsonResponse({'messageId': vote.message.id, 'user': vote.user.username, 'value': vote.vote_value})
 
     elif request.method == 'DELETE':
@@ -188,7 +188,14 @@ def vote_message(request, messageID):
         vote.delete()
         return JsonResponse({'commentId': vote.id})
 
-#@login_required
-#def subscribe_issue(request, issueID):
-    #if request.method == 'POST':
-       # data = IssueSubscription.objects.
+@login_required
+def subscribe_issue(request, issueID):
+    if request.method == 'POST':
+        data = IssueSubscription.objects.get_or_create(user=request.user, issue_id=issueID)
+        subscribe = data[0]
+        subscribe.save()
+        return JsonResponse({'issueId' : subscribe.issue.id, 'user' : subscribe.user.username})
+    elif request.method == 'DELETE':
+        subscribe = get_object_or_404(IssueSubscription, user = request.user, issue_id = issueID)
+        subscribe.delete()
+        return JsonResponse({'subId' : subscribe.id})
