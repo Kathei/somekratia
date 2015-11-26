@@ -22,18 +22,25 @@
     <script src="/static/search.js"></script>
     <script src="/static/issue.js"></script>
     <script src="/static/navigation.js"></script>
-
+    <script src="/static/navbar_controller.js"></script>
     <link rel="stylesheet" type="text/css" media="screen" href="../static/style.css" />
 </head>
 <body>
 
 <div class="navbar">
-    <div class="nav-contents">
+    <div class="nav-contents" ng-controller="navbarController">
         <a href="index.html"><img src="/static/img/somekratia_logo.png" class="logo"/></a>
         <ul id="mainnav">
             <li class="nav-item selected"><a href="index.html">HOME</a></li>
             <li class="nav-item"><a href=""></a>RECENT</li>
             <li class="nav-item"><a href=""></a>CATEGORIES</li>
+            {% verbatim %}
+            <select name="categorySelect" id="category" class="nav-item" ng-model="category"
+                    ng-init="categories = [{ id:0, name: 'Kaikki kategoriat'}]; categorySelect = categories[0];"
+                    ng-change="categoryChanged()">
+                    <option ng-repeat="option in categories" value="{{option}}">{{option.name}}</option>
+            </select>
+            {% endverbatim %}
         </ul>
 
         {% if user.is_authenticated %}

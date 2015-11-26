@@ -11,7 +11,7 @@ import json
 import logging
 
 
-from app.models import Message, IssueSubscription
+from app.models import Message
 from app.models import Issue
 from app.models import MessageVote
 from app.models import Decision
@@ -143,9 +143,13 @@ def post_message(request, issueID):
         messages = Message.objects.filter(issue=issueID)
         response = {}
         response['messages'] = [];
-        votes = MessageVote.objects.filter(user=request.user)
+        if request.user.is_authenticated():
+            votes = MessageVote.objects.filter(user=request.user)
         for m in messages:
-            voted = votes.filter(message=m).count() > 0
+            if votes is not None:
+                voted = votes.filter(message=m).count() > 0
+            else:
+                voted = False
             response['messages'].append({'text': m.text, 'poster': m.poster.username, 'created':m.created, 'edited':m.edited, 'id': m.id, 'liked': voted})
         return JsonResponse(response)
     elif request.user is None or request.user.is_anonymous():
