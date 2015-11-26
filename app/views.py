@@ -11,9 +11,10 @@ import json
 import logging
 
 
-from app.models import Message
+from app.models import Message, IssueSubscription
 from app.models import Issue
 from app.models import MessageVote
+from app.models import Decision
 
 # Create your views here.
 
@@ -96,6 +97,11 @@ def categories(request):
     return JsonResponse(get_url_as_json(url))
 
 
+def decisions(request, issueID):
+    url = 'http://dev.hel.fi/paatokset/v1/agenda_item/?issue=%s' % issueID
+    return JsonResponse(get_url_as_json(url))
+
+
 def issue(request, issueID):
     t = loader.get_template('issue.html')
     messages = Message.objects.filter(issue=issueID)
@@ -105,6 +111,7 @@ def issue(request, issueID):
     c.update(csrf(request))
     return HttpResponse(t.render(c))
 
+
 def issues_with_messages(request):
     messages = Message.objects.order_by('edited')[:10]
     issuelist = {}
@@ -113,6 +120,7 @@ def issues_with_messages(request):
         issue = message.issue
         issuelist['issues'].append({'message' : message.text, 'issueID' : issue.ahjo_id})
     return JsonResponse(issuelist)
+
 
 def edit_message(request, messageID):
     if request.user is None or request.user.is_anonymous():
@@ -177,3 +185,7 @@ def vote_message(request, messageID):
         vote.delete()
         return JsonResponse({'commentId': vote.id})
 
+#@login_required
+#def subscribe_issue(request, issueID):
+    #if request.method == 'POST':
+       # data = IssueSubscription.objects.

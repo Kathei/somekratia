@@ -22,6 +22,7 @@ from app.views import post_message, edit_message
 from app.views import categories
 from app.views import vote_message
 from app.views import issues_with_messages
+from app.views import decisions
 
 
 
@@ -41,5 +42,6 @@ urlpatterns = [
     url(r'^message/(?P<messageID>[0-9]+)/$', edit_message),
     url(r'^message/(?P<messageID>[0-9]+)/vote$', vote_message),
     url(r'^issues/recent/comments', issues_with_messages),
+    url(r'^issue/(?P<issueID>[0-9]+)/decisions', decisions),
 
 ]
