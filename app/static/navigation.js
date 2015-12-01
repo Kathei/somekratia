@@ -70,6 +70,26 @@ app.controller('messageController', function($scope, $http) {
     };
 });
 
+app.controller('subController', function($scope, $http) {
+    $scope.subscribeIssue = function(issue) {
+        issue.subscribed = !issue.subscribed;
+        if (issue.subscribed) {
+            $http.post("/issue/" + issue.id + "/subscribe", config).success(function(response) {
+                issue.imagesrc = "../../static/img/thumbs-up-green.png";
+            }).error(function(foo, bar, baz) {
+                alert("subscribe failed")
+            });
+        } else {
+            $http.delete("/issue/" + issue.id + "/vsubscribe", config).success(function(response) {
+                issue.imagesrc = "../../static/img/thumbs-up.png";
+            }).error(function(foo, bar, baz) {
+                alert("unsubscribe failed");
+            });
+        }
+
+    };
+});
+
 app.controller('recentController', function($scope, $http) {
     $http.get('/issues/recent/comments').success(function(response){
         console.log(response);

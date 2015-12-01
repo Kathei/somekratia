@@ -11,7 +11,7 @@ import json
 import logging
 
 
-from app.models import Message
+from app.models import Message, IssueSubscription
 from app.models import Issue
 from app.models import MessageVote
 from app.models import Decision
@@ -107,7 +107,12 @@ def issue(request, issueID):
     messages = Message.objects.filter(issue=issueID)
     url = 'http://dev.hel.fi/paatokset/v1/issue/%s/?format=json' % issueID
     details = get_url_as_json(url)
-    c = Context({'message_list': messages, 'issueID': issueID, 'user': request.user, 'jsondetails': details})
+    subscribed = False
+    if request.user.is_authenticated():
+        subscribes = IssueSubscription.objects.filter(user=request.user, issue=issueID)
+        if subscribes.count() > 0:
+            subscribed = True
+    c = Context({'message_list': messages, 'issueID': issueID, 'user': request.user, 'jsondetails': details, 'subscribed':subscribed})
     c.update(csrf(request))
     return HttpResponse(t.render(c))
 
@@ -142,7 +147,7 @@ def post_message(request, issueID):
     if request.method == 'GET':
         messages = Message.objects.filter(issue=issueID)
         response = {}
-        response['messages'] = [];
+        response['messages'] = []
         if request.user.is_authenticated():
             votes = MessageVote.objects.filter(user=request.user)
         for m in messages:
