@@ -129,10 +129,15 @@ app.controller('messageController', function($scope, $http) {
         var firstAndLast = getTimeSpan();
         var timeSpan = firstAndLast.end - firstAndLast.begin;
         console.log(timeStamp);
-        var position = (timeStamp - firstAndLast.begin) / timeSpan;
+        var position = 0;
+        if (timeSpan != 0) {
+            position = (timeStamp - firstAndLast.begin) / timeSpan;
+        }
+        var offset = 6;
+        var percentage = position * 86 + offset;
         //console.log(position);
         return {
-          'left': parseInt(6 + position*86) + '%'
+          'left': percentage + '%'
         }
     };
 
@@ -337,13 +342,19 @@ app.controller('searchController', function($scope, $http){
 });
 
 app.controller('loginController', function($scope){
+    var loginbutton = document.querySelector('[ng-controller="loginShowController"]');
+    var loginscope = angular.element(loginbutton).scope();
+
+    $scope.toggleShow = function() {
+        loginscope.toggleShow();
+    }
 
 });
 
 app.controller('loginShowController', function($scope, $rootScope){
 
     $scope.toggleShow = function() {
-        $rootScope.showLogin = true;
+        $rootScope.showLogin = !$rootScope.showLogin;
     }
 });
 

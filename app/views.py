@@ -203,7 +203,7 @@ def post_message(request, issueID):
             votes = MessageVote.objects.filter(user=request.user)
         else:
             votes = None
-            
+
         for m in messages:
             if votes is not None:
                 voted = votes.filter(message=m).count() > 0

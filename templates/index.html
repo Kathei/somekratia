@@ -33,11 +33,10 @@
         <ul id="mainnav">
             <li class="nav-item selected"><a href="index.html">HOME</a></li>
             <li class="nav-item"><a href=""></a>RECENT</li>
-            <li class="nav-item"><a href=""></a>CATEGORIES</li>
             {% verbatim %}
-            <select name="categorySelect" id="category" class="nav-item" ng-model="category"
-                    ng-init="categories = [{ id:0, name: 'Kaikki kategoriat'}]; categorySelect = categories[0];"
+            <select name="categorySelect" id="category" class="nav-item" ng-model="categorySelect"
                     ng-change="categoryChanged()">
+                    <option value="">KATEGORIAT</option>
                     <option ng-repeat="option in categories" value="{{option}}">{{option.name}}</option>
             </select>
             {% endverbatim %}
@@ -64,8 +63,8 @@
 
 </div>
 
-<div class="login" ng-controller="loginController" ng-show="showLogin">
-    <div class="login-box">
+<div class="login" ng-controller="loginController" ng-show="showLogin" ng-click="toggleShow()">
+    <div class="login-box" ng-click="console.log('klik')">
         <form class="" id="login" action="/login" method="post">
             {% csrf_token %}
             <!--<input type="button" id="signup" value="Sign up" />-->
@@ -77,6 +76,7 @@
             </label>
             <div class="button">
                 <button type="submit">Login</button>
+                <button type="reset" ng-click="toggleShow()">Cancel</button>
             </div>
         </form>
     </div>
