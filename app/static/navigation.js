@@ -74,14 +74,18 @@ app.controller('subController', function($scope, $http) {
     $scope.subscribeIssue = function(issue) {
         issue.subscribed = !issue.subscribed;
         if (issue.subscribed) {
+            var config = {headers: { 'Content-Type': 'application/x-www-form-urlencoded'}}
             $http.post("/issue/" + issue.id + "/subscribe", config).success(function(response) {
-                issue.imagesrc = "../../static/img/thumbs-up-green.png";
+                issue.imagesrc = "../../static/img/yellowstar.png";
             }).error(function(foo, bar, baz) {
                 alert("subscribe failed")
             });
         } else {
-            $http.delete("/issue/" + issue.id + "/vsubscribe", config).success(function(response) {
-                issue.imagesrc = "../../static/img/thumbs-up.png";
+            var config = {
+                method: 'DELETE',
+            };
+            $http.delete("/issue/" + issue.id + "/subscribe", config).success(function(response) {
+                issue.imagesrc = "../../static/img/graystar.png";
             }).error(function(foo, bar, baz) {
                 alert("unsubscribe failed");
             });

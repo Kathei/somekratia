@@ -195,7 +195,12 @@ def vote_message(request, messageID):
 
 @login_required
 def subscribe_issue(request, issueID):
+
     if request.method == 'POST':
+        issue = Issue.objects.get_or_create(id=issueID, ahjo_id=issueID)
+        if issue[1] is True:
+            issue[0].save()
+            logging.info("Created object with id %s" % issueID)
         data = IssueSubscription.objects.get_or_create(user=request.user, issue_id=issueID)
         subscribe = data[0]
         subscribe.save()

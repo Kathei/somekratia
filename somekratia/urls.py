@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-from app.views import index, login_view, issues_bbox, logout_view
+from app.views import index, login_view, issues_bbox, logout_view, subscribe_issue
 from app.views import issue
 from app.views import issues_search_text, issues_category
 from app.views import post_message, edit_message
@@ -43,5 +43,5 @@ urlpatterns = [
     url(r'^message/(?P<messageID>[0-9]+)/vote$', vote_message),
     url(r'^issues/recent/comments', issues_with_messages),
     url(r'^issue/(?P<issueID>[0-9]+)/decisions', decisions),
-
+    url(r'^issue/(?P<issueID>[0-9]+)/subscribe', subscribe_issue),
 ]

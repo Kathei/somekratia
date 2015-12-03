@@ -63,12 +63,13 @@
         <div class="placeholder-timeline">&nbsp;</div>
         <div class="issueDetails" ng-controller="messageController">
             <div class="issueInfo">
+                <div ng-init="issue = {{ jsondetails }};"></div>
                 <h2>{{ jsondetails.subject }} </h2>
                 <h4>Date: {{ jsondetails.latest_decision_date }}</h4>
                 <p>{{ jsondetails.summary }} </p>
                 {% verbatim %}
                 <div class="subscribe" ng-controller="subController">
-                    <img ng-src="{{ issue.subscribed ? '../../static/img/thumbs-up-green.png' : '../../static/img/thumbs-up.png' }}" ng-click="subscribeIssue()">
+                    <img ng-src="{{ issue.subscribed ? '../../static/img/yellowstar.png' : '../../static/img/graystar.png' }}" ng-click="subscribeIssue(issue)">
                 </div>
                 {% endverbatim%}
                 <div>
