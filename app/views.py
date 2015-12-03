@@ -1,10 +1,12 @@
-from django.shortcuts import loader, redirect, get_object_or_404
+from django.shortcuts import loader, redirect, get_object_or_404, render_to_response
 from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseNotFound
+from django.http import HttpResponseRedirect
 from django.template import RequestContext, Context
 from django.contrib.auth import authenticate, login, logout
 from urllib.request import urlopen, quote
 from django.template.context_processors import csrf
 from django.contrib.auth.decorators import login_required
+from app.forms import UserForm, UserProfileForm
 from django.core import serializers
 
 import json
@@ -15,6 +17,7 @@ from app.models import Message, IssueSubscription
 from app.models import Issue
 from app.models import MessageVote
 from app.models import Decision
+from app.models import UserWithProfile
 
 # Create your views here.
 
@@ -42,6 +45,54 @@ def login_view(request):
             return HttpResponse('Account no longer active')
     else:
         return HttpResponse('Invalid password or username', status=403)
+
+
+def register(request):
+    context = RequestContext(request)
+    registered = False
+
+    if request.method == 'POST':
+        user_form = UserForm(data=request.POST)
+        profile_form = UserProfileForm(data=request.POST)
+
+        if user_form.is_valid() and profile_form.is_valid():
+            user = user_form.save()
+            user.set_password(user.password)
+            user.save()
+
+            profile = profile_form.save(commit=False)
+            profile.user = user
+            if 'picture' in request.FILES:
+                profile.picture = request.FILES['picture']
+            profile.save()
+            registered = True
+            return HttpResponseRedirect('/user/%d/' % profile.user_id)
+        else:
+            print(user_form.errors, profile_form.errors)
+    else:
+        user_form = UserForm()
+        profile_form = UserProfileForm()
+
+    return render_to_response(
+            'register.html',
+            {'user_form': user_form, 'profile_form': profile_form, 'registered': registered},
+            context)
+
+
+def user_picture(request, userID):
+    user = get_object_or_404(UserWithProfile, user=userID)
+    return HttpResponse(user.picture.file, content_type='text/plain')
+    return user.picture.file
+
+
+def user_profile(request, userID):
+    if request.user.is_authenticated():
+        user = get_object_or_404(UserWithProfile, user=userID)
+        return render_to_response('profile.html',
+                           {'user': user},
+                           RequestContext(request))
+    else:
+        return HttpResponseRedirect("/")
 
 
 def logout_view(request):
