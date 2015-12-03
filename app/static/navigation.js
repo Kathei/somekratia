@@ -132,6 +132,20 @@ app.controller('searchController', function($scope, $http){
        },
        zoom: 13,
        options: $scope.mapOptions,
+       window: {
+           marker: {},
+           show: false,
+           closeClick: function(){
+            this.show = false;
+           },
+           options: {
+               pixelOffset: {
+                   height: -30,
+                   width: 0,
+               }
+           },
+           issue: {},
+       }
    }
 
     $scope.map.mapEvents = {};
@@ -159,28 +173,31 @@ app.controller('searchController', function($scope, $http){
     }
     $scope.issueMarkers = [];
 
+    $scope.templateUrl = {};
 
-   function createInfoWindow(issue) {
-
-        console.log("infoikkuna");
-        var infoString = "info"
-        var infowindow = google.maps.InfoWindow({
-            content: infoString
-            });
-        return infowindow;
-    }
+    $scope.content = {};
 
     $scope.markerClick = function (generated, event, marker){
         console.log(marker);
         $scope.MapOptions.markers.selected = marker;
         var issueId = marker.issue.id;
-        console.log(issueId);
-        document.location.href = '/issue/' + issueId;
 
-        //createInfoWindow(issue).open($scope.map, marker);
-        //$scope.windowOptions.visible = true;
-        //$scope.title = "Window Title!";
-        //marker.show = !marker.show;
+       // console.log($scope.MapOptions.markers.selected.coords);
+        //document.location.href = '/issue/' + issueId;
+        $scope.map.window.marker = marker;
+        $scope.map.window.issue = marker.issue;
+       // console.log(marker.coords);
+      //   console.log($scope.window.marker.coords);
+     //   $scope.content = '<a href ="/issue/' + issueId +'">' + marker.issue.subject + '</a>';
+       /* var link = document.createElement('a');
+        link.setAttribute('href',"/issue/" + issueId);
+        link.innerHTML = marker.issue.subject;*/
+        $scope.templateUrl = '/static/infowindow.html';
+        $scope.content = marker.issue;
+        console.log($scope.content);
+        $scope.map.window.show = !$scope.map.window.show;
+
+        $scope.$apply();
     };
 
     function addMarkers(issue, index, array) {
@@ -191,10 +208,11 @@ app.controller('searchController', function($scope, $http){
             latitude: latLong[1],
             longitude: latLong[0],
             issue: issue,
+            coords: latLong,
+            show: false,
         });
-      /*  marker.addListener('click', function(generated, event, marker) {
-            createInfoWindow(issue).open($scope.map, marker);
-        });*/
+        // TODO check if user follows issue and color differently if yes
+            //marker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue-dot.png');
 
         $scope.issueMarkers.push(marker);
     }
@@ -227,22 +245,10 @@ app.controller('searchController', function($scope, $http){
                 markersUpdating = false;
         });
     }
- //infowindow related stuff
-    $scope.windowOptions = {
-            visible: false
-        };
-
-        $scope.onClick = function() {
-            $scope.windowOptions.visible = !$scope.windowOptions.visible;
-        };
 
         $scope.closeClick = function() {
-            $scope.windowOptions.visible = false;
+            $scope.map.window.show = false;
         };
-
-        $scope.title = "Window Title!";
-
-
 });
 
 app.controller('loginController', function($scope){
@@ -255,6 +261,9 @@ app.controller('loginShowController', function($scope, $rootScope){
         $rootScope.showLogin = true;
     }
 });
+
+app.controller('templateController', function(){});
+
 
 
 
