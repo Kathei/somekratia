@@ -60,8 +60,18 @@
             </div>
 
         </div>
-        <div class="placeholder-timeline">&nbsp;</div>
-        <div class="issueDetails" ng-controller="messageController">
+    <div class="issueContainer" ng-controller="messageController">
+        <div class="timeline-background">
+            <div class="placeholder-timeline">&nbsp;</div>
+            <div ng-repeat="d in decisions">
+                <div class="timeline-decision" ng-style="getStyle($index, d.origin_last_modified_time);"></div>
+            </div>
+            <div ng-repeat="m in messages">
+                <div class="timeline-message" ng-style="getStyle($index, m.created);"></div>
+            </div>
+
+        </div>
+        <div class="issueDetails">
             <div class="issueInfo">
                 <div ng-init="issue = {{ jsondetails }};"></div>
                 <h2>{{ jsondetails.subject }} </h2>
@@ -114,6 +124,7 @@
             </div>
 
         </div>
+    </div>
     </div>
 </body>
 </html>

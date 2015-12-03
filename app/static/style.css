@@ -133,6 +133,36 @@ form {
 
 }
 
+.timeline-decision {
+    width: 5vw;
+	height: 5vw;
+	background: blue;
+	-moz-border-radius: 2.5vw;
+	-webkit-border-radius: 2.5vw;
+	border-radius: 2.5vw;
+    display: inline;
+    position: absolute;
+    top: 7vw;
+    transform: translateX(-50%);
+}
+
+.timeline-background {
+    width: 86vw;
+}
+
+.timeline-message {
+    width: 5vw;
+	height: 5vw;
+	background: peachpuff;
+	-moz-border-radius: 2.5vw;
+	-webkit-border-radius: 2.5vw;
+	border-radius: 2.5vw;
+    display: inline;
+    position: absolute;
+    top: 7vw;
+    transform: translateX(-50%);
+}
+
 .issueInfo {
     float: left;
     width: 40vw;

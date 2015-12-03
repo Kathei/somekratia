@@ -13,6 +13,10 @@ app.config(['$httpProvider', function($httpProvider) {
 }]);
 
 app.controller('messageController', function($scope, $http) {
+    /*$scope.latestMessage = Date.parse("2999-11-24T15:24:25.730Z");
+    $scope.latestDecision = Date.parse("2999-11-24T15:24:25.730Z");
+    $scope.firstMessage = Date.parse("1970-11-24T15:24:25.730Z");
+    $scope.firstDecision = Date.parse("1970-11-24T15:24:25.730Z");*/
     $scope.deleteMessage = function(messageId){
         console.log("test");
         var config = {
@@ -33,7 +37,9 @@ app.controller('messageController', function($scope, $http) {
         $http.post("/issue/" + issueId + "/messages/", "messagefield="+encodeURIComponent(newMessageText), config).success(function(response) {
             //TODO show loading icon
             alert("POST TOIMII");
-            $scope.messages.push(response);
+            $scope.latestMessage = Date.parse(response.created);
+            $scope.messages.push(response)
+            $scope.$apply();
 
         }).error(function(){
             alert("Post doesn't work");
@@ -44,12 +50,91 @@ app.controller('messageController', function($scope, $http) {
 
     };
 
-    $http.get("/issue/"+$scope.issueID +"/messages/").success(function(messages) {
-        console.log(messages);
-        $scope.messages = messages.messages;
+    $http.get("/issue/"+$scope.issueID +"/messages/").success(function(response) {
+        console.log(response);
+        var messages = response.messages;
+        if (messages.length == 0) {
+            $scope.latestMessage = 'undefined';
+            $scope.firstMessage = 'undefined';
+            $scope.messages = [];
+            return;
+        }
+        $scope.latestMessage = messages[0];
+        $scope.firstMessage = messages[0];
+        var first = Date.parse(messages[0].created);
+        var last = Date.parse(messages[0].created);
+        for (message of messages) {
+            var created = Date.parse(message.created);
+            if (created >= last) {
+                $scope.latestMessage = created;
+                last = created;
+            }
+            if (created <= first) {
+                $scope.firstMessage = created;
+                first = created;
+            }
+        }
+        $scope.messages = messages;
     }).error(function(foo, bar, baz){
         alert("Error getting messages!");
     });
+
+    $http.get("/issue/"+$scope.issueID +"/decisions/").success(function(response) {
+        console.log(response);
+        var decisions = response.objects;
+        if (decisions.length == 0) {
+            $scope.latestDecision = 'undefined';
+            $scope.firstDecision = 'undefined';
+            $scope.messages = [];
+            return;
+        }
+        $scope.latestDecision = decisions[0];
+        $scope.firstDecision = decisions[0];
+        var first = Date.parse(decisions[0].origin_last_modified_time);
+        var last = Date.parse(decisions[0].origin_last_modified_time);
+        for (decision of decisions) {
+            var created = Date.parse(decision.origin_last_modified_time);
+            if (created >= last) {
+                $scope.latestDecision = created;
+                last = created;
+            }
+            if (created <= first) {
+                $scope.firstDecision = created;
+                first = created;
+            }
+        }
+        $scope.decisions = decisions;
+    }).error(function(foo, bar, baz){
+        alert("Error getting decisions!");
+    });
+
+
+    function getTimeSpan() {
+        var span = {}
+        if ($scope.latestMessage == 'undefined') {
+            span.begin = $scope.firstDecision;
+            span.end = $scope.latestDecision;
+        } else if ($scope.latestDecision == 'undefined') {
+            span.begin = $scope.firstMessage;
+            span.end = $scope.latestMessage;
+        } else {
+            span.begin = $scope.firstMessage < $scope.firstDecision ? $scope.firstMessage : $scope.firstDecision;
+            span.end = $scope.latestMessage > $scope.latestDecision ? $scope.latestMessage : $scope.latestDecision;
+        }
+        return span;
+    }
+
+    $scope.getStyle = function(index, timing) {
+        var timeStamp = Date.parse(timing);
+        var firstAndLast = getTimeSpan();
+        var timeSpan = firstAndLast.end - firstAndLast.begin;
+        console.log(timeStamp);
+        var position = (timeStamp - firstAndLast.begin) / timeSpan;
+        //console.log(position);
+        return {
+          'left': parseInt(6 + position*86) + '%'
+        }
+    };
 
     $scope.likeMessage = function(message) {
         var config = {headers: { 'Content-Type': 'application/x-www-form-urlencoded'}};
