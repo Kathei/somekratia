@@ -49,8 +49,6 @@ urlpatterns = [
     url(r'^message/(?P<messageID>[0-9]+)/vote$', vote_message),
     url(r'^issues/recent/comments', issues_with_messages),
     url(r'^issue/(?P<issueID>[0-9]+)/decisions', decisions),
-<<<<<<< Updated upstream
     url(r'^issue/(?P<issueID>[0-9]+)/subscribe', subscribe_issue),
-=======
->>>>>>> Stashed changes
+
 ]
