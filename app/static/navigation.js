@@ -207,7 +207,7 @@ function timeStamp() {
   return date.join(".") + " " + time.join(":");
 }
 
-app.controller('searchController', function($scope, $http){
+app.controller('searchController', function($scope, $http, $timeout){
 
     $scope.MapOptions = {
         markers: {
@@ -239,11 +239,15 @@ app.controller('searchController', function($scope, $http){
    }
 
     $scope.map.mapEvents = {};
+    var markerRefreshPromise;
     $scope.map.mapEvents.bounds_changed = function (map, eventName, args) {
-        //console.log(eventName);
-        $scope.setMarkers(map.getBounds());
-        console.log(map.getBounds().getSouthWest().lat()+ ", " + map.getBounds().getSouthWest().lng() + ", "+ map.getBounds().getNorthEast().lat() + ", "
-        +map.getBounds().getNorthEast().lng());
+        // reset the update timer by canceling the last call
+        if (markerRefreshPromise != undefined) {
+            $timeout.cancel(markerRefreshPromise);
+        }
+        var waitTime = 500;
+        // schedule marker refresh to start in 500 ms (waitTime)
+        markerRefreshPromise = $timeout($scope.setMarkers, waitTime, false, map.getBounds());
     };
 
     $scope.textSearch = function(text) {
@@ -309,31 +313,55 @@ app.controller('searchController', function($scope, $http){
 
     var markersUpdating = false;
     $scope.setMarkers = function(bounds) {
-        if(markersUpdating) {
-            return;
-        }
-        markersUpdating = true;
         var config = {
             'params' : {
-                'minLat': bounds.getSouthWest().lat(),
-                'maxLat': bounds.getNorthEast().lat(),
-                'minLong': bounds.getSouthWest().lng(),
-                'maxLong': bounds.getNorthEast().lng(),
+                'minLat': bounds.getSouthWest().lat().toFixed(3),
+                'maxLat': bounds.getNorthEast().lat().toFixed(3),
+                'minLong': bounds.getSouthWest().lng().toFixed(3),
+                'maxLong': bounds.getNorthEast().lng().toFixed(3),
                 'format': 'json',
+                'page' : 1,
+                'pageSize' : 50,
             },
         };
 
-
-        $http.get("/issues/area", config)
-            .success(function(searchResult) {
-                $scope.issueMarkers.length = 0;
-                searchResult.objects.forEach(addMarkers);
-                markersUpdating = false;
-
-            }).error(function(data, status, headers, config){
-                console.log("error")
-                markersUpdating = false;
-        });
+        function loadData(config, initial, semaphore) {
+            $http.get("/issues/area", config)
+                .success(function (searchResult) {
+                    // stop updating if new query has been started
+                    if(semaphore.stop) {
+                        return;
+                    }
+                    // clear markers when first page is received
+                    if (initial) {
+                        $scope.issueMarkers.length = 0;
+                    }
+                    searchResult.objects.forEach(addMarkers);
+                    // read paging metadata from response
+                    var pageSize = searchResult.meta.limit;
+                    var page = searchResult.meta.page;
+                    var total = searchResult.meta.total_count;
+                    var pages = total / pageSize;
+                    // load next page if available
+                    if (page < pages && !semaphore.stop && page < 4) {
+                        config.params.page = page+1;
+                        loadData(config, false, semaphore);
+                    } else {
+                        // update loading status
+                        semaphore.markersUpdating = false;
+                    }
+                }).error(function (data, status, headers, config) {
+                    console.log("error")
+                    semaphore.markersUpdating = false;
+                });
+        }
+        // cancel previous marker request
+        if ($scope.previousRequestSemapahore != undefined) {
+            $scope.previousRequestSemapahore.stop = true;
+        }
+        var semaphore = {stop: false, markersUpdating: true};
+        loadData(config, true, semaphore);
+        $scope.previousRequestSemaphore = semaphore;
     }
 
         $scope.closeClick = function() {

@@ -119,11 +119,11 @@ def get_url_as_json(url):
 
 
 def issues_bbox(request):
-    minLat = request.GET.get('minLat')
-    maxLat = request.GET.get('maxLat')
-    minLong = request.GET.get('minLong')
-    maxLong = request.GET.get('maxLong')
-    url = 'http://dev.hel.fi/paatokset/v1/issue/search/?bbox=%s,%s,%s,%s%s'\
+    minLat = float(request.GET.get('minLat')) - 0.005
+    maxLat = float(request.GET.get('maxLat')) + 0.005
+    minLong = float(request.GET.get('minLong')) - 0.005
+    maxLong = float(request.GET.get('maxLong')) + 0.005
+    url = 'http://dev.hel.fi/paatokset/v1/issue/search/?bbox=%.2f,%.2f,%.2f,%.2f%s'\
           % (minLong, minLat, maxLong, maxLat, get_paging_info(request))
     return JsonResponse(get_url_as_json(url))
 
