@@ -83,7 +83,7 @@
 </div>
 {% verbatim %}
 <div id= 'map-container' ng-controller="searchController" >
-    <ui-gmap-google-map center='map.center' zoom='map.zoom' events="map.mapEvents">
+    <ui-gmap-google-map center='map.center' zoom='map.zoom' events="map.mapEvents" styles="[{stylers: [{ saturation: -20 },  { visibility: 'simplified' }]}, {featureType:'water', stylers: [{hue: '#6694DE'}] }]">
         <ui-gmap-window coords="map.window.marker.coords" options="map.window.options" show="map.window.show" closeClick="map.window.closeClick" isIconVisibleOnClick="true"
                         templateUrl="templateUrl" templateParameter="content" ng-cloak>
         </ui-gmap-window>

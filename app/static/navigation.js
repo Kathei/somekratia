@@ -45,12 +45,12 @@ app.controller('messageController', function($scope, $http) {
 
     $scope.postMessage = function(issueId, newMessageText) {
         //alert(issueId + ": " + newMessageText);
-        var config = {headers: { 'Content-Type': 'application/x-www-form-urlencoded'}}
+        var config = {headers: { 'Content-Type': 'application/x-www-form-urlencoded'}};
         $http.post("/issue/" + issueId + "/messages/", "messagefield="+encodeURIComponent(newMessageText), config).success(function(response) {
             //TODO show loading icon
             alert("POST TOIMII");
             $scope.latestMessage = Date.parse(response.created);
-            $scope.messages.push(response)
+            $scope.messages.push(response);
             //$scope.$apply();
 
         }).error(function(){
@@ -230,8 +230,8 @@ app.controller('searchController', function($scope, $http, $timeout){
 
     $scope.MapOptions = {
         markers: {
-            selected: {}
-        },
+            selected: {},
+        }
      };
 
    $scope.map = {

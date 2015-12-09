@@ -66,6 +66,7 @@ li.selected a {
     margin-top: 1.5vw;
     position: absolute;
     left: 0;
+    z-index: 1000;
 }
 
 .nav-item {
@@ -109,8 +110,9 @@ form {
     width: 100vw;
     height: 100vh;
     position: absolute;
-    top: 7vw;
+    top: 0vw;
     left: 0;
+    padding-top: 7vw;
 }
 
 .issueDetails {
@@ -147,7 +149,7 @@ form {
 	border-radius: 1.5vw;
     display: inline;
     position: absolute;
-    top: 3vw;
+    top: 9.5vw;
     transform: translateX(-50%);
 }
 
@@ -164,7 +166,7 @@ form {
 	border-radius: 1vw;
     display: inline;
     position: absolute;
-    top: 3vw;
+    top: 10vw;
     transform: translateX(-50%);
 }
 
@@ -235,3 +237,6 @@ form {
     width: 20%;
 }
 
+.infowindow {
+    background-color: #555555;
+}
