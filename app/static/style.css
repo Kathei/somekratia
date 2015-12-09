@@ -109,7 +109,7 @@ form {
     width: 100vw;
     height: 100vh;
     position: absolute;
-    top: 0;
+    top: 7vw;
     left: 0;
 }
 
@@ -147,7 +147,7 @@ form {
 	border-radius: 1.5vw;
     display: inline;
     position: absolute;
-    top: 8vw;
+    top: 3vw;
     transform: translateX(-50%);
 }
 
@@ -164,7 +164,7 @@ form {
 	border-radius: 1vw;
     display: inline;
     position: absolute;
-    top: 8.5vw;
+    top: 3vw;
     transform: translateX(-50%);
 }
 

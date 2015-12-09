@@ -10,21 +10,20 @@
 </div>
 <div class="issueDetails">
     <div class="issueInfo">
-        <div ng-init="issue = {{ jsondetails }};"></div>
-        <h2>{{ jsondetails.subject }} </h2>
-        <h4>Date: {{ jsondetails.latest_decision_date }}</h4>
-        <p>{{ jsondetails.summary }} </p>
-        {% verbatim %}
+        <h2>{{ issue.subject }} </h2>
+        <h4>Date: {{ issue.latest_decision_date }}</h4>
+        <p>{{ issue.summary }} </p>
+
         <div class="subscribe" ng-controller="subController">
             <img ng-src="{{ issue.subscribed ? '../../static/img/yellowstar.png' : '../../static/img/graystar.png' }}" ng-click="subscribeIssue(issue)">
         </div>
-        {% endverbatim%}
+
         <div>
             <label for="messagefield">
                 <textarea ng-model="messageText" id="messagefield" name="messagefield" rows="6" cols="70"></textarea>
             </label>
             <div class="button">
-                <button ng-click="postMessage({{ issueID }},messageText)">Send message</button>
+                <button ng-click="postMessage(issueID,messageText)">Send message</button>
             </div>
             <!--</form>-->
         </div>
@@ -43,7 +42,7 @@
                     </div>
                 {% endfor %} -->
 
-        {% verbatim %}
+
         <div ng-repeat="m in messages">
             <div class="messageBubble">
 
@@ -55,7 +54,7 @@
 
             </div>
         </div>
-        {% endverbatim%}
+
         <!--<form id="messageform" action="/issue/{{ issueID }}/messages/" method="post">
                         {% csrf_token %} -->
     </div>

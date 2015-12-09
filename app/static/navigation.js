@@ -17,6 +17,18 @@ app.controller('messageController', function($scope, $http) {
     $scope.latestDecision = Date.parse("2999-11-24T15:24:25.730Z");
     $scope.firstMessage = Date.parse("1970-11-24T15:24:25.730Z");
     $scope.firstDecision = Date.parse("1970-11-24T15:24:25.730Z");*/
+    $scope.$watch('issue', function(newValue, oldValue) {
+        //console.log("Issue muuttu: " + newValue + " oli " + oldValue);
+        $scope.messages = [];
+        $scope.decisions = [];
+        var issue = newValue;
+        if (typeof issue !== 'undefined') {
+            $scope.getMessages(issue.id);
+            $scope.getDecisions(issue.id);
+        }
+
+    });
+
     $scope.deleteMessage = function(messageId){
         console.log("test");
         var config = {
@@ -39,7 +51,7 @@ app.controller('messageController', function($scope, $http) {
             alert("POST TOIMII");
             $scope.latestMessage = Date.parse(response.created);
             $scope.messages.push(response)
-            $scope.$apply();
+            //$scope.$apply();
 
         }).error(function(){
             alert("Post doesn't work");
@@ -50,63 +62,70 @@ app.controller('messageController', function($scope, $http) {
 
     };
 
-    $http.get("/issue/"+$scope.issueID +"/messages/").success(function(response) {
-        console.log(response);
-        var messages = response.messages;
-        if (messages.length == 0) {
-            $scope.latestMessage = 'undefined';
-            $scope.firstMessage = 'undefined';
-            $scope.messages = [];
-            return;
-        }
-        $scope.latestMessage = messages[0];
-        $scope.firstMessage = messages[0];
-        var first = Date.parse(messages[0].created);
-        var last = Date.parse(messages[0].created);
-        for (message of messages) {
-            var created = Date.parse(message.created);
-            if (created >= last) {
-                $scope.latestMessage = created;
-                last = created;
+    $scope.getMessages = function(issueID) {
+        $http.get("/issue/"+ issueID +"/messages/").success(function(response) {
+            console.log(response);
+            var messages = response.messages;
+            if (messages.length == 0) {
+                $scope.latestMessage = 'undefined';
+                $scope.firstMessage = 'undefined';
+                $scope.messages = [];
+                return;
             }
-            if (created <= first) {
-                $scope.firstMessage = created;
-                first = created;
+            $scope.latestMessage = messages[0];
+            $scope.firstMessage = messages[0];
+            var first = Date.parse(messages[0].created);
+            var last = Date.parse(messages[0].created);
+            for (message of messages) {
+                var created = Date.parse(message.created);
+                if (created >= last) {
+                    $scope.latestMessage = created;
+                    last = created;
+                }
+                if (created <= first) {
+                    $scope.firstMessage = created;
+                    first = created;
+                }
             }
-        }
-        $scope.messages = messages;
-    }).error(function(foo, bar, baz){
-        alert("Error getting messages!");
-    });
+            $scope.messages = messages;
+        }).error(function(foo, bar, baz){
+            alert("Error getting messages!");
+        });
+    }
 
-    $http.get("/issue/"+$scope.issueID +"/decisions/").success(function(response) {
-        console.log(response);
-        var decisions = response.objects;
-        if (decisions.length == 0) {
-            $scope.latestDecision = 'undefined';
-            $scope.firstDecision = 'undefined';
-            $scope.messages = [];
-            return;
-        }
-        $scope.latestDecision = decisions[0];
-        $scope.firstDecision = decisions[0];
-        var first = Date.parse(decisions[0].origin_last_modified_time);
-        var last = Date.parse(decisions[0].origin_last_modified_time);
-        for (decision of decisions) {
-            var created = Date.parse(decision.origin_last_modified_time);
-            if (created >= last) {
-                $scope.latestDecision = created;
-                last = created;
+    $scope.getDecisions = function(issueID) {
+        $http.get("/issue/" + issueID + "/decisions/").success(function (response) {
+            console.log(response);
+            var decisions = response.objects;
+            if (decisions.length == 0) {
+                $scope.latestDecision = 'undefined';
+                $scope.firstDecision = 'undefined';
+                $scope.messages = [];
+                return;
             }
-            if (created <= first) {
-                $scope.firstDecision = created;
-                first = created;
+            $scope.latestDecision = decisions[0];
+            $scope.firstDecision = decisions[0];
+            var first = Date.parse(decisions[0].origin_last_modified_time);
+            var last = Date.parse(decisions[0].origin_last_modified_time);
+            for (decision of
+            decisions
+            )
+            {
+                var created = Date.parse(decision.origin_last_modified_time);
+                if (created >= last) {
+                    $scope.latestDecision = created;
+                    last = created;
+                }
+                if (created <= first) {
+                    $scope.firstDecision = created;
+                    first = created;
+                }
             }
-        }
-        $scope.decisions = decisions;
-    }).error(function(foo, bar, baz){
-        alert("Error getting decisions!");
-    });
+            $scope.decisions = decisions;
+        }).error(function (foo, bar, baz) {
+            alert("Error getting decisions!");
+        });
+    }
 
 
     function getTimeSpan() {
@@ -128,14 +147,14 @@ app.controller('messageController', function($scope, $http) {
         var timeStamp = Date.parse(timing);
         var firstAndLast = getTimeSpan();
         var timeSpan = firstAndLast.end - firstAndLast.begin;
-        console.log(timeStamp);
+        //console.log(timeStamp);
         var position = 0;
         if (timeSpan != 0) {
             position = (timeStamp - firstAndLast.begin) / timeSpan;
         }
         var offset = 6;
         var percentage = position * 86 + offset;
-        //console.log(position);
+        console.log(position);
         return {
           'left': percentage + '%'
         }
@@ -374,12 +393,15 @@ app.controller('searchController', function($scope, $http, $timeout){
 app.controller('windowController', function($scope){
     var issueController = document.querySelector('[ng-controller="messageController"]');
     var issueScope = angular.element(issueController).scope();
-    $scope.windowClick = function(issueID) {
+
+    $scope.windowClick = function(issue) {
         issueScope.showIssue = true;
-        issueScope.issueID = issueID;
-        console.log(issueID);
+        issueScope.issueID = issue.id;
+        issueScope.issue = issue;
+        console.log(issue);
         console.log("täällä! showIssue: " + issueScope.showIssue);
     }
+
 });
 
 app.controller('loginController', function($scope){
