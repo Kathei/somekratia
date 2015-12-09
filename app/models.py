@@ -28,6 +28,10 @@ class Message(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True)
 
+    def message_json(self):
+        json = {'text': self.text, 'poster': {'username' : self.poster.username, 'id': self.poster.id}, 'reply_to': self.reply_to, 'issue': self.issue.ahjo_id, 'created': self.created, 'edited': self.edited}
+        return json
+
 
 class Subscriptions(models.Model):
     subscriber = models.ForeignKey(settings.AUTH_USER_MODEL)
