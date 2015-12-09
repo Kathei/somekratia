@@ -229,6 +229,15 @@ form {
     left: 0;
 }
 
+/*SEARCH RESULTS -IKKUNA*/
+.searchResults {
+    background: white;
+    width: 50vw;
+    top: 10vw;
+    left: 10vw;
+    position: absolute;
+}
+
 
 #recentMessages {
     float: right;
