@@ -154,8 +154,6 @@ def decisions(request, issueID):
 
 
 def issue(request, issueID):
-    t = loader.get_template('issue.html')
-    messages = Message.objects.filter(issue=issueID)
     url = 'http://dev.hel.fi/paatokset/v1/issue/%s/?format=json' % issueID
     details = get_url_as_json(url)
     subscribed = False
@@ -163,9 +161,18 @@ def issue(request, issueID):
         subscribes = IssueSubscription.objects.filter(user=request.user, issue=issueID)
         if subscribes.count() > 0:
             subscribed = True
-    c = Context({'message_list': messages, 'issueID': issueID, 'user': request.user, 'jsondetails': details, 'subscribed':subscribed})
-    c.update(csrf(request))
-    return HttpResponse(t.render(c))
+            details['subscribed'] = True
+    issuedetails = {'issueID': issueID, 'user': {'id' : request.user.id, 'username': request.user.username}, 'jsondetails': details, 'subscribed':subscribed}
+    return JsonResponse(issuedetails)
+
+
+def messages(request, issueID):
+    messages = Message.objects.filter(issue=issueID)
+    messagelist = {}
+    messagelist['messages'] = []
+    for message in messages:
+        messagelist['messages'].append({'message': message.message_json()})
+        return JsonResponse(messagelist)
 
 
 def issues_with_messages(request):
@@ -174,7 +181,14 @@ def issues_with_messages(request):
     issuelist['issues'] = []
     for message in messages:
         issue = message.issue
-        issuelist['issues'].append({'message' : message.text, 'issueID' : issue.ahjo_id})
+        votes = MessageVote.objects.filter(message=message)
+        votes_counted = votes.count()
+        voted = False
+        if request.user.is_authenticated():
+            users_votes = votes.filter(user=request.user)
+            if users_votes.count() > 0:
+                voted = True
+        issuelist['issues'].append({'message' : message.text, 'issueID' : issue.ahjo_id, 'votes': int(votes_counted), 'voted': bool(voted)})
     return JsonResponse(issuelist)
 
 

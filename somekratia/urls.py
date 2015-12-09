@@ -24,7 +24,7 @@ from app.views import vote_message
 from app.views import issues_with_messages
 from app.views import decisions
 from app.views import register
-from app.views import user_profile, user_picture
+from app.views import user_profile, user_picture, messages
 from django.views.generic.edit import CreateView
 from django.contrib.auth.forms import UserCreationForm
 
@@ -34,7 +34,7 @@ urlpatterns = [
     url(r'^user/(?P<userID>[0-9]+)/$', user_profile),
     url(r'^user/(?P<userID>[0-9]+)/picture$', user_picture),
     url(r'^admin/', include(admin.site.urls)),
-    url(r'ndex.html', index),
+    url(r'index.html', index),
     url(r'^$', index),
     url(r'^login', login_view),
     url(r'^logout', logout_view),
@@ -50,5 +50,5 @@ urlpatterns = [
     url(r'^issues/recent/comments', issues_with_messages),
     url(r'^issue/(?P<issueID>[0-9]+)/decisions', decisions),
     url(r'^issue/(?P<issueID>[0-9]+)/subscribe', subscribe_issue),
-
+    url(r'^issue/(?P<issueID>[0-9]+)/messages', messages),
 ]
