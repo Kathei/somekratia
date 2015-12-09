@@ -27,6 +27,19 @@
             </div>
             <!--</form>-->
         </div>
+        <ul>
+            <li data-ng-repeat="d in decisions">
+                {{ d.meeting.date }} <!--Lisätään jokaisen decisionin päivämäärä listaan -->
+                <ul> <!-- Lisätään decisioneille liitteet -->
+                    <li data-ng-repeat="a in d.attachments | filter:{ public: true} ">
+                       <a href="{{ a.file_uri }}" target="_blank">{{ a.name }}: {{ a.file_type }}</a>
+                    </li>
+                    <li data-ng-repeat="a in d.attachments | filter:{ public: false} ">
+                       SALAINEN
+                    </li>
+                </ul>
+            </li>
+        </ul>
     </div>
 
     <div class="messages">
