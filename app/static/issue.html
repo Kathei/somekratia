@@ -1,0 +1,63 @@
+<div class="timeline-background">
+    <div class="placeholder-timeline">&nbsp;</div>
+    <div ng-repeat="d in decisions">
+        <div class="timeline-decision" ng-style="getStyle($index, d.origin_last_modified_time);"></div>
+    </div>
+    <div ng-repeat="m in messages">
+        <div class="timeline-message" ng-style="getStyle($index, m.created);"></div>
+    </div>
+
+</div>
+<div class="issueDetails">
+    <div class="issueInfo">
+        <div ng-init="issue = {{ jsondetails }};"></div>
+        <h2>{{ jsondetails.subject }} </h2>
+        <h4>Date: {{ jsondetails.latest_decision_date }}</h4>
+        <p>{{ jsondetails.summary }} </p>
+        {% verbatim %}
+        <div class="subscribe" ng-controller="subController">
+            <img ng-src="{{ issue.subscribed ? '../../static/img/yellowstar.png' : '../../static/img/graystar.png' }}" ng-click="subscribeIssue(issue)">
+        </div>
+        {% endverbatim%}
+        <div>
+            <label for="messagefield">
+                <textarea ng-model="messageText" id="messagefield" name="messagefield" rows="6" cols="70"></textarea>
+            </label>
+            <div class="button">
+                <button ng-click="postMessage({{ issueID }},messageText)">Send message</button>
+            </div>
+            <!--</form>-->
+        </div>
+    </div>
+
+    <div class="messages">
+        <!--{% for message in message_list %}
+                    <div class="messageBubble">
+                        <h2>{{ message.poster }}</h2>
+                        <p>{{ message.text }}</p>
+                        {% if message.poster == user %}
+                            <div class="button" ng-controller="messageController">
+                                <button type="submit" ng-click="deleteMessage({{ message.id }})">Delete message</button>
+                             </div>
+                        {% endif %}
+                    </div>
+                {% endfor %} -->
+
+        {% verbatim %}
+        <div ng-repeat="m in messages">
+            <div class="messageBubble">
+
+                <h3 class="poster">{{m.poster}}</h3>
+                <h3 class="time-posted">{{m.created | date: 'short'}}</h3>
+                <p class="messageText">{{m.text}}</p>
+
+                <img ng-src="{{ m.liked ? '../../static/img/thumbs-up-green.png' : '../../static/img/thumbs-up.png' }}" ng-click="likeMessage(m)">
+
+            </div>
+        </div>
+        {% endverbatim%}
+        <!--<form id="messageform" action="/issue/{{ issueID }}/messages/" method="post">
+                        {% csrf_token %} -->
+    </div>
+
+</div>

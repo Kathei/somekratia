@@ -154,7 +154,7 @@ def decisions(request, issueID):
 
 
 def issue(request, issueID):
-    t = loader.get_template('issue.html')
+    t = loader.get_template('static/issue.html')
     messages = Message.objects.filter(issue=issueID)
     url = 'http://dev.hel.fi/paatokset/v1/issue/%s/?format=json' % issueID
     details = get_url_as_json(url)

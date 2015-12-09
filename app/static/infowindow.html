@@ -1,5 +1,5 @@
 
      <div>
-         <a ng-href="/issue/{{ templateParameter.id }}">{{ templateParameter.subject }}</a>
+         <div ng-controller="windowController" ng-click="windowClick(templateParameter.id)">{{ templateParameter.subject }}</div>
      </div>
 

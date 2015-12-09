@@ -104,8 +104,13 @@ form {
 
 /* ISSUENÄKYMÄ */
 
-.issue .navbar {
-    position: relative;
+.issueContainer {
+    background-color: white;
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
 .issueDetails {
@@ -134,15 +139,15 @@ form {
 }
 
 .timeline-decision {
-    width: 5vw;
-	height: 5vw;
-	background: blue;
-	-moz-border-radius: 2.5vw;
-	-webkit-border-radius: 2.5vw;
-	border-radius: 2.5vw;
+    width: 3vw;
+	height: 3vw;
+	background: #d8752f;
+	-moz-border-radius: 1.5vw;
+	-webkit-border-radius: 1.5vw;
+	border-radius: 1.5vw;
     display: inline;
     position: absolute;
-    top: 7vw;
+    top: 8vw;
     transform: translateX(-50%);
 }
 
@@ -151,15 +156,15 @@ form {
 }
 
 .timeline-message {
-    width: 5vw;
-	height: 5vw;
-	background: peachpuff;
-	-moz-border-radius: 2.5vw;
-	-webkit-border-radius: 2.5vw;
-	border-radius: 2.5vw;
+    width: 2vw;
+	height: 2vw;
+	background: #d8752f;
+	-moz-border-radius: 1vw;
+	-webkit-border-radius: 1vw;
+	border-radius: 1vw;
     display: inline;
     position: absolute;
-    top: 7vw;
+    top: 8.5vw;
     transform: translateX(-50%);
 }
 

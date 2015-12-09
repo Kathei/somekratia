@@ -93,6 +93,10 @@
     </ui-gmap-google-map>
        </div>
 
+    <div class="issueContainer" ng-controller="messageController" ng-show="showIssue">
+        <div ng-include src="'static/issue.html'"></div>
+        </div>
+
     <div id="recentMessages" ng-controller="recentController">
         <div ng-repeat="m in recentlyCommented">
             <div class="messageBubble">

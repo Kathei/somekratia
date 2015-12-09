@@ -367,6 +367,19 @@ app.controller('searchController', function($scope, $http, $timeout){
         $scope.closeClick = function() {
             $scope.map.window.show = false;
         };
+
+
+});
+
+app.controller('windowController', function($scope){
+    var issueController = document.querySelector('[ng-controller="messageController"]');
+    var issueScope = angular.element(issueController).scope();
+    $scope.windowClick = function(issueID) {
+        issueScope.showIssue = true;
+        issueScope.issueID = issueID;
+        console.log(issueID);
+        console.log("täällä! showIssue: " + issueScope.showIssue);
+    }
 });
 
 app.controller('loginController', function($scope){
