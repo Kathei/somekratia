@@ -82,7 +82,6 @@ def register(request):
 def user_picture(request, userID):
     user = get_object_or_404(UserWithProfile, user=userID)
     return HttpResponse(user.picture.file, content_type='text/plain')
-    return user.picture.file
 
 
 def user_profile(request, userID):
@@ -154,8 +153,6 @@ def decisions(request, issueID):
 
 
 def issue(request, issueID):
-    t = loader.get_template('static/issue.html')
-    messages = Message.objects.filter(issue=issueID)
     url = 'http://dev.hel.fi/paatokset/v1/issue/%s/?format=json' % issueID
     details = get_url_as_json(url)
     subscribed = False
