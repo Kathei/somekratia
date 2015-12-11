@@ -13,6 +13,9 @@ angular.module('myApp').controller('navbarController', ['$scope', '$http', funct
         alert("Post doesn't work");
     });
     $scope.categoryChanged = function() {
+        var searchController = document.getElementById('map-container');
+        var searchScope = angular.element(searchController).scope();
+        searchScope.category = $scope.categorySelect;
         alert($scope.category);
     };
 }

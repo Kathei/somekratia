@@ -25,6 +25,7 @@ from app.views import issues_with_messages
 from app.views import decisions
 from app.views import register
 from app.views import user_profile, user_picture, messages
+from app.views import get_issue_subscriptions
 from django.views.generic.edit import CreateView
 from django.contrib.auth.forms import UserCreationForm
 
@@ -33,6 +34,7 @@ urlpatterns = [
     url(r'^register/$', register, name='register'),
     url(r'^user/(?P<userID>[0-9]+)/$', user_profile),
     url(r'^user/(?P<userID>[0-9]+)/picture$', user_picture),
+    url(r'^user/subscriptions$', get_issue_subscriptions),
     url(r'^admin/', include(admin.site.urls)),
     url(r'index.html', index),
     url(r'^$', index),
