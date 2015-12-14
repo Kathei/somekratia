@@ -32,8 +32,8 @@
     <div class="nav-contents" ng-controller="navbarController">
         <a href="index.html"><img src="/static/img/somekratia_logo.png" class="logo"/></a>
         <ul id="mainnav">
-            <li class="nav-item selected"><a href="index.html">HOME</a></li>
-            <li class="nav-item"><a href=""></a>RECENT</li>
+            <li class="nav-item selected"><a href="index.html">KOTI</a></li>
+            <li class="nav-item"><a href=""></a>VIIMEISIMMÄT</li>
             {% verbatim %}
             <select name="categorySelect" id="category" class="nav-item" ng-model="categorySelect"
                     ng-change="categoryChanged()">
@@ -47,17 +47,17 @@
             <form class="nav-field logout-button" id="logout" action="/logout" method="post">
                 {% csrf_token %}
 
-                <button class="nav-item" type="submit">LOGOUT</button>
+                <button class="nav-item" type="submit">LOPETA</button>
 
             </form>
         {% else %}
-            <button  class="nav-item login-button" ng-controller="loginShowController" ng-click="toggleShow()">LOGIN</button>
+            <button  class="nav-item login-button" ng-controller="loginShowController" ng-click="toggleShow()">KIRJAUDU</button>
         {% endif %}
 
         <div class="nav-field nav-item">
-            <input type="text" id="search" name="search" placeholder="Search" data-ng-model="text"/>
+            <input type="text" id="search" name="search" placeholder="Haku" data-ng-model="text"/>
 
-            <button type="submit" class="nav-item search-button" ng-controller="searchController" ng-click="textSearch(text)">SEARCH</button>
+            <button type="submit" class="nav-item search-button" ng-controller="searchController" ng-click="textSearch(text)">HAE</button>
 
         </div>
     </div>
@@ -70,14 +70,14 @@
             {% csrf_token %}
             <!--<input type="button" id="signup" value="Sign up" />-->
             <label for="usernameinput">
-                <input type="text" id="usernameinput" name="username" placeholder="Username" />
+                <input type="text" id="usernameinput" name="username" placeholder="Käyttäjänimi" />
             </label>
             <label for="passwordinput">
-                <input type="password" id="passwordinput" name="password" placeholder="Password" />
+                <input type="password" id="passwordinput" name="password" placeholder="Salasana" />
             </label>
             <div class="button">
-                <button type="submit">Login</button>
-                <button type="reset" ng-click="toggleShow()">Cancel</button>
+                <button type="submit">Kirjaudu</button>
+                <button type="reset" ng-click="toggleShow()">Peruuta</button>
             </div>
         </form>
     </div>
@@ -99,7 +99,7 @@
     </div>
 
     <div class="issueContainer" ng-controller="messageController" ng-show="showIssue">
-        <div ng-include src="'static/issue.html'"></div>
+        <div ng-include src="'static/issue.html'" ></div>
     </div>
 
     <div id="recentMessages" ng-controller="recentController">

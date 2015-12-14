@@ -136,9 +136,9 @@ form {
 .close {
     width: 1vw;
     height: 1vw;
-    position: fixed;
-    right: 7vw;
-    top: 10vw;
+    position: absolute;
+    right: 1vw;
+    top: 1vw;
 }
 
 .placeholder-timeline {
