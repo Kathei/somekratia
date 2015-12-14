@@ -1,8 +1,14 @@
 /**
  * Created by vihtori on 26/11/15.
  */
-angular.module('myApp').controller('navbarController', ['$scope', '$http', function($scope, $http) {
-    $scope.categories = [{id:0, name: "Kaikki kategoriat"}];
+angular.module('myApp').controller('searchResultController', ['$scope', '$http', function($scope, $http) {
+    $scope.showResults = false;
+    $scope.$watch('searchResults', function(newval, oldval){
+        if (typeof newval != "undefined"){
+            $scope.showResults = true;
+        }
+    });
+    /*$scope.categories = [{id:0, name: "Kaikki kategoriat"}];
     $scope.category = $scope.categories[0];
     $scope.selectCategory = $scope.category;
     $http.get('/categories').success(function(response) {
@@ -13,10 +19,7 @@ angular.module('myApp').controller('navbarController', ['$scope', '$http', funct
         alert("Post doesn't work");
     });
     $scope.categoryChanged = function() {
-        var searchController = document.getElementById('map-container');
-        var searchScope = angular.element(searchController).scope();
-        searchScope.category = $scope.categorySelect;
         alert($scope.category);
-    };
+    };*/
 }
 ]);

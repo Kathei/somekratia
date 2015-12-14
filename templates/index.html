@@ -23,6 +23,7 @@
     <script src="/static/issue.js"></script>
     <script src="/static/navigation.js"></script>
     <script src="/static/navbar_controller.js"></script>
+    <script src="/static/searchresult_controller.js"></script>
     <link rel="stylesheet" type="text/css" media="screen" href="../static/style.css" />
 </head>
 <body>
@@ -37,7 +38,7 @@
             <select name="categorySelect" id="category" class="nav-item" ng-model="categorySelect"
                     ng-change="categoryChanged()">
                     <option value="">KATEGORIAT</option>
-                    <option ng-repeat="option in categories" value="{{option}}">{{option.name}}</option>
+                    <option ng-repeat="option in categories" value="{{option.id}}">{{option.name}}</option>
             </select>
             {% endverbatim %}
         </ul>
@@ -93,9 +94,13 @@
     </ui-gmap-google-map>
        </div>
 
+    <div class="searchResultContainer" ng-controller="searchResultController" ng-show="showResults">
+        <div ng-include src="'static/searchresults.html'"></div>
+    </div>
+
     <div class="issueContainer" ng-controller="messageController" ng-show="showIssue">
         <div ng-include src="'static/issue.html'"></div>
-        </div>
+    </div>
 
     <div id="recentMessages" ng-controller="recentController">
         <div ng-repeat="m in recentlyCommented">

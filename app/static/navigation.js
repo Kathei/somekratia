@@ -154,7 +154,7 @@ app.controller('messageController', function($scope, $http) {
         }
         var offset = 6;
         var percentage = position * 86 + offset;
-        console.log(position);
+       // console.log(position);
         return {
           'left': percentage + '%'
         }
@@ -182,7 +182,7 @@ app.controller('messageController', function($scope, $http) {
 app.controller('subController', function($scope, $http) {
     $scope.subscribeIssue = function(issue) {
         issue.subscribed = !issue.subscribed;
-        if (issue.subscribed) {
+       if (issue.subscribed) {
             var config = {headers: { 'Content-Type': 'application/x-www-form-urlencoded'}}
             $http.post("/issue/" + issue.id + "/subscribe", config).success(function(response) {
                 issue.imagesrc = "../../static/img/yellowstar.png";
@@ -227,7 +227,12 @@ function timeStamp() {
 }
 
 app.controller('searchController', function($scope, $http, $timeout){
-
+    $http.get('/user/subscriptions').success(function(response) {
+       $scope.subscriptions = response.subscriptions;
+        console.log($scope.subscriptions);
+    }).error(function(){
+        alert('ei saa tilauksia');
+    });
     $scope.MapOptions = {
         markers: {
             selected: {},
@@ -280,8 +285,9 @@ app.controller('searchController', function($scope, $http, $timeout){
         };
         $http.get("/issues/text/", config)
             .success(function(searchResult) {
-                //console.log(searchResult);
-                //$scope.names = searchResult.objects;
+                var resultController = document.querySelector('[ng-controller="searchResultController"]');
+                var resultScope = angular.element(resultController).scope();
+                resultScope.searchResults = searchResult.objects;
             });
     }
     $scope.issueMarkers = [];
@@ -324,9 +330,10 @@ app.controller('searchController', function($scope, $http, $timeout){
             coords: latLong,
             show: false,
         });
-        // TODO check if user follows issue and color differently if yes
-            //marker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue-dot.png');
-
+        if ($scope.subscriptions.indexOf(marker.id) > -1){
+            marker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue-dot.png');
+            issue.subscribed = true;
+        }
         $scope.issueMarkers.push(marker);
     }
 
@@ -343,6 +350,9 @@ app.controller('searchController', function($scope, $http, $timeout){
                 'pageSize' : 50,
             },
         };
+        if ($scope.category != "0" && $scope.category != undefined) {
+            config.params.category = $scope.category;
+        }
 
         function loadData(config, initial, semaphore) {
             $http.get("/issues/area", config)
@@ -422,6 +432,16 @@ app.controller('loginShowController', function($scope, $rootScope){
 });
 
 app.controller('templateController', function(){});
+
+app.controller('closeController', function($scope){
+    var controller = document.querySelector('[ng-controller="messageController"]');
+    var topscope = angular.element(controller).scope();
+
+    $scope.closeIssue = function() {
+        console.log('ruksia klikattiin');
+        topscope.showIssue = false;
+    }
+});
 
 
 

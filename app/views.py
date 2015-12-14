@@ -122,8 +122,11 @@ def issues_bbox(request):
     maxLat = float(request.GET.get('maxLat')) + 0.005
     minLong = float(request.GET.get('minLong')) - 0.005
     maxLong = float(request.GET.get('maxLong')) + 0.005
+    category = request.GET.get('category')
     url = 'http://dev.hel.fi/paatokset/v1/issue/search/?bbox=%.2f,%.2f,%.2f,%.2f%s'\
           % (minLong, minLat, maxLong, maxLat, get_paging_info(request))
+    if category is not None:
+        url += ('&category=%s' % category)
     return JsonResponse(get_url_as_json(url))
 
 
@@ -276,3 +279,14 @@ def subscribe_issue(request, issueID):
         subscribe = get_object_or_404(IssueSubscription, user = request.user, issue_id = issueID)
         subscribe.delete()
         return JsonResponse({'subId' : subscribe.id})
+
+
+def get_issue_subscriptions(request):
+    user = request.user
+    list = {'subscriptions' : []}
+    if user.is_authenticated():
+        subscriptions = IssueSubscription.objects.filter(user=user)
+        for subscription in subscriptions:
+            list['subscriptions'].append(subscription.issue.ahjo_id)
+    return JsonResponse(list)
+

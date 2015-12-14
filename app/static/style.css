@@ -107,8 +107,11 @@ form {
 
 .issueContainer {
     background-color: white;
-    width: 100vw;
+    width: 90vw;
     height: 100vh;
+    margin-left: 5vw;
+    margin-right: 5vw;
+    margin-top: 10vh;
     position: absolute;
     top: 0vw;
     left: 0;
@@ -130,6 +133,14 @@ form {
 .issueDetails h4, .issueDetails p {
     font-family: Tw Cen MT;
     color: #939291;
+}
+
+.close {
+    width: 1vw;
+    height: 1vw;
+    position: fixed;
+    right: 7vw;
+    top: 10vw;
 }
 
 .placeholder-timeline {
@@ -229,6 +240,15 @@ form {
     position: absolute;
     top: 0;
     left: 0;
+}
+
+/*SEARCH RESULTS -IKKUNA*/
+.searchResults {
+    background: white;
+    width: 50vw;
+    top: 10vw;
+    left: 10vw;
+    position: absolute;
 }
 
 
