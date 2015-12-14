@@ -140,7 +140,7 @@ def issues_bbox(request):
 def issues_search_text(request):
     text = request.GET.get('search')
     if text is None or len(text) < 4:
-        return HttpResponse('{ \'msg\' : \'Search term must be at least 4 characters long\' }', 400)
+        return HttpResponse('{ "msg" : "Search term must be at least 4 characters long" }', 400)
     url = 'http://dev.hel.fi/openahjo/v1/issue/search/?text=%s&format=json%s'\
           % (quote(text), get_paging_info(request))
     return JsonResponse(get_url_as_json(url))
