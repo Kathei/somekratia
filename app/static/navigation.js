@@ -287,10 +287,11 @@ app.controller('searchController', function($scope, $http, $timeout){
             },
         };
         $http.get("/issues/text/", config)
-            .success(function(searchResult) {
+            .then(function(searchResult) {
                 var resultController = document.querySelector('[ng-controller="searchResultController"]');
                 var resultScope = angular.element(resultController).scope();
-                resultScope.searchResults = searchResult.objects;
+                resultScope.searchText.value = searchResult.config.params.search;
+                resultScope.searchResults = searchResult.data.objects;
             });
     }
     $scope.issueMarkers = [];
