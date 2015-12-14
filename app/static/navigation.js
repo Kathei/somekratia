@@ -14,9 +14,9 @@ app.config(['$httpProvider', function($httpProvider) {
 
 app.controller('messageController', function($scope, $http) {
     /*$scope.latestMessage = Date.parse("2999-11-24T15:24:25.730Z");
-    $scope.latestDecision = Date.parse("2999-11-24T15:24:25.730Z");
-    $scope.firstMessage = Date.parse("1970-11-24T15:24:25.730Z");
-    $scope.firstDecision = Date.parse("1970-11-24T15:24:25.730Z");*/
+     $scope.latestDecision = Date.parse("2999-11-24T15:24:25.730Z");
+     $scope.firstMessage = Date.parse("1970-11-24T15:24:25.730Z");
+     $scope.firstDecision = Date.parse("1970-11-24T15:24:25.730Z");*/
     $scope.$watch('issue', function(newValue, oldValue) {
         //console.log("Issue muuttu: " + newValue + " oli " + oldValue);
         $scope.messages = [];
@@ -154,9 +154,9 @@ app.controller('messageController', function($scope, $http) {
         }
         var offset = 6;
         var percentage = position * 86 + offset;
-       // console.log(position);
+        // console.log(position);
         return {
-          'left': percentage + '%'
+            'left': percentage + '%'
         }
     };
 
@@ -182,7 +182,7 @@ app.controller('messageController', function($scope, $http) {
 app.controller('subController', function($scope, $http) {
     $scope.subscribeIssue = function(issue) {
         issue.subscribed = !issue.subscribed;
-       if (issue.subscribed) {
+        if (issue.subscribed) {
             var config = {headers: { 'Content-Type': 'application/x-www-form-urlencoded'}}
             $http.post("/issue/" + issue.id + "/subscribe", config).success(function(response) {
                 issue.imagesrc = "../../static/img/yellowstar.png";
@@ -212,23 +212,23 @@ app.controller('recentController', function($scope, $http) {
 
 function timeStamp() {
 
-  var now = new Date();
-  var date = [ now.getDate(), now.getMonth() + 1, now.getFullYear() ];
-  var time = [ now.getHours(), now.getMinutes(), now.getSeconds() ];
+    var now = new Date();
+    var date = [ now.getDate(), now.getMonth() + 1, now.getFullYear() ];
+    var time = [ now.getHours(), now.getMinutes(), now.getSeconds() ];
 
 // If seconds and minutes are less than 10, add a zero
-  for ( var i = 1; i < 3; i++ ) {
-    if ( time[i] < 10 ) {
-      time[i] = "0" + time[i];
+    for ( var i = 1; i < 3; i++ ) {
+        if ( time[i] < 10 ) {
+            time[i] = "0" + time[i];
+        }
     }
-  }
 
-  return date.join(".") + " " + time.join(":");
+    return date.join(".") + " " + time.join(":");
 }
 
 app.controller('searchController', function($scope, $http, $timeout){
     $http.get('/user/subscriptions').success(function(response) {
-       $scope.subscriptions = response.subscriptions;
+        $scope.subscriptions = response.subscriptions;
         console.log($scope.subscriptions);
     }).error(function(){
         alert('ei saa tilauksia');
@@ -237,30 +237,33 @@ app.controller('searchController', function($scope, $http, $timeout){
         markers: {
             selected: {},
         }
-     };
+    };
 
-   $scope.map = {
-       center: {
-           latitude: 60.1728365,
-           longitude: 24.9399135,
-       },
-       zoom: 13,
-       options: $scope.mapOptions,
-       window: {
-           marker: {},
-           show: false,
-           closeClick: function(){
-            this.show = false;
-           },
-           options: {
-               pixelOffset: {
-                   height: -30,
-                   width: 0,
-               }
-           },
-           issue: {},
-       }
-   }
+    $scope.map = {
+        center: {
+            latitude: 60.1728365,
+            longitude: 24.9399135,
+        },
+        zoom: 13,
+        options: $scope.mapOptions,
+        window: {
+            marker: {},
+            show: false,
+            closeClick: function(){
+                this.show = false;
+            },
+            options: {
+                maxWidth: 200,
+                pixelOffset: {
+                    height: -30,
+                    width: 0,
+                }
+            },
+
+
+            issue: {},
+        }
+    }
 
     $scope.map.mapEvents = {};
     var markerRefreshPromise;
@@ -301,16 +304,16 @@ app.controller('searchController', function($scope, $http, $timeout){
         $scope.MapOptions.markers.selected = marker;
         var issueId = marker.issue.id;
 
-       // console.log($scope.MapOptions.markers.selected.coords);
+        // console.log($scope.MapOptions.markers.selected.coords);
         //document.location.href = '/issue/' + issueId;
         $scope.map.window.marker = marker;
         $scope.map.window.issue = marker.issue;
-       // console.log(marker.coords);
-      //   console.log($scope.window.marker.coords);
-     //   $scope.content = '<a href ="/issue/' + issueId +'">' + marker.issue.subject + '</a>';
-       /* var link = document.createElement('a');
-        link.setAttribute('href',"/issue/" + issueId);
-        link.innerHTML = marker.issue.subject;*/
+        // console.log(marker.coords);
+        //   console.log($scope.window.marker.coords);
+        //   $scope.content = '<a href ="/issue/' + issueId +'">' + marker.issue.subject + '</a>';
+        /* var link = document.createElement('a');
+         link.setAttribute('href',"/issue/" + issueId);
+         link.innerHTML = marker.issue.subject;*/
         $scope.templateUrl = '/static/infowindow.html';
         $scope.content = marker.issue;
         console.log($scope.content);
@@ -322,7 +325,7 @@ app.controller('searchController', function($scope, $http, $timeout){
     function addMarkers(issue, index, array) {
         var latLong = issue.geometries[0].coordinates;
         var marker = new google.maps.Marker ({
-           // map: $scope.map,
+            // map: $scope.map,
             id: issue.id,
             latitude: latLong[1],
             longitude: latLong[0],
@@ -331,8 +334,10 @@ app.controller('searchController', function($scope, $http, $timeout){
             show: false,
         });
         if ($scope.subscriptions.indexOf(marker.id) > -1){
-            marker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue-dot.png');
+            marker.setIcon('static/img/marker-blue.png');
             issue.subscribed = true;
+        } else {
+            marker.setIcon('static/img/marker-orange.png');
         }
         $scope.issueMarkers.push(marker);
     }
@@ -393,9 +398,9 @@ app.controller('searchController', function($scope, $http, $timeout){
         $scope.previousRequestSemaphore = semaphore;
     }
 
-        $scope.closeClick = function() {
-            $scope.map.window.show = false;
-        };
+    $scope.closeClick = function() {
+        $scope.map.window.show = false;
+    };
 
 
 });
@@ -441,6 +446,45 @@ app.controller('closeController', function($scope){
         console.log('ruksia klikattiin');
         topscope.showIssue = false;
     }
+});
+
+app.controller('profileController', function($scope, $http) {
+    $scope.showProfile = false;
+    console.log($scope.showProfile);
+
+    $http.get("/user/").success(function(response){
+        $scope.user = response;
+    }).error(function(foo, bar, baz){
+        alert("User not found");
+    });
+});
+
+app.controller('profileNavController', function($scope, $http){
+    var profileController = document.querySelector('[ng-controller="profileController"]');
+    var profileScope = angular.element(profileController).scope();
+
+    $http.get("/user/").success(function(response){
+        $scope.user = response;
+        //$scope.getPicture($scope.user.id);
+    }).error(function(foo, bar, baz){
+        alert("User not found");
+    });
+
+    $scope.getPicture = function(userId) {
+        $http.get("/user/" + userId + "/picture").success(function (response) {
+            //console.log(response);
+            $scope.user.picture = response;
+
+        }).error(function (foo, bar, baz) {
+            alert("Error getting profile pic!");
+        });
+    }
+
+    $scope.toggleShow = function() {
+        profileScope.showProfile = !profileScope.showProfile;
+        console.log(profileScope.showProfile);
+    }
+
 });
 
 

@@ -30,7 +30,7 @@
 
 <div class="navbar">
     <div class="nav-contents" ng-controller="navbarController">
-        <a href="index.html"><img src="/static/img/somekratia_logo.png" class="logo"/></a>
+        <a href="index.html"><img src="/static/img/somekratia_logo_small.png" class="logo"/></a>
         <ul id="mainnav">
             <li class="nav-item selected"><a href="index.html">HOME</a></li>
             <li class="nav-item"><a href=""></a>RECENT</li>
@@ -51,15 +51,27 @@
 
             </form>
         {% else %}
-            <button  class="nav-item login-button" ng-controller="loginShowController" ng-click="toggleShow()">LOGIN</button>
+            <button class="nav-item login-button" ng-controller="loginShowController" ng-click="toggleShow()">LOGIN</button>
         {% endif %}
 
-        <div class="nav-field nav-item">
+        <div class="nav-field">
             <input type="text" id="search" name="search" placeholder="Search" data-ng-model="text"/>
 
             <button type="submit" class="nav-item search-button" ng-controller="searchController" ng-click="textSearch(text)">SEARCH</button>
 
         </div>
+    
+        {% if user.is_authenticated %}
+            {% verbatim %}
+            <div class="nav-field nav-profile" ng-controller="profileNavController">
+                <div class="user-container">
+                    <img class=" user-avatar" ng-src="/user/{{ user.id }}/picture" ng-click="toggleShow()"/>
+                    <span class="username">{{ user.name }}</span>
+                </div>
+            </div>
+            {% endverbatim %}
+        {% endif %}
+    
     </div>
 
 </div>
@@ -84,7 +96,7 @@
 </div>
 {% verbatim %}
 <div id= 'map-container' ng-controller="searchController" >
-    <ui-gmap-google-map center='map.center' zoom='map.zoom' events="map.mapEvents" styles="[{stylers: [{ saturation: -20 },  { visibility: 'simplified' }]}, {featureType:'water', stylers: [{hue: '#6694DE'}] }]">
+    <ui-gmap-google-map center='map.center' zoom='map.zoom' events="map.mapEvents" styles="[{stylers: [{ saturation: -100 },  { visibility: 'simplified' }]}, {featureType:'water', stylers: [{color: '#94D5F7'}] }]">
         <ui-gmap-window coords="map.window.marker.coords" options="map.window.options" show="map.window.show" closeClick="map.window.closeClick" isIconVisibleOnClick="true"
                         templateUrl="templateUrl" templateParameter="content" ng-cloak>
         </ui-gmap-window>
@@ -100,6 +112,10 @@
 
     <div class="issueContainer" ng-controller="messageController" ng-show="showIssue">
         <div ng-include src="'static/issue.html'"></div>
+    </div>
+
+    <div class="profileContainer" ng-controller="profileController" ng-show="showProfile">
+        <div ng-include src="'static/profile.html'"></div>
     </div>
 
     <div id="recentMessages" ng-controller="recentController">

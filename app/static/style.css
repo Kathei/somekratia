@@ -60,18 +60,22 @@ li.selected a {
 
 .navbar {
     background-color: white;
-    padding: 2vw 0;
-    margin-top: 2vw;
+    padding: 1vw 0;
     width: 100vw;
     margin-top: 1.5vw;
     position: absolute;
     left: 0;
     z-index: 1000;
+    text-align: center;
 }
 
 .nav-item {
     display: inline;
     padding-right: 40px;
+}
+
+.nav-field {
+    display:inline;
 }
 
 .nav-contents {
@@ -84,10 +88,7 @@ form {
 }
 
 .logo {
-    width: 17vw;
-    position: absolute;
-    left: 5vw;
-    top: 0.5vw;
+    vertical-align: middle;
 }
 
 #login-button {
@@ -259,4 +260,38 @@ form {
 
 .infowindow {
     background-color: #555555;
+}
+
+.user-avatar {
+    width: 2.5vw;
+    height: 2.5vw;
+}
+
+.nav-profile {
+    margin-left: 3vw;
+    float: right;
+}
+
+.username {
+    font-size: 12px;
+    font-family: "Tw Cen MT";
+    color: #555555;
+}
+
+.user-container {
+    width: 5vw;
+    cursor: pointer;
+}
+
+.profileContainer {
+    background-color: white;
+    width: 90vw;
+    height: 100vh;
+    margin-left: 5vw;
+    margin-right: 5vw;
+    margin-top: 10vh;
+    position: absolute;
+    top: 0vw;
+    left: 0;
+    padding-top: 7vw;
 }
