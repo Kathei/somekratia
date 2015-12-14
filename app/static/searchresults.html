@@ -2,7 +2,7 @@
     <div>Hakusanalla "{{ searchText.value }}" löytyi {{ searchResults.length }} hakutulosta. </div>
     <ul>
         <li ng-repeat="x in searchResults">
-            <a ng-href="/issue/{{ x.id }}/">{{ x.subject }}</a>
+            <div ng-controller="windowController" ng-click="windowClick(x)">{{ x.subject }}</div>
         </li>
     </ul>
 </div>
