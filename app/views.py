@@ -79,6 +79,13 @@ def register(request):
             context)
 
 
+def current_user(request):
+    if request.user.is_authenticated():
+        userdata = {"id": request.user.id, "name": request.user.username}
+        return JsonResponse(userdata)
+    else:
+        return HttpResponseForbidden
+
 def user_picture(request, userID):
     user = get_object_or_404(UserWithProfile, user=userID)
     return HttpResponse(user.picture.file, content_type='text/plain')
@@ -87,7 +94,7 @@ def user_picture(request, userID):
 def user_profile(request, userID):
     if request.user.is_authenticated():
         user = get_object_or_404(UserWithProfile, user=userID)
-        return render_to_response('profile.html',
+        return render_to_response('static/profile.html',
                            {'user': user},
                            RequestContext(request))
     else:
@@ -133,7 +140,7 @@ def issues_bbox(request):
 def issues_search_text(request):
     text = request.GET.get('search')
     if text is None or len(text) < 4:
-        return HttpResponse('{ \'msg\' : \'Search term must be at least 4 characters long\' }', 400)
+        return HttpResponse('{ "msg" : "Search term must be at least 4 characters long" }', 400)
     url = 'http://dev.hel.fi/openahjo/v1/issue/search/?text=%s&format=json%s'\
           % (quote(text), get_paging_info(request))
     return JsonResponse(get_url_as_json(url))
