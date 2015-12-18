@@ -30,6 +30,10 @@ h2 {
     font-size: 27px;
 }
 
+h1 {
+    font-size: 40px;
+}
+
 #map-container {
     width: 100vw;
     height: 100vh;
@@ -109,20 +113,23 @@ form {
 .issueContainer {
     background-color: white;
     width: 90vw;
-    height: 100vh;
+    height: 67vh;
     margin-left: 5vw;
     margin-right: 5vw;
-    margin-top: 10vh;
+    margin-top: 20vh;
     position: absolute;
     top: 0vw;
     left: 0;
     padding-top: 7vw;
+    border-top-left-radius: 1vw;
+    border-top-right-radius: 1vw;
+    overflow: scroll;
 }
 
 .issueDetails {
-    display: inline-block;
-    width: 86vw;
-    margin: 3vw 0 0 6vw;
+   display: inline-block;
+    width: 82vw;
+    margin: 3vw 0 0 4vw;
 }
 
 .issueDetails h2 {
@@ -140,15 +147,16 @@ form {
     width: 1vw;
     height: 1vw;
     position: absolute;
-    right: 1vw;
-    top: 1vw;
+    right: 2vw;
+    top: 2vw;
+    cursor: pointer;
 }
 
 .placeholder-timeline {
-    width: 86vw;
+    width: 82vw;
     background-color: #939291;
     height: 3px;
-    margin: 4vw 0 0 6vw;
+    margin-left: 4vw;
 
 }
 
@@ -161,12 +169,12 @@ form {
 	border-radius: 1.5vw;
     display: inline;
     position: absolute;
-    top: 9.5vw;
+    top: 5.5vw;
     transform: translateX(-50%);
 }
 
 .timeline-background {
-    width: 86vw;
+    width: 90vw;
 }
 
 .timeline-message {
@@ -178,7 +186,7 @@ form {
 	border-radius: 1vw;
     display: inline;
     position: absolute;
-    top: 10vw;
+    top: 6vw;
     transform: translateX(-50%);
 }
 
@@ -259,7 +267,7 @@ form {
 }
 
 .infowindow {
-    background-color: #555555;
+    /*background-color: #555555;*/
 }
 
 .user-avatar {
@@ -286,12 +294,24 @@ form {
 .profileContainer {
     background-color: white;
     width: 90vw;
-    height: 100vh;
+    height: 75vh;
     margin-left: 5vw;
     margin-right: 5vw;
-    margin-top: 10vh;
+    margin-top: 20vh;
     position: absolute;
     top: 0vw;
     left: 0;
-    padding-top: 7vw;
+    border-radius: 1vw;
+    overflow: scroll;
+}
+
+.profileContainer h1 {
+    font-family: Tw Cen MT;
+    color: #939291;
+}
+
+.userDetails {
+   display: inline-block;
+    width: 80vw;
+    margin: 2vw 0 0 6vw;
 }

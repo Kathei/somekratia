@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Somekratia - {{ user.user.username }}</title>
-</head>
-<body>
-    <h1>{{ user.user.username }}</h1>
-    <img width="128" height="128" src="/user/{{ user.user_id }}/picture" />
-</body>
-</html>
+<img src="/static/img/x.png" class="close" ng-controller="closeProfileController" ng-click="closeProfile()"/>
+<div class="userDetails">
+    <h1>{{ user.name }}</h1>
+    <img width="128" height="128" src="/user/{{ user.id }}/picture" />
+</div>
+<div class="user-subscriptions" ng-controller="subscriptionController">
+
+</div>

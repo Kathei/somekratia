@@ -58,7 +58,7 @@
         <div class="nav-field nav-item">
             <input type="text" id="search" name="search" placeholder="Haku" data-ng-model="text"/>
 
-            <button type="submit" class="nav-item search-button" ng-controller="searchController" ng-click="textSearch(text)">HAE</button>
+            <button type="submit" class="nav-item search-button" ng-controller="textSearchController" ng-click="textSearch(text)">HAE</button>
 
         </div>
     
@@ -115,7 +115,7 @@
         <div ng-include src="'static/issue.html'" ></div>
     </div>
 
-    <div class="profileContainer" ng-controller="profileController" ng-show="showProfile">
+    <div class="profileContainer" ng-controller="profileController" ng-show="userData.showProfile">
         <div ng-include src="'static/profile.html'"></div>
     </div>
 
