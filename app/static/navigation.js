@@ -260,7 +260,10 @@ app.controller('searchController', function($scope, $http, $timeout){
     $scope.MapOptions = {
         markers: {
             selected: {},
-        }
+        },
+        mapTypeControl: false,
+        mapTypeControlOptions: { mapTypeIds: [] },
+
     };
 
     $scope.map = {
@@ -269,7 +272,7 @@ app.controller('searchController', function($scope, $http, $timeout){
             longitude: 24.9399135,
         },
         zoom: 13,
-        options: $scope.mapOptions,
+        options: $scope.MapOptions,
         window: {
             marker: {},
             show: false,
@@ -455,9 +458,16 @@ app.controller('loginController', function($scope){
 });
 
 app.controller('loginShowController', function($scope, $rootScope){
+    $scope.inputClick = false;
 
     $scope.toggleShow = function() {
-        $rootScope.showLogin = !$rootScope.showLogin;
+        if($scope.inputClick) {
+            $scope.inputClick = false;
+            return;
+        }
+        else {
+            $rootScope.showLogin = !$rootScope.showLogin;
+        }
     }
 });
 

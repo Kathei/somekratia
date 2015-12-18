@@ -24,6 +24,7 @@
     <script src="/static/navigation.js"></script>
     <script src="/static/navbar_controller.js"></script>
     <script src="/static/searchresult_controller.js"></script>
+    <script src="/static/login_controller.js"></script>
     <link rel="stylesheet" type="text/css" media="screen" href="../static/style.css" />
 </head>
 <body>
@@ -43,7 +44,14 @@
             {% endverbatim %}
         </ul>
 
-        {% if user.is_authenticated %}
+        <div class="nav-field nav-item">
+            <input type="text" id="search" name="search" placeholder="Haku" data-ng-model="text"/>
+
+            <button type="submit" class="nav-item search-button" ng-controller="textSearchController" ng-click="textSearch(text)">HAE</button>
+
+        </div>
+
+         {% if user.is_authenticated %}
             <form class="nav-field logout-button" id="logout" action="/logout" method="post">
                 {% csrf_token %}
 
@@ -54,13 +62,6 @@
 
             <button  class="nav-item login-button" ng-controller="loginShowController" ng-click="toggleShow()">KIRJAUDU</button>
         {% endif %}
-
-        <div class="nav-field nav-item">
-            <input type="text" id="search" name="search" placeholder="Haku" data-ng-model="text"/>
-
-            <button type="submit" class="nav-item search-button" ng-controller="textSearchController" ng-click="textSearch(text)">HAE</button>
-
-        </div>
     
         {% if user.is_authenticated %}
             {% verbatim %}
@@ -78,26 +79,11 @@
 </div>
 
 <div class="login" ng-controller="loginController" ng-show="showLogin" ng-click="toggleShow()">
-    <div class="login-box" ng-click="console.log('klik')">
-        <form class="" id="login" action="/login" method="post">
-            {% csrf_token %}
-            <!--<input type="button" id="signup" value="Sign up" />-->
-            <label for="usernameinput">
-                <input type="text" id="usernameinput" name="username" placeholder="Käyttäjänimi" />
-            </label>
-            <label for="passwordinput">
-                <input type="password" id="passwordinput" name="password" placeholder="Salasana" />
-            </label>
-            <div class="button">
-                <button type="submit">Kirjaudu</button>
-                <button type="reset" ng-click="toggleShow()">Peruuta</button>
-            </div>
-        </form>
-    </div>
+   <div ng-include src="'static/login.html'" ></div>
 </div>
 {% verbatim %}
 <div id= 'map-container' ng-controller="searchController" >
-    <ui-gmap-google-map center='map.center' zoom='map.zoom' events="map.mapEvents" styles="[{stylers: [{ saturation: -100 },  { visibility: 'simplified' }]}, {featureType:'water', stylers: [{color: '#94D5F7'}] }]">
+    <ui-gmap-google-map center='map.center' zoom='map.zoom' events="map.mapEvents" options="MapOptions"styles="[{stylers: [{ saturation: -100 },  { visibility: 'simplified' }]}, {featureType:'water', stylers: [{color: '#94D5F7'}] }]">
         <ui-gmap-window coords="map.window.marker.coords" options="map.window.options" show="map.window.show" closeClick="map.window.closeClick" isIconVisibleOnClick="true"
                         templateUrl="templateUrl" templateParameter="content" ng-cloak>
         </ui-gmap-window>
