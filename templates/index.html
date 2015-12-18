@@ -24,6 +24,7 @@
     <script src="/static/navigation.js"></script>
     <script src="/static/navbar_controller.js"></script>
     <script src="/static/searchresult_controller.js"></script>
+    <script src="/static/login_controller.js"></script>
     <link rel="stylesheet" type="text/css" media="screen" href="../static/style.css" />
 </head>
 <body>
@@ -32,8 +33,8 @@
     <div class="nav-contents" ng-controller="navbarController">
         <a href="index.html"><img src="/static/img/somekratia_logo_small.png" class="logo"/></a>
         <ul id="mainnav">
-            <li class="nav-item selected"><a href="index.html">HOME</a></li>
-            <li class="nav-item"><a href=""></a>RECENT</li>
+            <li class="nav-item selected"><a href="index.html">KOTI</a></li>
+            <li class="nav-item"><a href=""></a>VIIMEISIMMÄT</li>
             {% verbatim %}
             <select name="categorySelect" id="category" class="nav-item" ng-model="categorySelect"
                     ng-change="categoryChanged()">
@@ -43,23 +44,24 @@
             {% endverbatim %}
         </ul>
 
-        {% if user.is_authenticated %}
+        <div class="nav-field nav-item">
+            <input type="text" id="search" name="search" placeholder="Haku" data-ng-model="text"/>
+
+            <button type="submit" class="nav-item search-button" ng-controller="textSearchController" ng-click="textSearch(text)">HAE</button>
+
+        </div>
+
+         {% if user.is_authenticated %}
             <form class="nav-field logout-button" id="logout" action="/logout" method="post">
                 {% csrf_token %}
 
-                <button class="nav-item" type="submit">LOGOUT</button>
+                <button class="nav-item" type="submit">LOPETA</button>
 
             </form>
         {% else %}
-            <button class="nav-item login-button" ng-controller="loginShowController" ng-click="toggleShow()">LOGIN</button>
+
+            <button  class="nav-item login-button" ng-controller="loginShowController" ng-click="toggleShow()">KIRJAUDU</button>
         {% endif %}
-
-        <div class="nav-field">
-            <input type="text" id="search" name="search" placeholder="Search" data-ng-model="text"/>
-
-            <button type="submit" class="nav-item search-button" ng-controller="textSearchController" ng-click="textSearch(text)">SEARCH</button>
-
-        </div>
     
         {% if user.is_authenticated %}
             {% verbatim %}
@@ -77,26 +79,11 @@
 </div>
 
 <div class="login" ng-controller="loginController" ng-show="showLogin" ng-click="toggleShow()">
-    <div class="login-box" ng-click="console.log('klik')">
-        <form class="" id="login" action="/login" method="post">
-            {% csrf_token %}
-            <!--<input type="button" id="signup" value="Sign up" />-->
-            <label for="usernameinput">
-                <input type="text" id="usernameinput" name="username" placeholder="Username" />
-            </label>
-            <label for="passwordinput">
-                <input type="password" id="passwordinput" name="password" placeholder="Password" />
-            </label>
-            <div class="button">
-                <button type="submit">Login</button>
-                <button type="reset" ng-click="toggleShow()">Cancel</button>
-            </div>
-        </form>
-    </div>
+   <div ng-include src="'static/login.html'" ></div>
 </div>
 {% verbatim %}
 <div id= 'map-container' ng-controller="searchController" >
-    <ui-gmap-google-map center='map.center' zoom='map.zoom' events="map.mapEvents" styles="[{stylers: [{ saturation: -100 },  { visibility: 'simplified' }]}, {featureType:'water', stylers: [{color: '#94D5F7'}] }]">
+    <ui-gmap-google-map center='map.center' zoom='map.zoom' events="map.mapEvents" options="MapOptions"styles="[{stylers: [{ saturation: -100 },  { visibility: 'simplified' }]}, {featureType:'water', stylers: [{color: '#94D5F7'}] }]">
         <ui-gmap-window coords="map.window.marker.coords" options="map.window.options" show="map.window.show" closeClick="map.window.closeClick" isIconVisibleOnClick="true"
                         templateUrl="templateUrl" templateParameter="content" ng-cloak>
         </ui-gmap-window>
@@ -111,7 +98,7 @@
     </div>
 
     <div class="issueContainer" ng-controller="messageController" ng-show="showIssue">
-        <div ng-include src="'static/issue.html'"></div>
+        <div ng-include src="'static/issue.html'" ></div>
     </div>
 
     <div class="profileContainer" ng-controller="profileController" ng-show="userData.showProfile">
