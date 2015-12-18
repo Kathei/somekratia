@@ -26,7 +26,7 @@ from app.views import decisions
 from app.views import register
 from app.views import user_profile, user_picture, messages
 from app.views import get_issue_subscriptions
-from app.views import current_user
+from app.views import current_user, reply_to_message
 from django.views.generic.edit import CreateView
 from django.contrib.auth.forms import UserCreationForm
 
@@ -55,4 +55,5 @@ urlpatterns = [
     url(r'^issue/(?P<issueID>[0-9]+)/decisions', decisions),
     url(r'^issue/(?P<issueID>[0-9]+)/subscribe', subscribe_issue),
     url(r'^issue/(?P<issueID>[0-9]+)/messages', messages),
+    url(r'^message/(?P<messageID>[0-9]+)/reply$', reply_to_message),
 ]

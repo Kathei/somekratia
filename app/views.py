@@ -40,7 +40,7 @@ def login_view(request):
     if user is not None:
         if user.is_active:
             login(request, user)
-            return HttpResponse('Logged in')
+            return JsonResponse({"id": request.user.id, "name": request.user.username});
         else:
             return HttpResponse('Account no longer active')
     else:
@@ -233,26 +233,36 @@ def post_message(request, issueID):
             else:
                 voted = False
             response['messages'].append({'text': m.text, 'poster': m.poster.username, 'created':m.created, 'edited':m.edited, 'id': m.id, 'liked': voted})
+
+        for m in messages:
+            replies = Message.objects.filter(reply_to=m)
+            response['messages'].append({'replies':replies})
+
         return JsonResponse(response)
     elif request.user is None or request.user.is_anonymous():
         return HttpResponseForbidden('Please login before posting')
     elif request.method == 'POST':
-        #create new issue to the database if the one with id=issueID is not found
-        #Issues are foreign keys for messages
         issue = Issue.objects.get_or_create(id=issueID, ahjo_id=issueID)
         if issue[1] is True:
             issue[0].save()
             logging.info("Created object with id %s" % issueID)
 
         m = Message(text=request.POST['messagefield'], poster=request.user, issue_id=issueID)
-        #m.text = request.POST['messagefield']
-        #m.poster = request.user
-        #m.issue_id = issueID
         m.save()
         response = {'text': m.text, 'poster': m.poster.username, 'created':m.created, 'edited':m.edited, 'id': m.id }
         return JsonResponse(response)
     else:
         return HttpResponseBadRequest("Only POST and GET methods are allowed")
+
+
+def reply_to_message(request, messageID):
+    if request.method == 'POST':
+        m = Message(text=request.POST['replyfield'], poster=request.user,
+                    reply_to=get_object_or_404(Message, id=messageID),
+                    issue_id=get_object_or_404(Message, id=messageID).issue.ahjo_id)
+        m.save()
+        response = {'text': m.text, 'poster': m.poster.username, 'created':m.created, 'edited':m.edited, 'id': m.id }
+        return JsonResponse(response)
 
 
 @login_required

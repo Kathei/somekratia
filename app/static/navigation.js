@@ -65,6 +65,17 @@ app.controller('messageController', function($scope, $http) {
         //$scope.messages.push({text: newMessageText, poster: 'dynamic', time: timeStamp() });
 
     };
+    $scope.replyToMessage = function (message, newMessageText) {
+        var config = {headers: { 'Content-Type': 'application/x-www-form-urlencoded'}};
+        $http.post("/message/" + message.id + "/reply", "replyfield="+encodeURIComponent(newMessageText), config).success(function(response) {
+            $scope.latestReply = Date.parse(response.created);
+            $scope.messages.push(response);
+            message.showReplyControls.value = !message.showReplyControls.value;
+            console.log(message.showReplyControls);
+        }).error(function() {
+            alert("vastaus ei toimi");
+        });
+    };
 
     $scope.getMessages = function(issueID) {
         $http.get("/issue/"+ issueID +"/messages/").success(function(response) {
@@ -181,6 +192,9 @@ app.controller('messageController', function($scope, $http) {
             });
         }
     };
+    $scope.toggleReplyControls = function(message) {
+        message.showReplyControls.value = !message.showReplyControls.value;
+    }
 });
 
 app.controller('subController', function($scope, $http) {

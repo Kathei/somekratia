@@ -58,14 +58,20 @@
 
 
         <div ng-repeat="m in messages">
-            <div class="messageBubble">
+            <div class="messageBubble" ng-init="m.showReplyControls = {value:false}">
 
                 <h3 class="poster">{{m.poster}}</h3>
                 <h3 class="time-posted">{{m.created | date: 'short'}}</h3>
                 <p class="messageText">{{m.text}}</p>
 
                 <img ng-src="{{ m.liked ? '../../static/img/thumbs-up-green.png' : '../../static/img/thumbs-up.png' }}" ng-click="likeMessage(m)">
-
+                <div ng-click="toggleReplyControls(m)">vastaa</div>
+                <div ng-show="m.showReplyControls.value">
+                    <textarea ng-mogel="replyText" name="replyfield" id="replyfield" rows="6" cols="70"></textarea>
+                    <div class="button">
+                        <button ng-click="replyToMessage(m, replyText)">Send message</button>
+                    </div>
+                </div>
             </div>
         </div>
 
