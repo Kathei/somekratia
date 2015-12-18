@@ -274,7 +274,10 @@ app.controller('searchController', function($scope, $http, $timeout){
     $scope.MapOptions = {
         markers: {
             selected: {},
-        }
+        },
+        mapTypeControl: false,
+        mapTypeControlOptions: { mapTypeIds: [] },
+
     };
 
     $scope.map = {
@@ -283,7 +286,7 @@ app.controller('searchController', function($scope, $http, $timeout){
             longitude: 24.9399135,
         },
         zoom: 13,
-        options: $scope.mapOptions,
+        options: $scope.MapOptions,
         window: {
             marker: {},
             show: false,
@@ -427,18 +430,35 @@ app.controller('searchController', function($scope, $http, $timeout){
 
 });
 
-app.controller('windowController', function($scope){
+app.controller('windowController', function($scope, $http) {
     var issueController = document.querySelector('[ng-controller="messageController"]');
     var issueScope = angular.element(issueController).scope();
 
-    $scope.windowClick = function(issue) {
+    $scope.windowClick = function (issue) {
         issueScope.showIssue = true;
         issueScope.issueID = issue.id;
         issueScope.issue = issue;
         console.log(issue);
         console.log("täällä! showIssue: " + issueScope.showIssue);
     }
-
+    $scope.$watch("issue", function (newVal, oldVal) {
+        if( newVal === undefined) {
+            return;
+        }
+        var issueID = newVal.id;
+        $http.get("/issue/" + issueID + "/messages/").success(function (response) {
+            console.log(response);
+            var messages = response.messages;
+            $scope.messages = messages;
+            if (messages.length > 0) {
+                $scope.lastMessage = messages[messages.length - 1];
+            } else {
+                $scope.lastMessage = undefined;
+            }
+        }).error(function(err) {
+            alert(err);
+        });
+    });
 });
 
 app.controller('loginController', function($scope){
@@ -452,9 +472,16 @@ app.controller('loginController', function($scope){
 });
 
 app.controller('loginShowController', function($scope, $rootScope){
+    $scope.inputClick = false;
 
     $scope.toggleShow = function() {
-        $rootScope.showLogin = !$rootScope.showLogin;
+        if($scope.inputClick) {
+            $scope.inputClick = false;
+            return;
+        }
+        else {
+            $rootScope.showLogin = !$rootScope.showLogin;
+        }
     }
 });
 
