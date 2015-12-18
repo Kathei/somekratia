@@ -91,8 +91,19 @@ li.selected a {
     margin-left: 6vw;
 }
 
-.logout-button {
+.logout-button-button {
     margin-left: -2vw;
+}
+
+.login-button, .logout-button-button {
+    -webkit-appearance: none;
+   -moz-appearance: none;
+   appearance: none;
+    border: 0;
+    background-color: #6fc1dd;
+    color: #FFFFFF;
+    cursor: pointer;
+    border-radius: 5px;
 }
 
 form {
@@ -103,9 +114,6 @@ form {
     vertical-align: middle;
 }
 
-#login-button {
-
-}
 
 .navbar button {
     padding: 3px;
@@ -258,6 +266,7 @@ form {
     position: absolute;
     top: 0;
     left: 0;
+    z-index: 1000;
 }
 
 /*SEARCH RESULTS -IKKUNA*/
@@ -358,6 +367,6 @@ form {
     margin-bottom: 5vh;
 }
 
-.recentPoster {
-    color: #d8752f;
+select {
+    width: 280px;
 }
