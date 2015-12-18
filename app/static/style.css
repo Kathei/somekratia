@@ -124,6 +124,7 @@ form {
     border-top-left-radius: 1vw;
     border-top-right-radius: 1vw;
     overflow: scroll;
+    z-index: 1;
 }
 
 .issueDetails {
@@ -260,12 +261,6 @@ form {
     position: absolute;
 }
 
-
-#recentMessages {
-    float: right;
-    width: 20%;
-}
-
 .infowindow {
     /*background-color: #555555;*/
 }
@@ -303,6 +298,7 @@ form {
     left: 0;
     border-radius: 1vw;
     overflow: scroll;
+    z-index: 1;
 }
 
 .profileContainer h1 {
@@ -314,4 +310,46 @@ form {
    display: inline-block;
     width: 80vw;
     margin: 2vw 0 0 6vw;
+}
+
+#recentMessages {
+    background: #FFF;
+    padding: 1.5vw;
+    width: 17vw;
+    position: absolute;
+    top: 14vw;
+    right: 5vw;
+    border-radius: 1vw;
+    z-index: 0;
+}
+
+#recentMessages h3 {
+    font-family: "Tw Cen MT";
+    color: #6fc1dd;
+    font-size: 25px;
+    margin: 1vw;
+}
+
+.recent-message {
+    padding: 1vh 1vw;
+}
+
+.recent-message-txt {
+    font-family: "Tw Cen MT";
+    color: #939291;
+    cursor: pointer;
+}
+
+.recent-message-txt:hover {
+    color: #555555;
+}
+
+.recentMessageContainer {
+    height: 30vh;
+    overflow: scroll;
+    margin-bottom: 5vh;
+}
+
+.recentPoster {
+    color: #d8752f;
 }
