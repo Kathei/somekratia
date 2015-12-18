@@ -149,6 +149,7 @@ form {
     position: absolute;
     right: 2vw;
     top: 2vw;
+    cursor: pointer;
 }
 
 .placeholder-timeline {
@@ -266,7 +267,7 @@ form {
 }
 
 .infowindow {
-    background-color: #555555;
+    /*background-color: #555555;*/
 }
 
 .user-avatar {
@@ -293,15 +294,15 @@ form {
 .profileContainer {
     background-color: white;
     width: 90vw;
-    height: 100vh;
+    height: 75vh;
     margin-left: 5vw;
     margin-right: 5vw;
-    margin-top: 12vw;
+    margin-top: 20vh;
     position: absolute;
     top: 0vw;
     left: 0;
-    padding-top: 1.5vw;
-     border-radius: 1vw;
+    border-radius: 1vw;
+    overflow: scroll;
 }
 
 .profileContainer h1 {
@@ -312,5 +313,5 @@ form {
 .userDetails {
    display: inline-block;
     width: 80vw;
-    margin: 3vw 0 0 6vw;
+    margin: 2vw 0 0 6vw;
 }

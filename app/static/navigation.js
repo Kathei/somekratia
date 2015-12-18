@@ -12,6 +12,10 @@ app.config(['$httpProvider', function($httpProvider) {
     $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
 }]);
 
+app.factory('UserData', function(){
+    return {'userId': 0, 'username': undefined, 'showProfile': false};
+});
+
 app.controller('messageController', function($scope, $http) {
     /*$scope.latestMessage = Date.parse("2999-11-24T15:24:25.730Z");
      $scope.latestDecision = Date.parse("2999-11-24T15:24:25.730Z");
@@ -226,6 +230,26 @@ function timeStamp() {
     return date.join(".") + " " + time.join(":");
 }
 
+app.controller('textSearchController', function($scope, $http){
+    $scope.textSearch = function(text) {
+
+        console.log("test");
+        var config = {
+            'params' : {
+                'search': text,
+                'format': 'json',
+            },
+        };
+        $http.get("/issues/text/", config)
+            .then(function(searchResult) {
+                var resultController = document.querySelector('[ng-controller="searchResultController"]');
+                var resultScope = angular.element(resultController).scope();
+                resultScope.searchText.value = searchResult.config.params.search;
+                resultScope.searchResults = searchResult.data.objects;
+            });
+    }
+});
+
 app.controller('searchController', function($scope, $http, $timeout){
     $http.get('/user/subscriptions').success(function(response) {
         $scope.subscriptions = response.subscriptions;
@@ -277,23 +301,6 @@ app.controller('searchController', function($scope, $http, $timeout){
         markerRefreshPromise = $timeout($scope.setMarkers, waitTime, false, map.getBounds());
     };
 
-    $scope.textSearch = function(text) {
-
-        console.log("test");
-        var config = {
-            'params' : {
-                'search': text,
-                'format': 'json',
-            },
-        };
-        $http.get("/issues/text/", config)
-            .then(function(searchResult) {
-                var resultController = document.querySelector('[ng-controller="searchResultController"]');
-                var resultScope = angular.element(resultController).scope();
-                resultScope.searchText.value = searchResult.config.params.search;
-                resultScope.searchResults = searchResult.data.objects;
-            });
-    }
     $scope.issueMarkers = [];
 
     $scope.templateUrl = {};
@@ -449,9 +456,9 @@ app.controller('closeController', function($scope){
     }
 });
 
-app.controller('profileController', function($scope, $http) {
-    //$scope.showProfile = false;
-    //console.log($scope.showProfile);
+app.controller('profileController', function($scope, $http, UserData) {
+    $scope.userData = UserData;
+    console.log($scope.userData.showProfile);
 
     $http.get("/user/").success(function(response){
         $scope.user = response;
@@ -460,11 +467,9 @@ app.controller('profileController', function($scope, $http) {
     });
 });
 
-app.controller('profileNavController', function($scope, $http){
-    var profileController = document.querySelector('[ng-controller="profileController"]');
-    var profileScope = angular.element(profileController).scope();
-    profileScope.showProfile = false;
-
+app.controller('profileNavController', function($scope, $http, UserData){
+    //profileScope.showProfile = false;
+    $scope.userData = UserData;
     $http.get("/user/").success(function(response){
         $scope.user = response;
         //$scope.getPicture($scope.user.id);
@@ -483,22 +488,25 @@ app.controller('profileNavController', function($scope, $http){
     }
 
     $scope.toggleShow = function() {
-        profileScope.showProfile = true;
-        console.log(profileScope.showProfile);
+        console.log(UserData.showProfile);
+        $scope.userData.showProfile = true;
     }
 
 });
 
-app.controller('closeProfileController', function($scope){
-    var controller = document.querySelector('[ng-controller="profileController"]');
-    var topscope = angular.element(controller).scope();
-
+app.controller('closeProfileController', function($scope, UserData){
     $scope.closeProfile = function() {
         //console.log('ruksia klikattiin');
-        topscope.showProfile = !topscope.showProfile;
+        UserData.showProfile = !UserData.showProfile;
     }
 });
 
+app.controller('subscriptionController', function($scope){
+    var controller = document.querySelector('[ng-controller="searchController"]');
+    var topScope = angular.element(controller).scope();
+
+    console.log(topScope.subscriptions);
+});
 
 
 
