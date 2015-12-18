@@ -152,8 +152,8 @@ app.controller('messageController', function($scope, $http) {
         if (timeSpan != 0) {
             position = (timeStamp - firstAndLast.begin) / timeSpan;
         }
-        var offset = 6;
-        var percentage = position * 86 + offset;
+        var offset = 4;
+        var percentage = position * 92 + offset;
         // console.log(position);
         return {
             'left': percentage + '%'
@@ -450,19 +450,20 @@ app.controller('closeController', function($scope){
 });
 
 app.controller('profileController', function($scope, $http) {
-    $scope.showProfile = false;
-    console.log($scope.showProfile);
+    //$scope.showProfile = false;
+    //console.log($scope.showProfile);
 
     $http.get("/user/").success(function(response){
         $scope.user = response;
     }).error(function(foo, bar, baz){
-        alert("User not found");
+        //alert("User not found");
     });
 });
 
 app.controller('profileNavController', function($scope, $http){
     var profileController = document.querySelector('[ng-controller="profileController"]');
     var profileScope = angular.element(profileController).scope();
+    profileScope.showProfile = false;
 
     $http.get("/user/").success(function(response){
         $scope.user = response;
@@ -482,10 +483,20 @@ app.controller('profileNavController', function($scope, $http){
     }
 
     $scope.toggleShow = function() {
-        profileScope.showProfile = !profileScope.showProfile;
+        profileScope.showProfile = true;
         console.log(profileScope.showProfile);
     }
 
+});
+
+app.controller('closeProfileController', function($scope){
+    var controller = document.querySelector('[ng-controller="profileController"]');
+    var topscope = angular.element(controller).scope();
+
+    $scope.closeProfile = function() {
+        //console.log('ruksia klikattiin');
+        topscope.showProfile = !topscope.showProfile;
+    }
 });
 
 
