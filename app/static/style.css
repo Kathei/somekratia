@@ -84,7 +84,26 @@ li.selected a {
 
 .nav-contents {
     float: right;
-    margin-right: 5vw;
+    margin-right: 3vw;
+}
+
+.login-button {
+    margin-left: 6vw;
+}
+
+.logout-button-button {
+    margin-left: -2vw;
+}
+
+.login-button, .logout-button-button {
+    -webkit-appearance: none;
+   -moz-appearance: none;
+   appearance: none;
+    border: 0;
+    background-color: #6fc1dd;
+    color: #FFFFFF;
+    cursor: pointer;
+    border-radius: 5px;
 }
 
 form {
@@ -95,9 +114,6 @@ form {
     vertical-align: middle;
 }
 
-#login-button {
-
-}
 
 .navbar button {
     padding: 3px;
@@ -124,6 +140,7 @@ form {
     border-top-left-radius: 1vw;
     border-top-right-radius: 1vw;
     overflow: scroll;
+    z-index: 1;
 }
 
 .issueDetails {
@@ -249,6 +266,7 @@ form {
     position: absolute;
     top: 0;
     left: 0;
+    z-index: 1000;
 }
 
 /*SEARCH RESULTS -IKKUNA*/
@@ -258,12 +276,6 @@ form {
     top: 10vw;
     left: 10vw;
     position: absolute;
-}
-
-
-#recentMessages {
-    float: right;
-    width: 20%;
 }
 
 .infowindow {
@@ -276,7 +288,7 @@ form {
 }
 
 .nav-profile {
-    margin-left: 3vw;
+    margin-left: 4vw;
     float: right;
 }
 
@@ -303,6 +315,7 @@ form {
     left: 0;
     border-radius: 1vw;
     overflow: scroll;
+    z-index: 1;
 }
 
 .profileContainer h1 {
@@ -314,4 +327,46 @@ form {
    display: inline-block;
     width: 80vw;
     margin: 2vw 0 0 6vw;
+}
+
+#recentMessages {
+    background: #FFF;
+    padding: 1.5vw;
+    width: 17vw;
+    position: absolute;
+    top: 14vw;
+    right: 5vw;
+    border-radius: 1vw;
+    z-index: 0;
+}
+
+#recentMessages h3 {
+    font-family: "Tw Cen MT";
+    color: #6fc1dd;
+    font-size: 25px;
+    margin: 1vw;
+}
+
+.recent-message {
+    padding: 1vh 1vw;
+}
+
+.recent-message-txt {
+    font-family: "Tw Cen MT";
+    color: #939291;
+    cursor: pointer;
+}
+
+.recent-message-txt:hover {
+    color: #555555;
+}
+
+.recentMessageContainer {
+    height: 30vh;
+    overflow: scroll;
+    margin-bottom: 5vh;
+}
+
+select {
+    width: 280px;
 }

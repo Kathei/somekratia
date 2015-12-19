@@ -55,7 +55,7 @@
             <form class="nav-field logout-button" id="logout" action="/logout" method="post">
                 {% csrf_token %}
 
-                <button class="nav-item" type="submit">LOPETA</button>
+                <button class="nav-item logout-button-button" type="submit">LOPETA</button>
 
             </form>
         {% else %}
@@ -106,10 +106,13 @@
     </div>
 
     <div id="recentMessages" ng-controller="recentController">
-        <div ng-repeat="m in recentlyCommented">
-            <div class="messageBubble">
-                <div class="messageText">
-                    Viesti: {{m.message}} - ID: {{m.issueID}}
+        <h3>Viimeksi kommentoidut</h3>
+        <div class="recentMessageContainer">
+            <div ng-repeat="i in recentlyCommented">
+                <div class="recent-message">
+                    <div class="recent-message-txt" ng-controller="windowController" ng-click="windowClick(i.issue)">
+                        {{ i.name }}
+                    </div>
                 </div>
             </div>
         </div>

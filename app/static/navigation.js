@@ -223,9 +223,30 @@ app.controller('subController', function($scope, $http) {
 
 app.controller('recentController', function($scope, $http) {
     $http.get('/issues/recent/comments').success(function(response){
-        console.log(response);
-        $scope.recentlyCommented = response.issues;
-    })
+
+        $scope.recentlyCommented = response.commented;
+        //console.log(response.commented);
+        for (i = 0; i < 10; i++) {
+            //console.log(i);
+            $scope.getNameOfIssue($scope.recentlyCommented[i].issueID, i);
+        }
+        //console.log($scope.recentlyCommented[0].issueID);
+    });
+
+    $scope.getNameOfIssue = function(issueID, i) {
+        $http.get('/issue/'+ issueID).success(function(response){
+            //console.log(response);
+            var issueName = response.jsondetails.subject;
+            $scope.recentlyCommented[i].issue = response.jsondetails;
+            $scope.recentlyCommented[i].name = issueName;
+            //console.log(issueName);
+        }).error(function(foo, bar, baz) {
+            alert("could not find recent issue");
+        });
+    }
+
+
+
 });
 
 function timeStamp() {

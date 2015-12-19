@@ -185,11 +185,12 @@ def messages(request, issueID):
 
 
 def issues_with_messages(request):
-    messages = Message.objects.order_by('edited')[:10]
+    messages = Message.objects.order_by('-edited')[:10]
     issuelist = {}
-    issuelist['issues'] = []
+    issuelist['commented'] = []
     for message in messages:
         issue = message.issue
+        poster = message.poster.username
         votes = MessageVote.objects.filter(message=message)
         votes_counted = votes.count()
         voted = False
@@ -197,7 +198,7 @@ def issues_with_messages(request):
             users_votes = votes.filter(user=request.user)
             if users_votes.count() > 0:
                 voted = True
-        issuelist['issues'].append({'message' : message.text, 'issueID' : issue.ahjo_id, 'votes': int(votes_counted), 'voted': bool(voted)})
+        issuelist['commented'].append({'message' : message.text, 'issueID' : issue.ahjo_id, 'votes': int(votes_counted), 'voted': bool(voted), 'poster': poster})
     return JsonResponse(issuelist)
 
 
