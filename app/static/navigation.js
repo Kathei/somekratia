@@ -12,7 +12,7 @@ app.config(['$httpProvider', function($httpProvider) {
     $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
 }]);
 
-app.factory('UserData', function(){
+app.factory('UserData', function($http){
     var data = {'userId': 0, 'username': undefined, 'showProfile':false, 'subscriptions': []};
     data.isLoggedIn = function() {
         return data.username != undefined && data.userId != 0;
@@ -20,10 +20,15 @@ app.factory('UserData', function(){
     data.profilePictureUrl = function() {
         return "/user/" + data.userId + "/picture";
     }
+    $http.get('/user/subscriptions').success(function(response) {
+        data.subscriptions = response.subscriptions;
+    }).error(function(){
+        alert('ei saa tilauksia');
+    });
     return data;
 });
 
-app.factory('IssueData', function($http, $q) {
+app.factory('IssueData', function($http, $q, UserData) {
     var issueId = 0;
     var requestCanceller;
     function updateIssueData(issueId) {
@@ -34,7 +39,11 @@ app.factory('IssueData', function($http, $q) {
         data.data = null;
         data.messages.length = 0;
         $http.get('/issue/' + issueId +'/').then(function (response) {
-            data.data = response.data.jsondetails;
+            var issue = response.data.jsondetails;
+            if(UserData.subscriptions.indexOf(issue.id) > -1) {
+                issue.subscribed = true;
+            }
+            data.data = issue;
             data.messages = response.data.messages;
         }, function (response) {
             alert("Could not load messages for issue: " + data.issueId);
@@ -372,17 +381,11 @@ app.controller('textSearchController', function($scope, $http){
     }
 });
 
-app.controller('searchController', function($scope, $http, $timeout, IssueData){
+app.controller('searchController', function($scope, $http, $timeout, IssueData, UserData){
     $scope.issueMarkers = [];
     $scope.currentIssues = {};
     $scope.templateUrl = {};
     $scope.windowContent = {};
-    $http.get('/user/subscriptions').success(function(response) {
-        $scope.subscriptions = response.subscriptions;
-        console.log($scope.subscriptions);
-    }).error(function(){
-        alert('ei saa tilauksia');
-    });
     $scope.MapOptions = {
         markers: {
             selected: {},
@@ -461,7 +464,7 @@ app.controller('searchController', function($scope, $http, $timeout, IssueData){
                 //Filter categories
                 var category = feature.getProperty('category_origin_id');
                 var icon =  '/static/img/marker-orange.png';
-                if ($scope.subscriptions.indexOf(feature.getId()) > -1) {
+                if (UserData.subscriptions.indexOf(feature.getId()) > -1) {
                     icon = 'static/img/marker-blue.png';
                 }
                 return { visible: !tooOld, icon: icon};
