@@ -284,11 +284,20 @@ app.controller('messageController', function($scope, $http, IssueData, MessageSe
     }
 });
 
-app.controller('subController', function($scope, $http, UserData) {
+app.controller('subController', function($scope, $http, UserData, IssueData) {
     $scope.userData = UserData;
+    $scope.issueData = IssueData;
     $scope.subscribeClass = "grey";
-    $scope.subscribeText = " Seuraa";
-
+    $scope.subscribeText = "Seuraa";
+    $scope.$watch("issueData.data.subscribed", function(subscribed, oldVal) {
+       if(subscribed) {
+           $scope.subscribeClass = "blue";
+           $scope.subscribeText = "Lopeta seuraaminen";
+       } else {
+           $scope.subscribeClass = "grey";
+           $scope.subscribeText = "Seuraa";
+       }
+    });
     $scope.subscribeIssue = function(issue) {
         issue.subscribed = !issue.subscribed;
         if (issue.subscribed) {
