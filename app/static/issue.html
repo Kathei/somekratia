@@ -1,23 +1,23 @@
 <img src="/static/img/x.png" class="close" ng-controller="closeController" ng-click="closeIssue()"/>
 <div class="timeline-background">
     <div class="placeholder-timeline">&nbsp;</div>
-    <div ng-repeat="d in decisions">
+    <div ng-repeat="d in issueData.decisions">
         <div class="timeline-decision" ng-style="getStyle($index, d.origin_last_modified_time);"></div>
     </div>
-    <div ng-repeat="m in messages">
+    <div ng-repeat="m in issueData.messages">
         <div class="timeline-message" ng-style="getStyle($index, m.created);"></div>
     </div>
 
 </div>
 <div class="issueDetails">
     <div class="issueInfo">
-        <h2>{{ issue.subject }} </h2>
-        <h4>Date: {{ issue.latest_decision_date }}</h4>
+        <h2>{{ issueData.data.subject }} </h2>
+        <h4>Date: {{ issueData.data.latest_decision_date }}</h4>
         <p>{{ issue.summary }} </p>
 
        <div ng-controller="subController" ng-show="userData.isLoggedIn()">
         <div class="subscribe">
-            <img ng-src="{{ issue.subscribed ? '../../static/img/yellowstar.png' : '../../static/img/graystar.png' }}" ng-click="subscribeIssue(issue)">
+            <img ng-src="{{ issueData.data.subscribed ? '../../static/img/yellowstar.png' : '../../static/img/graystar.png' }}" ng-click="subscribeIssue(issue)">
         </div>
 
         <div>
@@ -25,13 +25,13 @@
                 <textarea ng-model="messageText" id="messagefield" name="messagefield" rows="6" cols="65"></textarea>
             </label>
             <div class="button">
-                <button ng-click="postMessage(issueID,messageText)">Send message</button>
+                <button ng-click="postMessage(issueData.issueId,messageText)">Send message</button>
             </div>
             <!--</form>-->
         </div>
        </div>
         <ul>
-            <li data-ng-repeat="d in decisions">
+            <li data-ng-repeat="d in issueData.decisions">
                 {{ d.meeting.date }} <!--Lisätään jokaisen decisionin päivämäärä listaan -->
                 <ul> <!-- Lisätään decisioneille liitteet -->
                     <li data-ng-repeat="a in d.attachments | filter:{ public: true} ">
@@ -59,10 +59,9 @@
                 {% endfor %} -->
 
 
-        <div ng-repeat="m in messages">
+        <div ng-repeat="m in issueData.messages">
             <div class="messageBubble" ng-init="m.showReplyControls = {value:false}">
-
-                <h3 class="poster">{{m.poster}}</h3>
+                <h3 class="poster">{{m.poster.username}}</h3>
                 <h3 class="time-posted">{{m.created | date: 'short'}}</h3>
                 <p class="messageText">{{m.text}}</p>
 

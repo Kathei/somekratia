@@ -13,75 +13,54 @@ app.config(['$httpProvider', function($httpProvider) {
 }]);
 
 app.factory('UserData', function(){
-    var data = {'userId': 0, 'username': undefined, 'showProfile':false};
+    var data = {'userId': 0, 'username': undefined, 'showProfile':false, 'subscriptions': []};
     data.isLoggedIn = function() {
         return data.username != undefined && data.userId != 0;
     }
     return data;
 });
 
-app.controller('messageController', function($scope, $http) {
-    /*$scope.latestMessage = Date.parse("2999-11-24T15:24:25.730Z");
-     $scope.latestDecision = Date.parse("2999-11-24T15:24:25.730Z");
-     $scope.firstMessage = Date.parse("1970-11-24T15:24:25.730Z");
-     $scope.firstDecision = Date.parse("1970-11-24T15:24:25.730Z");*/
-    $scope.$watch('issue', function(newValue, oldValue) {
-        //console.log("Issue muuttu: " + newValue + " oli " + oldValue);
-        $scope.messages = [];
-        $scope.decisions = [];
-        var issue = newValue;
-        if (typeof issue !== 'undefined') {
-            $scope.getMessages(issue.id);
-            $scope.getDecisions(issue.id);
+app.factory('IssueData', function($http, $q) {
+    var issueId = 0;
+    var requestCanceller;
+    function updateIssueData(issueId) {
+        if(requestCanceller != undefined) {
+            requestCanceller.resolve();
         }
-
-    });
-
-    $scope.deleteMessage = function(messageId){
-        console.log("test");
-        var config = {
-            method: 'DELETE',
-        };
-        $http.delete("/message/" + messageId + '/', config)
-            .success(function() {
-                //alert("deleted: " + messageId);
-            }).error(function() {
-                alert("delete failed!");
-            });
-        //TODO remove message with messageId from $scope.messages
-    };
-
-    $scope.postMessage = function(issueId, newMessageText) {
-        //alert(issueId + ": " + newMessageText);
-        var config = {headers: { 'Content-Type': 'application/x-www-form-urlencoded'}};
-        $http.post("/issue/" + issueId + "/messages/", "messagefield="+encodeURIComponent(newMessageText), config).success(function(response) {
-            //TODO show loading icon
-            alert("POST TOIMII");
-            $scope.latestMessage = Date.parse(response.created);
-            $scope.messages.push(response);
-            //$scope.$apply();
-
-        }).error(function(){
-            alert("Post doesn't work");
+        requestCanceller = $q.defer();
+        data.data = null;
+        data.messages.length = 0;
+        $http.get('/issue/' + issueId +'/').then(function (response) {
+            data.data = response.data.jsondetails;
+            data.messages = response.data.messages;
+        }, function (response) {
+            alert("Could not load messages for issue: " + data.issueId);
         });
 
-
-        //$scope.messages.push({text: newMessageText, poster: 'dynamic', time: timeStamp() });
-
-    };
-    $scope.replyToMessage = function (message, newMessageText) {
-        var config = {headers: { 'Content-Type': 'application/x-www-form-urlencoded'}};
-        $http.post("/message/" + message.id + "/reply", "replyfield="+encodeURIComponent(newMessageText), config).success(function(response) {
-            $scope.latestReply = Date.parse(response.created);
-            $scope.messages.push(response);
-            message.showReplyControls.value = !message.showReplyControls.value;
-            console.log(message.showReplyControls);
-        }).error(function() {
-            alert("vastaus ei toimi");
+        $http.get('/issue/' + issueId + '/decisions').then(function(response) {
+            data.decisions = response.data;
         });
+    }
+    var data =  {
+        'messages' : [],
+        'data': undefined,
+        'showDetails': false,
+        get issueId() {
+            return issueId;
+        },
+        set issueId(val) {
+            if (issueId != val) {
+                issueId = val;
+                updateIssueData(val);
+            }
+        }
     };
+    return data;
+});
 
-    $scope.getMessages = function(issueID) {
+
+app.service('MessageService', function($http, IssueData) {
+    this.getMessages = function(issueId) {
         $http.get("/issue/"+ issueID +"/messages/").success(function(response) {
             console.log(response);
             var messages = response.messages;
@@ -110,7 +89,101 @@ app.controller('messageController', function($scope, $http) {
         }).error(function(foo, bar, baz){
             alert("Error getting messages!");
         });
+    };
+
+    this.postMessage = function(issueId, newMessageText) {
+        var config = {headers: { 'Content-Type': 'application/x-www-form-urlencoded'}};
+        $http.post("/issue/" + issueId + "/messages/", "messagefield="+encodeURIComponent(newMessageText), config).success(function(response) {
+            //TODO show loading icon
+            alert("POST TOIMII");
+            IssueData.messages.push(response);
+            //$scope.$apply();
+
+        }).error(function(){
+            alert("Post doesn't work");
+        });
+    };
+
+    this.replyToMessage = function(messageId, newMessageText) {
+        var config = {headers: { 'Content-Type': 'application/x-www-form-urlencoded'}};
+        $http.post("/message/" + message.id + "/reply", "replyfield="+encodeURIComponent(newMessageText), config).success(function(response) {
+            $scope.latestReply = Date.parse(response.created);
+            IssueData.messages.push(response);
+            message.showReplyControls.value = !message.showReplyControls.value;
+            console.log(message.showReplyControls);
+        }).error(function() {
+            alert("vastaus ei toimi");
+        });
+    };
+    this.deleteMessage = function(messageId) {
+       var messages = IssueDatassueData.messages;
+        console.log("test");
+        var config = {
+            method: 'DELETE',
+        };
+        $http.delete("/message/" + messageId + '/', config)
+            .success(function() {
+                var idx = 0;
+                for(;idx < messages.length; idx++) {
+                    if (messages[idx].id == messageId) {
+                        messages.splice(idx, 1);
+                        break;
+                    }
+                }
+                //alert("deleted: " + messageId);
+            }).error(function() {
+                alert("delete failed!");
+            });
     }
+});
+
+app.service('IssueService', function($http, MessageService){
+    this.getDecisions = function(issueId) {
+
+    };
+
+    this.subscribe = function(issueId) {
+
+    };
+
+    this.unsubscribe = function(issueId) {
+
+    };
+});
+
+app.controller('messageController', function($scope, $http, IssueData, MessageService) {
+    $scope.issueData = IssueData;
+    $scope.$watch('issueData.messages', function(messages, oldVal){
+        if(messages == undefined || messages.length == 0) {
+                $scope.latestMessage = 'undefined';
+                $scope.firstMessage = 'undefined';
+                $scope.messages = [];
+                return;
+        }
+        $scope.latestMessage = messages[0];
+        $scope.firstMessage = messages[0];
+        var first = Date.parse(messages[0].created);
+        var last = Date.parse(messages[0].created);
+        for (message of $scope.issueData.messages) {
+            var created = Date.parse(message.created);
+            if (created >= last) {
+                $scope.latestMessage = created;
+                last = created;
+            }
+            if (created <= first) {
+                $scope.firstMessage = created;
+                first = created;
+            }
+        }
+        $scope.messages = $scope.issueData.messages;
+    });
+    $scope.deleteMessage = function(messageId){
+        MessageService.deleteMessage(messageId);
+    };
+
+    $scope.postMessage = function(issueId, newMessageText) {
+        MessageService.postMessage(issueId, newMessageText);
+    };
 
     $scope.getDecisions = function(issueID) {
         $http.get("/issue/" + issueID + "/decisions/").success(function (response) {
@@ -291,7 +364,11 @@ app.controller('textSearchController', function($scope, $http){
     }
 });
 
-app.controller('searchController', function($scope, $http, $timeout){
+app.controller('searchController', function($scope, $http, $timeout, IssueData){
+    $scope.issueMarkers = [];
+    $scope.currentIssues = {};
+    $scope.templateUrl = {};
+    $scope.windowContent = {};
     $http.get('/user/subscriptions').success(function(response) {
         $scope.subscriptions = response.subscriptions;
         console.log($scope.subscriptions);
@@ -317,7 +394,7 @@ app.controller('searchController', function($scope, $http, $timeout){
         window: {
             marker: {},
             show: false,
-            closeClick: function(){
+            closeClick: function () {
                 this.show = false;
             },
             options: {
@@ -331,124 +408,58 @@ app.controller('searchController', function($scope, $http, $timeout){
 
             issue: {},
         }
-    }
-
-    $scope.map.mapEvents = {};
-    var markerRefreshPromise;
-    $scope.map.mapEvents.bounds_changed = function (map, eventName, args) {
-        // reset the update timer by canceling the last call
-        if (markerRefreshPromise != undefined) {
-            $timeout.cancel(markerRefreshPromise);
-        }
-        var waitTime = 500;
-        // schedule marker refresh to start in 500 ms (waitTime)
-        markerRefreshPromise = $timeout($scope.setMarkers, waitTime, false, map.getBounds());
     };
 
-    $scope.issueMarkers = [];
-
-    $scope.templateUrl = {};
-
-    $scope.content = {};
-
-    $scope.markerClick = function (generated, event, marker){
-        console.log(marker);
-        $scope.MapOptions.markers.selected = marker;
-        var issueId = marker.issue.id;
-
-        // console.log($scope.MapOptions.markers.selected.coords);
-        //document.location.href = '/issue/' + issueId;
-        $scope.map.window.marker = marker;
-        $scope.map.window.issue = marker.issue;
-        // console.log(marker.coords);
-        //   console.log($scope.window.marker.coords);
-        //   $scope.content = '<a href ="/issue/' + issueId +'">' + marker.issue.subject + '</a>';
-        /* var link = document.createElement('a');
-         link.setAttribute('href',"/issue/" + issueId);
-         link.innerHTML = marker.issue.subject;*/
+    function featureClick(feature) {
         $scope.templateUrl = '/static/infowindow.html';
-        $scope.content = marker.issue;
+        IssueData.issueId = feature.getId();
+        $scope.content = {issueId: feature.getId()};
         console.log($scope.content);
         $scope.map.window.show = !$scope.map.window.show;
-
+        var geometry = feature.getGeometry().get();
+        var lat = geometry.lat;
+        var lng = geometry.lng;
+        $scope.map.window.marker.id = feature.getId();
+        $scope.map.window.marker.issue = $scope.content;
+        $scope.map.window.marker.coords = [geometry.lng(), geometry.lat()];
+        $scope.map.window.issue = $scope.content;
         $scope.$apply();
     };
 
-    function addMarkers(issue, index, array) {
-        var latLong = issue.geometries[0].coordinates;
-        var marker = new google.maps.Marker ({
-            // map: $scope.map,
-            id: issue.id,
-            latitude: latLong[1],
-            longitude: latLong[0],
-            issue: issue,
-            coords: latLong,
-            show: false,
-        });
-        if ($scope.subscriptions.indexOf(marker.id) > -1){
-            marker.setIcon('static/img/marker-blue.png');
-            issue.subscribed = true;
-        } else {
-            marker.setIcon('static/img/marker-orange.png');
-        }
-        $scope.issueMarkers.push(marker);
-    }
-
-    var markersUpdating = false;
-    $scope.setMarkers = function(bounds) {
-        var config = {
-            'params' : {
-                'minLat': bounds.getSouthWest().lat().toFixed(3),
-                'maxLat': bounds.getNorthEast().lat().toFixed(3),
-                'minLong': bounds.getSouthWest().lng().toFixed(3),
-                'maxLong': bounds.getNorthEast().lng().toFixed(3),
-                'format': 'json',
-                'page' : 1,
-                'pageSize' : 50,
-            },
-        };
-        if ($scope.category != "0" && $scope.category != undefined) {
-            config.params.category = $scope.category;
-        }
-
-        function loadData(config, initial, semaphore) {
-            $http.get("/issues/area", config)
-                .success(function (searchResult) {
-                    // stop updating if new query has been started
-                    if(semaphore.stop) {
-                        return;
-                    }
-                    // clear markers when first page is received
-                    if (initial) {
-                        $scope.issueMarkers.length = 0;
-                    }
-                    searchResult.objects.forEach(addMarkers);
-                    // read paging metadata from response
-                    var pageSize = searchResult.meta.limit;
-                    var page = searchResult.meta.page;
-                    var total = searchResult.meta.total_count;
-                    var pages = total / pageSize;
-                    // load next page if available
-                    if (page < pages && !semaphore.stop && page < 4) {
-                        config.params.page = page+1;
-                        loadData(config, false, semaphore);
-                    } else {
-                        // update loading status
-                        semaphore.markersUpdating = false;
-                    }
-                }).error(function (data, status, headers, config) {
-                    console.log("error")
-                    semaphore.markersUpdating = false;
+    var dataLayerInitialized = false;
+    $scope.map.mapEvents = {tilesloaded: function (map) {
+        if (!dataLayerInitialized) {
+            dataLayerInitialized = true;
+            $scope.$apply(function () {
+                map.data.loadGeoJson('/static/issue_index.json');
+                map.data.addListener("click", function(event) {
+                    featureClick(event.feature);
                 });
-        }
-        // cancel previous marker request
-        if ($scope.previousRequestSemapahore != undefined) {
-            $scope.previousRequestSemapahore.stop = true;
-        }
-        var semaphore = {stop: false, markersUpdating: true};
-        loadData(config, true, semaphore);
-        $scope.previousRequestSemaphore = semaphore;
-    }
+
+            });
+            map.data.setStyle(function(feature) {
+                //Show only issues with decisions less than 6 months ago
+                var lastModified = new Date(feature.getProperty('latest_decision_date'));
+                var now = new Date();
+                var month = now.getMonth();
+                var maxTimeSinceLatestDecision = 6;
+                if(month > maxTimeSinceLatestDecision) {
+                    now.setMonth(now.getMonth() - maxTimeSinceLatestDecision);
+                } else {
+                    now.setMonth((month - maxTimeSinceLatestDecision) % 11);
+                    now.setFullYear(now.getFullYear()-Math.ceil(maxTimeSinceLatestDecision / 12));
+                }
+                var tooOld = lastModified.getTime() < now.getTime();
+                //Filter categories
+                var category = feature.getProperty('category_origin_id');
+                var icon =  '/static/img/marker-orange.png';
+                if ($scope.subscriptions.indexOf(feature.getId()) > -1) {
+                    icon = 'static/img/marker-blue.png';
+                }
+                return { visible: !tooOld, icon: icon};
+            });
+        }},};
+
 
     $scope.closeClick = function() {
         $scope.map.window.show = false;
@@ -457,35 +468,14 @@ app.controller('searchController', function($scope, $http, $timeout){
 
 });
 
-app.controller('windowController', function($scope, $http) {
-    var issueController = document.querySelector('[ng-controller="messageController"]');
-    var issueScope = angular.element(issueController).scope();
-
+app.controller('windowController', function($scope, $http, IssueData) {
+    $scope.issueData = IssueData;
     $scope.windowClick = function (issue) {
-        issueScope.showIssue = true;
-        issueScope.issueID = issue.id;
-        issueScope.issue = issue;
+        $scope.issueData.showDetails = true;
         console.log(issue);
-        console.log("täällä! showIssue: " + issueScope.showIssue);
-    }
-    $scope.$watch("issue", function (newVal, oldVal) {
-        if( newVal === undefined) {
-            return;
-        }
-        var issueID = newVal.id;
-        $http.get("/issue/" + issueID + "/messages/").success(function (response) {
-            console.log(response);
-            var messages = response.messages;
-            $scope.messages = messages;
-            if (messages.length > 0) {
-                $scope.lastMessage = messages[messages.length - 1];
-            } else {
-                $scope.lastMessage = undefined;
-            }
-        }).error(function(err) {
-            alert(err);
-        });
-    });
+        console.log("täällä! showIssue: " + $scope.issueData.showIssue);
+    };
+
 });
 
 app.controller('loginController', function($scope, UserData){
@@ -516,13 +506,13 @@ app.controller('loginShowController', function($scope, $rootScope, UserData){
 
 app.controller('templateController', function(){});
 
-app.controller('closeController', function($scope){
+app.controller('closeController', function($scope, IssueData){
     var controller = document.querySelector('[ng-controller="messageController"]');
     var topscope = angular.element(controller).scope();
-
+    $scope.issueData = IssueData;
     $scope.closeIssue = function() {
         console.log('ruksia klikattiin');
-        topscope.showIssue = false;
+        $scope.issueData.showDetails = false;
     }
 });
 
