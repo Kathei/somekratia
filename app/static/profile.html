@@ -1,7 +1,7 @@
 <img src="/static/img/x.png" class="close" ng-controller="closeProfileController" ng-click="closeProfile()"/>
 <div class="userDetails">
-    <h1>{{ user.name }}</h1>
-    <img width="128" height="128" src="/user/{{ user.id }}/picture" />
+    <h1>{{ userData.username }}</h1>
+    <img width="128" height="128" src="{{ userData.profilePictureUrl() }}" />
 </div>
 <div class="user-subscriptions" ng-controller="subscriptionController">
 

@@ -132,7 +132,7 @@ form {
     height: 67vh;
     margin-left: 5vw;
     margin-right: 5vw;
-    margin-top: 20vh;
+    margin-top: 11vw;
     position: absolute;
     top: 0vw;
     left: 0;
@@ -160,9 +160,11 @@ form {
     color: #939291;
 }
 
+.issueDetails .date {
+    margin-top: 0;
+}
+
 .close {
-    width: 1vw;
-    height: 1vw;
     position: absolute;
     right: 2vw;
     top: 2vw;
@@ -243,7 +245,7 @@ form {
 
 .time-posted {
     float: right;
-    width: 38%;
+    width: 33%;
 }
 
 /* LOGIN-IKKUNA */
@@ -309,7 +311,7 @@ form {
     height: 75vh;
     margin-left: 5vw;
     margin-right: 5vw;
-    margin-top: 20vh;
+    margin-top: 11vw;
     position: absolute;
     top: 0vw;
     left: 0;
@@ -369,4 +371,68 @@ form {
 
 select {
     width: 280px;
+}
+
+.subscribe h5 {
+    font-family: Tw Cen Mt;
+    display: inline-block;
+    vertical-align: super;
+    font-size: 18px;
+    margin: 2vw 0 1vw 0;
+    color: #939291;
+    cursor: pointer;
+}
+
+.subscribe {
+    margin-top: -2vw;
+}
+
+.subscribe .grey {
+    color: #939291;
+}
+
+.subscribe .blue {
+    color: #6fc1dd;
+}
+
+.thumbsup {
+    cursor: pointer;
+}
+
+.reply {
+    font-family: Tw Cen Mt;
+    color: #fff;
+    display: inline;
+    float: right;
+    margin-bottom: 2vw;
+    cursor: pointer;
+}
+
+.attachment-heading {
+    margin-bottom: 1vw;
+}
+
+.decision-list {
+    font-family: "Tw Cen MT";
+    color: #939291;
+    font-size: 20px;
+    /*list-style: none;*/
+}
+
+.attachment-list {
+    font-size: 16px;
+}
+
+.attachment-list a {
+    color: #939291;
+    text-decoration: none;
+}
+
+.attachment-list a:hover {
+    color: #d8752f;
+}
+
+.decision-arrow {
+    margin-bottom: -2px;
+    cursor: pointer;
 }

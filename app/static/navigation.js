@@ -16,6 +16,9 @@ app.factory('UserData', function(){
     var data = {'userId': 0, 'username': undefined, 'showProfile':false};
     data.isLoggedIn = function() {
         return data.username != undefined && data.userId != 0;
+    };
+    data.profilePictureUrl = function() {
+        return "/user/" + data.userId + "/picture";
     }
     return data;
 });
@@ -122,14 +125,12 @@ app.controller('messageController', function($scope, $http) {
                 $scope.messages = [];
                 return;
             }
+
             $scope.latestDecision = decisions[0];
             $scope.firstDecision = decisions[0];
             var first = Date.parse(decisions[0].origin_last_modified_time);
             var last = Date.parse(decisions[0].origin_last_modified_time);
-            for (decision of
-            decisions
-            )
-            {
+            for (decision of decisions) {
                 var created = Date.parse(decision.origin_last_modified_time);
                 if (created >= last) {
                     $scope.latestDecision = created;
@@ -203,13 +204,17 @@ app.controller('messageController', function($scope, $http) {
 
 app.controller('subController', function($scope, $http, UserData) {
     $scope.userData = UserData;
+    $scope.subscribeClass = "grey";
+    $scope.subscribeText = " Seuraa";
 
     $scope.subscribeIssue = function(issue) {
         issue.subscribed = !issue.subscribed;
         if (issue.subscribed) {
             var config = {headers: { 'Content-Type': 'application/x-www-form-urlencoded'}}
             $http.post("/issue/" + issue.id + "/subscribe", config).success(function(response) {
-                issue.imagesrc = "../../static/img/yellowstar.png";
+                //issue.imagesrc = "../../static/img/yellowstar.png";
+                $scope.subscribeClass = "blue";
+                $scope.subscribeText = " Lopeta seuraaminen";
             }).error(function(foo, bar, baz) {
                 alert("subscribe failed")
             });
@@ -218,13 +223,16 @@ app.controller('subController', function($scope, $http, UserData) {
                 method: 'DELETE',
             };
             $http.delete("/issue/" + issue.id + "/subscribe", config).success(function(response) {
-                issue.imagesrc = "../../static/img/graystar.png";
+                //issue.imagesrc = "../../static/img/graystar.png";
+                $scope.subscribeClass = "grey";
+                $scope.subscribeText = " Seuraa";
             }).error(function(foo, bar, baz) {
                 alert("unsubscribe failed");
             });
         }
 
     };
+
 });
 
 app.controller('recentController', function($scope, $http) {
@@ -541,6 +549,8 @@ app.controller('profileNavController', function($scope, $http, UserData){
     //profileScope.showProfile = false;
     $scope.userData = UserData;
     $http.get("/user/").success(function(response){
+        $scope.userData.userId = response.id;
+        $scope.userData.username = response.name;
         $scope.user = response;
         //$scope.getPicture($scope.user.id);
     }).error(function(foo, bar, baz){
@@ -550,7 +560,7 @@ app.controller('profileNavController', function($scope, $http, UserData){
     $scope.getPicture = function(userId) {
         $http.get("/user/" + userId + "/picture").success(function (response) {
             //console.log(response);
-            $scope.user.picture = response;
+            $scope.userData.picture = response;
 
         }).error(function (foo, bar, baz) {
             alert("Error getting profile pic!");
@@ -565,9 +575,10 @@ app.controller('profileNavController', function($scope, $http, UserData){
 });
 
 app.controller('closeProfileController', function($scope, UserData){
+    $scope.userData = UserData;
     $scope.closeProfile = function() {
         //console.log('ruksia klikattiin');
-        UserData.showProfile = !UserData.showProfile;
+        $scope.userData.showProfile = !$scope.userData.showProfile;
     }
 });
 

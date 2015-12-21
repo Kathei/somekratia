@@ -1,4 +1,4 @@
-<img src="/static/img/x.png" class="close" ng-controller="closeController" ng-click="closeIssue()"/>
+<img src="/static/img/x-grey.png" class="close" ng-controller="closeController" ng-click="closeIssue()"/>
 <div class="timeline-background">
     <div class="placeholder-timeline">&nbsp;</div>
     <div ng-repeat="d in decisions">
@@ -12,33 +12,36 @@
 <div class="issueDetails">
     <div class="issueInfo">
         <h2>{{ issue.subject }} </h2>
-        <h4>Date: {{ issue.latest_decision_date }}</h4>
+        <div class="subscribe" ng-controller="subController" ng-show="userData.isLoggedIn()">
+            <!--<img ng-src="{{ issue.subscribed ? '../../static/img/yellowstar.png' : '../../static/img/graystar.png' }}" ng-click="subscribeIssue(issue)">-->
+            <h5 ng-click="subscribeIssue(issue)"><span ng-class="subscribeClass">★</span> {{ subscribeText }}</h5>
+        </div>
+        <h4 class="date">Päivämäärä: {{ issue.latest_decision_date }}</h4>
         <p>{{ issue.summary }} </p>
 
        <div ng-controller="subController" ng-show="userData.isLoggedIn()">
-        <div class="subscribe">
-            <img ng-src="{{ issue.subscribed ? '../../static/img/yellowstar.png' : '../../static/img/graystar.png' }}" ng-click="subscribeIssue(issue)">
-        </div>
 
         <div>
             <label for="messagefield">
                 <textarea ng-model="messageText" id="messagefield" name="messagefield" rows="6" cols="65"></textarea>
             </label>
             <div class="button">
-                <button ng-click="postMessage(issueID,messageText)">Send message</button>
+                <button ng-click="postMessage(issueID,messageText)">Lähetä viesti</button>
             </div>
             <!--</form>-->
         </div>
        </div>
-        <ul>
+        <h4 class="attachment-heading">Päätökset: </h4>
+        <ul class="decision-list">
             <li data-ng-repeat="d in decisions">
-                {{ d.meeting.date }} <!--Lisätään jokaisen decisionin päivämäärä listaan -->
-                <ul> <!-- Lisätään decisioneille liitteet -->
+                {{ d.meeting.policymaker_name + " " + d.meeting.date}} <!--Lisätään jokaisen decisionin päivämäärä listaan -->
+                <img class="decision-arrow" src="/static/img/arrow_down.png">
+                <ul class="attachment-list"> <!-- Lisätään decisioneille liitteet -->
                     <li data-ng-repeat="a in d.attachments | filter:{ public: true} ">
                        <a href="{{ a.file_uri }}" target="_blank">{{ a.name }}: {{ a.file_type }}</a>
                     </li>
                     <li data-ng-repeat="a in d.attachments | filter:{ public: false} ">
-                       SALAINEN
+                       Salainen liite
                     </li>
                 </ul>
             </li>
@@ -66,12 +69,12 @@
                 <h3 class="time-posted">{{m.created | date: 'short'}}</h3>
                 <p class="messageText">{{m.text}}</p>
 
-                <img ng-src="{{ m.liked ? '../../static/img/thumbs-up-green.png' : '../../static/img/thumbs-up.png' }}" ng-click="likeMessage(m)">
-                <div ng-click="toggleReplyControls(m)">vastaa</div>
+                <img class="thumbsup" ng-src="{{ m.liked ? '../../static/img/thumbs-up-green.png' : '../../static/img/thumbs-up.png' }}" ng-click="likeMessage(m)">
+                <div class="reply" ng-click="toggleReplyControls(m)">Vastaa</div>
                 <div ng-show="m.showReplyControls.value">
                     <textarea ng-mogel="replyText" name="replyfield" id="replyfield" rows="6" cols="70"></textarea>
                     <div class="button">
-                        <button ng-click="replyToMessage(m, replyText)">Send message</button>
+                        <button ng-click="replyToMessage(m, replyText)">Lähetä viesti</button>
                     </div>
                 </div>
             </div>
