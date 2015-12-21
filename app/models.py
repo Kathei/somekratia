@@ -23,13 +23,17 @@ class Decision(models.Model):
 class Message(models.Model):
     text = models.TextField()
     poster = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    reply_to = models.ForeignKey('self', blank=True, null=True)
+    reply_to = models.ForeignKey('self', blank=True, null=True, related_name='replies')
     issue = models.ForeignKey(Issue)
     created = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True)
 
-    def message_json(self):
-        json = {'text': self.text, 'poster': {'username' : self.poster.username, 'id': self.poster.id}, 'reply_to': self.reply_to, 'issue': self.issue.ahjo_id, 'created': self.created, 'edited': self.edited}
+    def message_json(self, get_replies=True):
+        json = {'id': self.id, 'text': self.text, 'poster': {'username' : self.poster.username, 'id': self.poster.id}, 'reply_to': self.reply_to_id, 'issue': self.issue.ahjo_id, 'created': self.created, 'edited': self.edited}
+        if self.replies.all().count() > 0:
+            json['replies'] = []
+            for reply in self.replies.all():
+                json['replies'].append(reply.message_json(False))
         return json
 
 

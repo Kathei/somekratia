@@ -13,7 +13,6 @@ from django.core import serializers
 import json
 import logging
 
-
 from app.models import Message, IssueSubscription
 from app.models import Issue
 from app.models import MessageVote
@@ -22,15 +21,15 @@ from app.models import UserWithProfile
 
 # Create your views here.
 
-@ensure_csrf_cookie
 
+@ensure_csrf_cookie
 def index(request):
     t = loader.get_template('index.html')
     c = RequestContext(request)
     if request is not None:
         c['request'] = request
     c.update(csrf(request))
-    return HttpResponse(t.render(c))
+    return render_to_response('index.html', c)
 
 
 def login_view(request):
@@ -86,7 +85,7 @@ def current_user(request):
         userdata = {"id": request.user.id, "name": request.user.username}
         return JsonResponse(userdata)
     else:
-        return HttpResponseForbidden
+        return HttpResponseForbidden()
 
 def user_picture(request, userID):
     user = get_object_or_404(UserWithProfile, user=userID)
@@ -127,6 +126,9 @@ def get_url_as_json(url):
 
 
 def issues_bbox(request):
+    if issue_location_index is None:
+        issue_location_index = index.Index()
+
     minLat = float(request.GET.get('minLat')) - 0.005
     maxLat = float(request.GET.get('maxLat')) + 0.005
     minLong = float(request.GET.get('minLong')) - 0.005
@@ -174,6 +176,12 @@ def issue(request, issueID):
             subscribed = True
             details['subscribed'] = True
     issuedetails = {'issueID': issueID, 'user': {'id' : request.user.id, 'username': request.user.username}, 'jsondetails': details, 'subscribed':subscribed}
+    messages = Message.objects.filter(issue=issueID)
+    messageJsons = []
+    issuedetails['messages'] = messageJsons
+    for message in messages:
+        messageJsons.append(message.message_json())
+
     return JsonResponse(issuedetails)
 
 
@@ -231,11 +239,12 @@ def post_message(request, issueID):
             votes = None
 
         for m in messages:
+            message = m.message_json();
             if votes is not None:
-                voted = votes.filter(message=m).count() > 0
+                message['liked'] = votes.filter(message=m).count() > 0
             else:
-                voted = False
-            response['messages'].append({'text': m.text, 'poster': m.poster.username, 'created':m.created, 'edited':m.edited, 'id': m.id, 'liked': voted})
+                message['liked'] = False
+            response['messages'].append(message)
 
         for m in messages:
             replies = Message.objects.filter(reply_to=m)
@@ -252,7 +261,7 @@ def post_message(request, issueID):
 
         m = Message(text=request.POST['messagefield'], poster=request.user, issue_id=issueID)
         m.save()
-        response = {'text': m.text, 'poster': m.poster.username, 'created':m.created, 'edited':m.edited, 'id': m.id }
+        response = m.message_json()
         return JsonResponse(response)
     else:
         return HttpResponseBadRequest("Only POST and GET methods are allowed")

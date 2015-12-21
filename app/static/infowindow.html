@@ -1,7 +1,7 @@
 
-     <div ng-controller="windowController" ng-init="issue=templateParameter">
-         <div ng-click="windowClick(templateParameter)">{{ templateParameter.subject }}</div>
-         <div>Viestit: {{ messages.length }}</div>
+     <div ng-controller="windowController">
+         <div ng-click="windowClick(issueData.issueId)">aihe:{{ issueData.data.subject }}</div>
+         <div>Viestit: {{ issueData.messages.length }}</div>
          <div ng-show="lastMessage != undefined">Viimeisin viesti: {{ lastMessage.edited }}</div>
         </div>
 
