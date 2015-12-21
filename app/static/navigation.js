@@ -13,7 +13,11 @@ app.config(['$httpProvider', function($httpProvider) {
 }]);
 
 app.factory('UserData', function(){
-    return {'userId': 0, 'username': undefined, 'showProfile': false};
+    var data = {'userId': 0, 'username': undefined, 'showProfile':false};
+    data.isLoggedIn = function() {
+        return data.username != undefined && data.userId != 0;
+    }
+    return data;
 });
 
 app.controller('messageController', function($scope, $http) {
@@ -197,7 +201,9 @@ app.controller('messageController', function($scope, $http) {
     }
 });
 
-app.controller('subController', function($scope, $http) {
+app.controller('subController', function($scope, $http, UserData) {
+    $scope.userData = UserData;
+
     $scope.subscribeIssue = function(issue) {
         issue.subscribed = !issue.subscribed;
         if (issue.subscribed) {
@@ -482,7 +488,8 @@ app.controller('windowController', function($scope, $http) {
     });
 });
 
-app.controller('loginController', function($scope){
+app.controller('loginController', function($scope, UserData){
+    $scope.userData = UserData;
     var loginbutton = document.querySelector('[ng-controller="loginShowController"]');
     var loginscope = angular.element(loginbutton).scope();
 
@@ -492,7 +499,8 @@ app.controller('loginController', function($scope){
 
 });
 
-app.controller('loginShowController', function($scope, $rootScope){
+app.controller('loginShowController', function($scope, $rootScope, UserData){
+    $scope.userData = UserData;
     $scope.inputClick = false;
 
     $scope.toggleShow = function() {

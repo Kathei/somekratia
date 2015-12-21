@@ -15,7 +15,8 @@
         <h4>Date: {{ issue.latest_decision_date }}</h4>
         <p>{{ issue.summary }} </p>
 
-        <div class="subscribe" ng-controller="subController">
+       <div ng-controller="subController" ng-show="userData.isLoggedIn()">
+        <div class="subscribe">
             <img ng-src="{{ issue.subscribed ? '../../static/img/yellowstar.png' : '../../static/img/graystar.png' }}" ng-click="subscribeIssue(issue)">
         </div>
 
@@ -28,6 +29,7 @@
             </div>
             <!--</form>-->
         </div>
+       </div>
         <ul>
             <li data-ng-repeat="d in decisions">
                 {{ d.meeting.date }} <!--Lisätään jokaisen decisionin päivämäärä listaan -->

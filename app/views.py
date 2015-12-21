@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from urllib.request import urlopen, quote
 from django.template.context_processors import csrf
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import ensure_csrf_cookie
 from app.forms import UserForm, UserProfileForm
 from django.core import serializers
 
@@ -21,6 +22,7 @@ from app.models import UserWithProfile
 
 # Create your views here.
 
+@ensure_csrf_cookie
 
 def index(request):
     t = loader.get_template('index.html')

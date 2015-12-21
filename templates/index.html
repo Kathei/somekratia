@@ -51,28 +51,19 @@
 
         </div>
 
-         {% if user.is_authenticated %}
-            <form class="nav-field logout-button" id="logout" action="/logout" method="post">
-                {% csrf_token %}
+                <button class="nav-item logout-button-button" type="submit" ng-controller="logoutController" ng-show="userData.isLoggedIn()" ng-click="logout()">LOPETA</button>
 
-                <button class="nav-item logout-button-button" type="submit">LOPETA</button>
 
-            </form>
-        {% else %}
+            <button class="nav-item login-button" ng-controller="loginShowController" ng-show="!userData.isLoggedIn()" ng-click="toggleShow()">KIRJAUDU</button>
 
-            <button  class="nav-item login-button" ng-controller="loginShowController" ng-click="toggleShow()">KIRJAUDU</button>
-        {% endif %}
-    
-        {% if user.is_authenticated %}
             {% verbatim %}
-            <div class="nav-field nav-profile" ng-controller="profileNavController">
+            <div class="nav-field nav-profile" ng-controller="profileNavController" ng-show="userData.isLoggedIn()">
                 <div class="user-container">
                     <img class=" user-avatar" ng-src="/user/{{ user.id }}/picture" ng-click="toggleShow()"/>
                     <span class="username">{{ user.name }}</span>
                 </div>
             </div>
             {% endverbatim %}
-        {% endif %}
     
     </div>
 
