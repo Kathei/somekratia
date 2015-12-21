@@ -1,6 +1,5 @@
 import json, datetime
 from urllib.request import urlopen
-from rtree import index
 
 def get_url_as_string(url):
     json_str = urlopen(url).read().decode('utf-8')
