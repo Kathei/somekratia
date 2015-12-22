@@ -311,11 +311,12 @@ def vote_message(request, messageID):
 def subscribe_issue(request, issueID):
 
     if request.method == 'POST':
-        issue = Issue.objects.get_or_create(id=issueID)
-        if issue[1] is True:
-            issue[0].title = get_issue_as_json(issueID)['subject']
-            issue[0].save()
-            logging.info("Created object with id %s" % issueID)
+        issue = get_object_or_404(Issue, id=issueID)
+        #issue = Issue.objects.get_or_create(id=issueID)
+        #if issue[1] is True:
+        #    issue[0].title = get_issue_as_json(issueID)['subject']
+        #    issue[0].save()
+        #    logging.info("Created object with id %s" % issueID)
         data = IssueSubscription.objects.get_or_create(user=request.user, issue_id=issueID)
         subscribe = data[0]
         subscribe.save()

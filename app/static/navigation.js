@@ -354,7 +354,15 @@ app.controller('recentController', function($scope, $http) {
 
         $scope.recentlyCommented = response.commented;
         //console.log(response.commented);
-        for (i = 0; i < 10; i++) {
+
+        var max;
+
+        if (response.commented.length < 10) {
+            max = response.commented.length;
+        } else {
+            max = 10;
+        }
+        for (i = 0; i < max; i++) {
             //console.log(i);
             $scope.getNameOfIssue($scope.recentlyCommented[i].issueID, i);
         }
