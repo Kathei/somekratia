@@ -269,7 +269,7 @@ def post_message(request, issueID):
     elif request.user is None or request.user.is_anonymous():
         return HttpResponseForbidden('Please login before posting')
     elif request.method == 'POST':
-        issue = Issue.objects.get_or_create(id=issueID, ahjo_id=issueID)
+        issue = Issue.objects.get_or_create(id=issueID)
         if issue[1] is True:
             issue[0].save()
             logging.info("Created object with id %s" % issueID)
@@ -286,7 +286,7 @@ def reply_to_message(request, messageID):
     if request.method == 'POST':
         m = Message(text=request.POST['replyfield'], poster=request.user,
                     reply_to=get_object_or_404(Message, id=messageID),
-                    issue_id=get_object_or_404(Message, id=messageID).issue.ahjo_id)
+                    issue_id=get_object_or_404(Message, id=messageID).issue.id)
         m.save()
         response = {'text': m.text, 'poster': m.poster.username, 'created':m.created, 'edited':m.edited, 'id': m.id }
         return JsonResponse(response)
@@ -311,7 +311,7 @@ def vote_message(request, messageID):
 def subscribe_issue(request, issueID):
 
     if request.method == 'POST':
-        issue = Issue.objects.get_or_create(id=issueID, ahjo_id=issueID)
+        issue = Issue.objects.get_or_create(id=issueID)
         if issue[1] is True:
             issue[0].title = get_issue_as_json(issueID)['subject']
             issue[0].save()
