@@ -22,7 +22,8 @@ app.factory('UiState', function() {
        'showIssueDetails': false,
        'showLogin': false,
        'showRegister': false,
-       'showSearchResults': false
+       'showSearchResults': false,
+       'inputClick': false
    };
 });
 
@@ -296,6 +297,7 @@ app.controller('messageController', function($scope, $http, IssueData, MessageSe
     $scope.toggleReplyControls = function(message) {
         message.showReplyControls.value = !message.showReplyControls.value;
     }
+
 });
 
 app.controller('subController', function($scope, $http, UserData, IssueData, MapHolder) {
@@ -519,33 +521,6 @@ app.controller('windowController', function($scope, $http, IssueData, UiState) {
         console.log("täällä! showIssue: " + UiState.showIssue);
     };
 
-});
-
-app.controller('loginController', function($scope, UserData){
-    $scope.userData = UserData;
-    var loginbutton = document.querySelector('[ng-controller="loginShowController"]');
-    var loginscope = angular.element(loginbutton).scope();
-
-
-    $scope.toggleShow = function() {
-        loginscope.toggleShow();
-    }
-
-});
-
-app.controller('loginShowController', function($scope, $rootScope, UserData){
-    $scope.userData = UserData;
-    $scope.inputClick = false;
-
-    $scope.toggleShow = function() {
-        if($scope.inputClick) {
-            $scope.inputClick = false;
-            return;
-        }
-        else {
-            $rootScope.showLogin = !$rootScope.showLogin;
-        }
-    }
 });
 
 app.controller('templateController', function(){});

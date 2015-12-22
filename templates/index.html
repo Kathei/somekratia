@@ -54,7 +54,7 @@
                 <button class="nav-item logout-button-button" type="submit" ng-controller="logoutController" ng-show="userData.isLoggedIn()" ng-click="logout()">LOPETA</button>
 
 
-            <button class="nav-item login-button" ng-controller="loginShowController" ng-show="!userData.isLoggedIn()" ng-click="toggleShow()">KIRJAUDU</button>
+            <button class="nav-item login-button" ng-controller="loginWindowController" ng-show="!userData.isLoggedIn()" ng-click="toggleShow()">KIRJAUDU</button>
 
             {% verbatim %}
             <div class="nav-field nav-profile" ng-controller="profileNavController" ng-show="userData.isLoggedIn()">
@@ -69,7 +69,7 @@
 
 </div>
 
-<div class="login" ng-controller="loginController" ng-show="showLogin" ng-click="toggleShow()">
+<div class="login" ng-controller="loginWindowController" ng-show="uiState.showLogin" ng-click="toggleShow()">
    <div ng-include src="'static/login.html'" ></div>
 </div>
 {% verbatim %}
