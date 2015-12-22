@@ -320,7 +320,7 @@ form {
     z-index: 1;
 }
 
-.profileContainer h1 {
+.profileContainer h1, .profileContainer h2, .profileContainer li {
     font-family: Tw Cen MT;
     color: #939291;
 }
@@ -329,10 +329,35 @@ form {
 
 }
 
+.profileContainer h2 {
+    margin-top: 2.8vw;
+}
+
+.profileContainer li {
+    list-style-type: none;
+    margin: 0 0 10px -38px;
+    cursor: pointer;
+}
+
+.profileContainer li:hover {
+    color: #555555;
+}
+
+.profileContainer .usernameTitle {
+    color: #6fc1dd;
+}
+
+
 .profileLeft {
     float: left;
-    width: 40vw;
+    width: 20vw;
 }
+
+.profileRight {
+    float: right;
+    width: 60vw;
+}
+
 .userDetails {
     display: inline-block;
     width: 80vw;
@@ -445,3 +470,4 @@ select {
     margin-bottom: -2px;
     cursor: pointer;
 }
+

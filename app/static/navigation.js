@@ -33,7 +33,11 @@ app.factory('UserData', function($http){
         return data.username != undefined && data.userId != 0;
     };
     data.profilePictureUrl = function() {
-        return "/user/" + data.userId + "/picture";
+        if (data.userId != 0) {
+            return "/user/" + data.userId + "/picture";
+        } else {
+            return;
+        }
     }
     $http.get('/user/subscriptions').success(function(response) {
         data.subscriptions = response.subscriptions;
@@ -539,6 +543,7 @@ app.controller('windowController', function($scope, $http, IssueData, UiState) {
     $scope.windowClick = function (issueId) {
         $scope.issueData.issueId = issueId;
         UiState.showDetails = true;
+        UiState.showProfile = false;
         //console.log(issue);
         //console.log("täällä! showIssue: " + UiState.showIssue);
     };
@@ -579,18 +584,10 @@ app.controller('profileNavController', function($scope, $http, UserData, UiState
         $scope.user = response;
         //$scope.getPicture($scope.user.id);
     }).error(function(foo, bar, baz){
-        alert("User not found");
+        //alert("User not found");
     });
 
-    $scope.getPicture = function(userId) {
-        $http.get("/user/" + userId + "/picture").success(function (response) {
-            //console.log(response);
-            $scope.userData.picture = response;
 
-        }).error(function (foo, bar, baz) {
-            alert("Error getting profile pic!");
-        });
-    }
 
     $scope.toggleShow = function() {
         UiState.showProfile = true;
