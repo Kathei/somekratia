@@ -63,8 +63,7 @@
                 </div>
             </div>
             <div ng-repeat="r in replies">
-                <div class="messageBubble">
-                    <h2>Vastaus</h2>
+                <div class="replyBubble">
                     <h3 class="poster">{{r.poster.username}}</h3>
                     <h3 class="time-posted">{{r.created | date: 'short'}}</h3>
                     <p class="messageText">{{r.text}}</p>

@@ -124,10 +124,7 @@ app.service('MessageService', function($http, IssueData) {
     this.postMessage = function(issueId, newMessageText) {
         var config = {headers: { 'Content-Type': 'application/x-www-form-urlencoded'}};
         $http.post("/issue/" + issueId + "/messages/", "messagefield="+encodeURIComponent(newMessageText), config).success(function(response) {
-            //TODO show loading icon
-            alert("POST TOIMII");
             IssueData.messages.push(response);
-            //$scope.$apply();
 
         }).error(function(){
             alert("Post doesn't work");
@@ -312,6 +309,8 @@ app.controller('replyController', function($scope, MessageService) {
     $scope.replyToMessage = function(message, newMessageText) {
         MessageService.replyToMessage(message, newMessageText, function(reply) {
             $scope.replies.push(reply);
+            $scope.showReplyControls.value = false;
+
         });
 
     };
