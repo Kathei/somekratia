@@ -1,13 +1,21 @@
 <img src="/static/img/x-grey.png" class="close" ng-controller="closeProfileController" ng-click="closeProfile()"/>
 <div class="userDetails">
-    <h1>{{ userData.username }}</h1>
-    <img height="128" src="{{ userData.profilePictureUrl() }}" />
-</div>
-<div class="user-subscriptions" ng-controller="subscriptionController">
-    <ul>
-        <li ng-repeat="(id, issue) in subscriptions">
-            <div ng-controller="windowController" ng-click="windowClick(id)">{{ issue.title }}</div>
-        </li>
+    <div class="profileLeft">
+        <h1>{{ userData.username }}</h1>
+        <img height="128" src="{{ userData.profilePictureUrl() }}" />
+    </div>
+    <div class="user-subscriptions" ng-controller="subscriptionController">
+        <h2>Seuratut päätökset</h2>
+        <ul>
+            <li ng-repeat="(id, issue) in subscriptions">
+                <div ng-controller="windowController" ng-click="windowClick(id)">
+                    {{ issue.title }} <br/>
+                    Viimeisin päätös: {{  }} <br/>
+                    Viimeisin viesti: {{  }}
 
-    </ul>
+                </div>
+
+            </li>
+        </ul>
+    </div>
 </div>

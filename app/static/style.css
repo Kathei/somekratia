@@ -325,10 +325,19 @@ form {
     color: #939291;
 }
 
+.user-subscriptions {
+
+}
+
+.profileLeft {
+    float: left;
+    width: 40vw;
+}
 .userDetails {
-   display: inline-block;
+    display: inline-block;
     width: 80vw;
-    margin: 2vw 0 0 6vw;
+    margin: 2vw 6vw 2vw 6vw;
+    float: right;
 }
 
 #recentMessages {

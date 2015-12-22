@@ -130,13 +130,14 @@ app.service('MessageService', function($http, IssueData) {
         });
     };
 
-    this.replyToMessage = function(messageId, newMessageText) {
+    this.replyToMessage = function(message, newMessageText, callback) {
         var config = {headers: { 'Content-Type': 'application/x-www-form-urlencoded'}};
+        console.log("nappia painettu");
         $http.post("/message/" + message.id + "/reply", "replyfield="+encodeURIComponent(newMessageText), config).success(function(response) {
-            $scope.latestReply = Date.parse(response.created);
-            IssueData.messages.push(response);
-            message.showReplyControls.value = !message.showReplyControls.value;
-            console.log(message.showReplyControls);
+            console.log("replies: " + message.replies);
+            //showReplyControls.value = !showReplyControls.value;
+            //console.log($scope.showReplyControls);
+            callback(response);
         }).error(function() {
             alert("vastaus ei toimi");
         });
@@ -294,11 +295,24 @@ app.controller('messageController', function($scope, $http, IssueData, MessageSe
             });
         }
     };
-    $scope.toggleReplyControls = function(message) {
-        message.showReplyControls.value = !message.showReplyControls.value;
+});
+
+app.controller('replyController', function($scope, MessageService) {
+
+    $scope.showReplyControls = {value:false};
+
+    $scope.toggleReplyControls = function() {
+        $scope.showReplyControls.value = !$scope.showReplyControls.value;
     }
 
-});
+    $scope.replyToMessage = function(message, newMessageText) {
+        MessageService.replyToMessage(message, newMessageText, function(reply) {
+            $scope.replies.push(reply);
+        });
+
+    };
+
+    });
 
 app.controller('subController', function($scope, $http, UserData, IssueData, MapHolder) {
     $scope.userData = UserData;
@@ -589,7 +603,6 @@ app.controller('subscriptionController', function($scope, $http, UserData){
         $scope.user = response;
         $scope.subscriptions = UserData.subscriptions;
         console.log($scope.user);
-        console.log("subit: " + $scope.subscriptions);
     }).error(function(foo, bar, baz){
         //alert("User not found");
     });
