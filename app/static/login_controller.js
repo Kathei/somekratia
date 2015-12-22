@@ -23,6 +23,7 @@ app.controller('loginWindowController', ['$scope', '$http', 'UserData', function
             alert("Tervetuloa "+ username);
             $scope.userData.username = response.name;
             $scope.userData.userId = response.id;
+            $scope.userData.subscriptions = response.subscriptions;
             console.log($scope.userData.username);
         }).error(function(){
             alert("Kirjautumisessa tapahtui virhe, yritäthän uudelleen!");

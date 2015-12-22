@@ -12,8 +12,22 @@ app.config(['$httpProvider', function($httpProvider) {
     $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
 }]);
 
+app.factory('MapHolder', function() {
+    return {'map': undefined};
+})
+
+app.factory('UiState', function() {
+   return {
+       'showProfile' : false,
+       'showIssueDetails': false,
+       'showLogin': false,
+       'showRegister': false,
+       'showSearchResults': false
+   };
+});
+
 app.factory('UserData', function($http){
-    var data = {'userId': 0, 'username': undefined, 'showProfile':false, 'subscriptions': []};
+    var data = {'userId': 0, 'username': undefined, 'subscriptions': []};
     data.isLoggedIn = function() {
         return data.username != undefined && data.userId != 0;
     };
@@ -40,7 +54,7 @@ app.factory('IssueData', function($http, $q, UserData) {
         data.messages.length = 0;
         $http.get('/issue/' + issueId +'/').then(function (response) {
             var issue = response.data.jsondetails;
-            if(UserData.subscriptions.indexOf(issue.id) > -1) {
+            if(UserData.subscriptions.hasOwnProperty(issue.id)) {
                 issue.subscribed = true;
             }
             data.data = issue;
@@ -56,7 +70,6 @@ app.factory('IssueData', function($http, $q, UserData) {
     var data =  {
         'messages' : [],
         'data': undefined,
-        'showDetails': false,
         get issueId() {
             return issueId;
         },
@@ -163,8 +176,9 @@ app.service('IssueService', function($http, MessageService){
     };
 });
 
-app.controller('messageController', function($scope, $http, IssueData, MessageService) {
+app.controller('messageController', function($scope, $http, IssueData, MessageService, UiState) {
     $scope.issueData = IssueData;
+    $scope.uiState = UiState;
     $scope.$watch('issueData.messages', function(messages, oldVal){
         if(messages == undefined || messages.length == 0) {
                 $scope.latestMessage = 'undefined';
@@ -284,7 +298,7 @@ app.controller('messageController', function($scope, $http, IssueData, MessageSe
     }
 });
 
-app.controller('subController', function($scope, $http, UserData, IssueData) {
+app.controller('subController', function($scope, $http, UserData, IssueData, MapHolder) {
     $scope.userData = UserData;
     $scope.issueData = IssueData;
     $scope.subscribeClass = "grey";
@@ -306,6 +320,11 @@ app.controller('subController', function($scope, $http, UserData, IssueData) {
                 //issue.imagesrc = "../../static/img/yellowstar.png";
                 $scope.subscribeClass = "blue";
                 $scope.subscribeText = " Lopeta seuraaminen";
+                $scope.userData.subscriptions[response.issueId.toString()] = response;
+                if(MapHolder.map != undefined) {
+                    var feature = MapHolder.map.data.getFeatureById(response.issueId);
+                    feature.setProperty('subscribed', true);
+                }
             }).error(function(foo, bar, baz) {
                 alert("subscribe failed")
             });
@@ -317,6 +336,8 @@ app.controller('subController', function($scope, $http, UserData, IssueData) {
                 //issue.imagesrc = "../../static/img/graystar.png";
                 $scope.subscribeClass = "grey";
                 $scope.subscribeText = " Seuraa";
+                delete UserData.subscriptions[issue.id.toString()];
+                MapHolder.map.data.getFeatureById(issue.id).setProperty('subscribed', false);
             }).error(function(foo, bar, baz) {
                 alert("unsubscribe failed");
             });
@@ -390,7 +411,7 @@ app.controller('textSearchController', function($scope, $http){
     }
 });
 
-app.controller('searchController', function($scope, $http, $timeout, IssueData, UserData){
+app.controller('searchController', function($scope, $http, $timeout, IssueData, UserData, MapHolder){
     $scope.issueMarkers = [];
     $scope.currentIssues = {};
     $scope.templateUrl = {};
@@ -448,6 +469,7 @@ app.controller('searchController', function($scope, $http, $timeout, IssueData, 
 
     var dataLayerInitialized = false;
     $scope.map.mapEvents = {tilesloaded: function (map) {
+        MapHolder.map = map;
         if (!dataLayerInitialized) {
             dataLayerInitialized = true;
             $scope.$apply(function () {
@@ -473,7 +495,7 @@ app.controller('searchController', function($scope, $http, $timeout, IssueData, 
                 //Filter categories
                 var category = feature.getProperty('category_origin_id');
                 var icon =  '/static/img/marker-orange.png';
-                if (UserData.subscriptions.indexOf(feature.getId()) > -1) {
+                if (UserData.subscriptions.hasOwnProperty(feature.getId())) {
                     icon = 'static/img/marker-blue.png';
                 }
                 return { visible: !tooOld, icon: icon};
@@ -488,13 +510,13 @@ app.controller('searchController', function($scope, $http, $timeout, IssueData, 
 
 });
 
-app.controller('windowController', function($scope, $http, IssueData) {
+app.controller('windowController', function($scope, $http, IssueData, UiState) {
     $scope.issueData = IssueData;
     $scope.windowClick = function (issueId) {
         $scope.issueData.issueId = issueId;
-        $scope.issueData.showDetails = true;
+        UiState.showDetails = true;
         //console.log(issue);
-        console.log("täällä! showIssue: " + $scope.issueData.showIssue);
+        console.log("täällä! showIssue: " + UiState.showIssue);
     };
 
 });
@@ -503,6 +525,7 @@ app.controller('loginController', function($scope, UserData){
     $scope.userData = UserData;
     var loginbutton = document.querySelector('[ng-controller="loginShowController"]');
     var loginscope = angular.element(loginbutton).scope();
+
 
     $scope.toggleShow = function() {
         loginscope.toggleShow();
@@ -527,28 +550,30 @@ app.controller('loginShowController', function($scope, $rootScope, UserData){
 
 app.controller('templateController', function(){});
 
-app.controller('closeController', function($scope, IssueData){
+app.controller('closeController', function($scope, IssueData, UiState){
     var controller = document.querySelector('[ng-controller="messageController"]');
     var topscope = angular.element(controller).scope();
     $scope.issueData = IssueData;
     $scope.closeIssue = function() {
         console.log('ruksia klikattiin');
-        $scope.issueData.showDetails = false;
+        UiState.showDetails = false;
     }
 });
 
-app.controller('profileController', function($scope, $http, UserData) {
+app.controller('profileController', function($scope, $http, UserData, UiState) {
     $scope.userData = UserData;
-    console.log($scope.userData.showProfile);
+    $scope.uiState = UiState;
+    console.log(UiState.showProfile);
 
     $http.get("/user/").success(function(response){
         $scope.user = response;
+        $scope.subscriptions = $scope.user.subscriptions;
     }).error(function(foo, bar, baz){
         //alert("User not found");
     });
 });
 
-app.controller('profileNavController', function($scope, $http, UserData){
+app.controller('profileNavController', function($scope, $http, UserData, UiState){
     //profileScope.showProfile = false;
     $scope.userData = UserData;
     $http.get("/user/").success(function(response){
@@ -571,25 +596,29 @@ app.controller('profileNavController', function($scope, $http, UserData){
     }
 
     $scope.toggleShow = function() {
-        console.log(UserData.showProfile);
-        $scope.userData.showProfile = true;
+        UiState.showProfile = true;
     }
 
 });
 
-app.controller('closeProfileController', function($scope, UserData){
-    $scope.userData = UserData;
+app.controller('closeProfileController', function($scope, UiState){
     $scope.closeProfile = function() {
         //console.log('ruksia klikattiin');
-        $scope.userData.showProfile = !$scope.userData.showProfile;
+        UiState.showProfile = false;
     }
 });
 
-app.controller('subscriptionController', function($scope){
-    var controller = document.querySelector('[ng-controller="searchController"]');
-    var topScope = angular.element(controller).scope();
+app.controller('subscriptionController', function($scope, $http, UserData){
 
-    console.log(topScope.subscriptions);
+    $http.get("/user/").success(function(response){
+        $scope.user = response;
+        $scope.subscriptions = UserData.subscriptions;
+        console.log($scope.user);
+        console.log("subit: " + $scope.subscriptions);
+    }).error(function(foo, bar, baz){
+        //alert("User not found");
+    });
+
 });
 
 

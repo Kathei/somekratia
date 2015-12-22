@@ -32,6 +32,14 @@ def index(request):
     return render_to_response('index.html', c)
 
 
+def get_subscription_dict(userID):
+    jsonDict = {}
+    subscriptions = IssueSubscription.objects.filter(user=userID)
+    for subscription in subscriptions:
+        jsonDict[str(subscription.issue_id)] = {'id':subscription.issue_id, 'title': subscription.issue.title}
+    return jsonDict
+
+
 def login_view(request):
     if request.method != 'POST':
         return HttpResponse('Only POST is accepted', status=405)
@@ -41,12 +49,12 @@ def login_view(request):
     if user is not None:
         if user.is_active:
             login(request, user)
-            return JsonResponse({"id": request.user.id, "name": request.user.username});
+            return JsonResponse({"id": request.user.id, "name": request.user.username, "subscriptions": get_subscription_dict(user.id)});
         else:
             return HttpResponse('Account no longer active')
     else:
         return HttpResponse('Invalid password or username', status=403)
-
+    return jsonDict
 
 def register(request):
     context = RequestContext(request)
@@ -82,7 +90,12 @@ def register(request):
 
 def current_user(request):
     if request.user.is_authenticated():
+        subscriptions = request.user.subscriptions.all()
         userdata = {"id": request.user.id, "name": request.user.username}
+        subs = []
+        userdata['subscriptions'] = subs
+        for s in subscriptions:
+            subs.append({'issueId': s.issue.id, 'title': s.issue.title})
         return JsonResponse(userdata)
     else:
         return HttpResponseForbidden()
@@ -123,6 +136,10 @@ def get_url_as_string(url):
 
 def get_url_as_json(url):
     return json.loads(get_url_as_string(url))
+
+
+def get_issue_as_json(issueId):
+    return get_url_as_json(url = 'http://dev.hel.fi/paatokset/v1/issue/%s/?format=json' % issueId)
 
 
 def issues_bbox(request):
@@ -167,8 +184,7 @@ def decisions(request, issueID):
 
 
 def issue(request, issueID):
-    url = 'http://dev.hel.fi/paatokset/v1/issue/%s/?format=json' % issueID
-    details = get_url_as_json(url)
+    details = get_issue_as_json(issueID)
     subscribed = False
     if request.user.is_authenticated():
         subscribes = IssueSubscription.objects.filter(user=request.user, issue=issueID)
@@ -298,24 +314,25 @@ def subscribe_issue(request, issueID):
     if request.method == 'POST':
         issue = Issue.objects.get_or_create(id=issueID, ahjo_id=issueID)
         if issue[1] is True:
+            issue[0].title = get_issue_as_json(issueID)['subject']
             issue[0].save()
             logging.info("Created object with id %s" % issueID)
         data = IssueSubscription.objects.get_or_create(user=request.user, issue_id=issueID)
         subscribe = data[0]
         subscribe.save()
-        return JsonResponse({'issueId' : subscribe.issue.id, 'user' : subscribe.user.username})
+        return JsonResponse({'issueId' : subscribe.issue.id, 'title' : subscribe.issue.title})
     elif request.method == 'DELETE':
         subscribe = get_object_or_404(IssueSubscription, user = request.user, issue_id = issueID)
         subscribe.delete()
         return JsonResponse({'subId' : subscribe.id})
 
 
-def get_issue_subscriptions(request):
-    user = request.user
-    list = {'subscriptions' : []}
-    if user.is_authenticated():
-        subscriptions = IssueSubscription.objects.filter(user=user)
-        for subscription in subscriptions:
-            list['subscriptions'].append(subscription.issue.ahjo_id)
+def get_issue_subscriptions(request, userID=None):
+    if userID is None:
+        if request.user.is_authenticated():
+            userID = request.user.id
+        else:
+            return HttpResponseBadRequest()
+    list = {'subscriptions' : get_subscription_dict(userID)};
     return JsonResponse(list)
 

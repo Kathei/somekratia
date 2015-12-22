@@ -36,6 +36,7 @@ urlpatterns = [
     url(r'^user/$', current_user),
     url(r'^user/(?P<userID>[0-9]+)/$', user_profile),
     url(r'^user/(?P<userID>[0-9]+)/picture$', user_picture),
+    url(r'^user/(?P<userID>[0-9]+)/subscriptions', get_issue_subscriptions),
     url(r'^user/subscriptions$', get_issue_subscriptions),
     url(r'^admin/', include(admin.site.urls)),
     url(r'index.html', index),

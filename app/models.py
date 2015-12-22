@@ -37,11 +37,6 @@ class Message(models.Model):
         return json
 
 
-class Subscriptions(models.Model):
-    subscriber = models.ForeignKey(settings.AUTH_USER_MODEL)
-    issue = models.ForeignKey(Issue)
-
-
 class MessageVote(models.Model):
     message = models.ForeignKey(Message)
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
@@ -53,7 +48,7 @@ class MessageVote(models.Model):
 
 class IssueSubscription(models.Model):
     issue = models.ForeignKey(Issue)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="subscriptions")
 
     class Meta:
         unique_together = (("issue", "user"),)

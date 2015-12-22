@@ -59,8 +59,8 @@
             {% verbatim %}
             <div class="nav-field nav-profile" ng-controller="profileNavController" ng-show="userData.isLoggedIn()">
                 <div class="user-container">
-                    <img class=" user-avatar" ng-src="/user/{{ user.id }}/picture" ng-click="toggleShow()"/>
-                    <span class="username">{{ user.name }}</span>
+                    <img class=" user-avatar" ng-src="/user/{{ userData.userId }}/picture" ng-click="toggleShow()"/>
+                    <span class="username">{{ userData.username }}</span>
                 </div>
             </div>
             {% endverbatim %}
@@ -81,15 +81,15 @@
     </ui-gmap-google-map>
        </div>
 
-    <div class="searchResultContainer" ng-controller="searchResultController" ng-show="showResults">
+    <div class="searchResultContainer" ng-controller="searchResultController" ng-show="uiState.showSearchResults">
         <div ng-include src="'static/searchresults.html'"></div>
     </div>
 
-    <div class="issueContainer" ng-controller="messageController" ng-show="issueData.showDetails">
+    <div class="issueContainer" ng-controller="messageController" ng-show="uiState.showDetails">
         <div ng-include src="'static/issue.html'" ></div>
     </div>
 
-    <div class="profileContainer" ng-controller="profileController" ng-show="userData.showProfile">
+    <div class="profileContainer" ng-controller="profileController" ng-show="uiState.showProfile">
         <div ng-include src="'static/profile.html'"></div>
     </div>
 
