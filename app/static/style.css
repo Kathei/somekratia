@@ -222,20 +222,31 @@ form {
     margin-top: 2vw;
 }
 
-.messageBubble {
+
+.messageBubble, .replyBubble {
     padding: 2vw;
-    background-color: #6fc1dd;
     margin-bottom: 1vw;
     border-radius: 1vw;
 }
 
-.messageBubble h3, .messageBubble p{
+.messageBubble h3, .messageBubble p, .replyBubble h3, .replyBubble p {
     font-family: Tw Cen MT;
     color: #ffffff;
 }
 
-.messageBubble h3 {
+.messageBubble h3, .replyBubble h3 {
     margin-top: 0.5vh;
+}
+
+.messageBubble {
+    background-color: #6fc1dd;
+    clear: right;
+}
+
+.replyBubble {
+    background-color: #9fd5e8;
+    width: 80%;
+    float: right;
 }
 
 .poster {

@@ -9,10 +9,7 @@
         <ul>
             <li ng-repeat="(id, issue) in subscriptions">
                 <div ng-controller="windowController" ng-click="windowClick(id)">
-                    {{ issue.title }} <br/>
-                    Viimeisin päätös: {{  }} <br/>
-                    Viimeisin viesti: {{  }}
-
+                    {{ issue.title }}
                 </div>
 
             </li>
