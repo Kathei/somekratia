@@ -2,16 +2,24 @@
  * Created by tiitulahti on 18/12/15.
  */
 
-app.controller('loginWindowController', ['$scope', '$http', 'UserData', function($scope, $http, UserData){
+app.controller('loginWindowController', ['$scope', '$http', 'UserData', 'UiState', function($scope, $http, UserData, UiState){
     $scope.userData = UserData;
-
-    console.log($scope.userData+"userdata?");
+    $scope.uiState = UiState;
 
     $scope.textfieldClick = function(){
-        var loginbutton = document.querySelector('[ng-controller="loginShowController"]');
-        var loginscope = angular.element(loginbutton).scope();
+        $scope.uiState.inputClick = true;
+    }
 
-        loginscope.inputClick = true;
+    $scope.toggleShow = function() {
+        if($scope.uiState.inputClick) {
+            $scope.uiState.inputClick = false;
+            console.log("if");
+            return;
+        }
+        else {
+            $scope.uiState.showLogin = !$scope.uiState.showLogin;
+            console.log("else");
+        }
     }
 
     $scope.login = function(username, password){
@@ -24,20 +32,13 @@ app.controller('loginWindowController', ['$scope', '$http', 'UserData', function
             $scope.userData.username = response.name;
             $scope.userData.userId = response.id;
             $scope.userData.subscriptions = response.subscriptions;
+            $scope.uiState.showLogin = false;
             console.log($scope.userData.username);
         }).error(function(){
             alert("Kirjautumisessa tapahtui virhe, yritäthän uudelleen!");
         })
     };
 
-    $scope.cancel = function(){
-        var loginbutton = document.querySelector('[ng-controller="loginShowController"]');
-        var loginscope = angular.element(loginbutton).scope();
-
-        $scope.toggleShow = function() {
-            loginscope.toggleShow();
-        }
-    }
 }
 ]);
 
@@ -59,3 +60,30 @@ angular.module('myApp').controller('logoutController', ['$scope', '$http', 'User
     };
 }
 ]);
+
+/*app.controller('loginController', function($scope, UserData){
+    $scope.userData = UserData;
+    var loginbutton = document.querySelector('[ng-controller="loginShowController"]');
+    var loginscope = angular.element(loginbutton).scope();
+
+
+    $scope.toggleShow = function() {
+        loginscope.toggleShow();
+    }
+
+});
+
+app.controller('loginShowController', function($scope, $rootScope, UserData){
+    $scope.userData = UserData;
+    $scope.inputClick = false;
+
+    $scope.toggleShow = function() {
+        if($scope.inputClick) {
+            $scope.inputClick = false;
+            return;
+        }
+        else {
+            $rootScope.showLogin = !$rootScope.showLogin;
+        }
+    }
+});     */

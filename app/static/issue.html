@@ -1,4 +1,4 @@
-<img src="/static/img/x-grey.png" class="close" ng-controller="closeController" ng-click="closeIssue()"/>
+<img src="/static/img/x-grey.png" class="close" ng-controller="closeController"/>
 <div class="timeline-background">
     <div class="placeholder-timeline">&nbsp;</div>
     <div ng-repeat="d in issueData.decisions">
@@ -20,7 +20,7 @@
 
        <div ng-controller="subController" ng-show="userData.isLoggedIn()">
         <div>
-            <label for="messagefield">
+            <label for="messagefield" ng-keyup="$event.keyCode == 13 && postMessage(issueData.issueId, messageText)">
                 <textarea ng-model="messageText" id="messagefield" name="messagefield" rows="6" cols="65"></textarea>
             </label>
             <div class="button">
