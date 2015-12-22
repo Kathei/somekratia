@@ -25,7 +25,7 @@ class Message(models.Model):
     edited = models.DateTimeField(auto_now=True)
 
     def message_json(self, get_replies=True):
-        json = {'id': self.id, 'text': self.text, 'poster': {'username' : self.poster.username, 'id': self.poster.id}, 'reply_to': self.reply_to_id, 'issue': self.issue.ahjo_id, 'created': self.created, 'edited': self.edited}
+        json = {'id': self.id, 'text': self.text, 'poster': {'username' : self.poster.username, 'id': self.poster.id}, 'reply_to': self.reply_to_id, 'issue': self.issue.id, 'created': self.created, 'edited': self.edited}
         if self.replies.all().count() > 0:
             json['replies'] = []
             for reply in self.replies.all():

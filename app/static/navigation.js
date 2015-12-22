@@ -19,7 +19,7 @@ app.factory('MapHolder', function() {
 app.factory('UiState', function() {
    return {
        'showProfile' : false,
-       'showIssueDetails': false,
+       'showDetails': false,
        'showLogin': false,
        'showRegister': false,
        'showSearchResults': false,
@@ -518,7 +518,7 @@ app.controller('windowController', function($scope, $http, IssueData, UiState) {
         $scope.issueData.issueId = issueId;
         UiState.showDetails = true;
         //console.log(issue);
-        console.log("täällä! showIssue: " + UiState.showIssue);
+        //console.log("täällä! showIssue: " + UiState.showIssue);
     };
 
 });
