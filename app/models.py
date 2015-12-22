@@ -12,7 +12,6 @@ class UserWithProfile(models.Model):
 
 class Issue(models.Model):
     title = models.TextField()
-    ahjo_id = models.BigIntegerField(unique=True, blank=False, null=False)
     modified_time = models.DateTimeField(null=True)
     last_decision_time = models.DateTimeField(null=True, blank=True)
 
