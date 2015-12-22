@@ -1,3 +1,4 @@
+from datetime import date, datetime
 from django.db import models
 from django.conf import settings
 # Create your models here.
@@ -12,12 +13,8 @@ class UserWithProfile(models.Model):
 class Issue(models.Model):
     title = models.TextField()
     ahjo_id = models.BigIntegerField(unique=True, blank=False, null=False)
-
-
-class Decision(models.Model):
-    title = models.TextField()
-    ahjo_id = models.BigIntegerField(unique=True, blank=False, null=False)
-    issue_id = models.ForeignKey(Issue)
+    modified_time = models.DateTimeField(null=True)
+    last_decision_time = models.DateTimeField(null=True, blank=True)
 
 
 class Message(models.Model):

@@ -1,6 +1,15 @@
 import json, datetime
+import psycopg2
+import sys
 from urllib.request import urlopen
 
+
+if len(sys.argv) != 2:
+    print("no output file provided. using 'app/static/issue_index.json")
+    output = 'app/static/issue_index.json'
+else:
+    output = sys.argv[1]
+print(output)
 def get_url_as_string(url):
     json_str = urlopen(url).read().decode('utf-8')
     return json_str
@@ -23,9 +32,12 @@ def create_geo_json_feature(issue, coordinates):
                 }
             }
 
+
+conn = psycopg2.connect("dbname='somekratia' user='somekratia' host='localhost' password='extemporizers735!laboriously'")
 server = 'http://dev.hel.fi'
-path = '/paatokset/v1/issue/?limit=1000&order_by=latest_decision_date'
+path = '/paatokset/v1/issue/?limit=1000&order_by=last_modified_time'
 issue_index = []
+issues = []
 geo_json = {'type': 'FeatureCollection', 'features': issue_index}
 while path is not None:
     url = "%s%s" % (server, path)
@@ -36,20 +48,29 @@ while path is not None:
     print("loaded %sms" % (request_end - request_start))
     meta = data['meta']
     path = meta['next']
-    for issue in data['objects']:
-        print("%s - %s" % (issue['last_modified_time'], issue['subject']))
-        point_count = 0
-        for geometry in issue['geometries']:
-            if geometry['category'] == 'address' and len(geometry['coordinates']) == 2:
-                point_count += 1
-                print(str(geometry['coordinates']))
-                issue_index.append(create_geo_json_feature(issue, geometry['coordinates']))
-    print("index contains %d issues with coordinates" % (len(issue_index)))
+    issues += data['objects']
+
+for issue in issues:
+    print("%s - %s" % (issue['last_modified_time'], issue['subject']))
+    point_count = 0
+    for geometry in issue['geometries']:
+        if geometry['category'] == 'address' and len(geometry['coordinates']) == 2:
+            point_count += 1
+            print(str(geometry['coordinates']))
+            issue_index.append(create_geo_json_feature(issue, geometry['coordinates']))
+print("index contains %d issues with coordinates" % (len(issue_index)))
 
 
 print("Writing index to 'issue_index.json'...")
-with open('issue_index.json', 'w') as outfile:
+with open(output, 'w') as outfile:
     json.dump(geo_json, outfile)
+print("updating database")
+cur = conn.cursor()
+cur.execute("""DELETE FROM app_issue""")
+cur.executemany("""INSERT INTO app_issue(id, title, modified_time, last_decision_time) VALUES (%(id)s, %(subject)s, %(last_modified_time)s, %(latest_decision_date)s)""", issues)
+conn.commit()
+cur.close()
+conn.close()
 print("DONE!")
 
 

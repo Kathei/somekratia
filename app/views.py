@@ -16,7 +16,6 @@ import logging
 from app.models import Message, IssueSubscription
 from app.models import Issue
 from app.models import MessageVote
-from app.models import Decision
 from app.models import UserWithProfile
 
 # Create your views here.
@@ -224,7 +223,7 @@ def issues_with_messages(request):
             users_votes = votes.filter(user=request.user)
             if users_votes.count() > 0:
                 voted = True
-        issuelist['commented'].append({'message' : message.text, 'issueID' : issue.ahjo_id, 'votes': int(votes_counted), 'voted': bool(voted), 'poster': poster})
+        issuelist['commented'].append({'message' : message.text, 'issueID' : issue.id, 'votes': int(votes_counted), 'voted': bool(voted), 'poster': poster})
     return JsonResponse(issuelist)
 
 
