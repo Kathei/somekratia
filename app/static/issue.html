@@ -47,38 +47,31 @@
     </div>
 
     <div class="messages">
-        <!--{% for message in message_list %}
-                    <div class="messageBubble">
-                        <h2>{{ message.poster }}</h2>
-                        <p>{{ message.text }}</p>
-                        {% if message.poster == user %}
-                            <div class="button" ng-controller="messageController">
-                                <button type="submit" ng-click="deleteMessage({{ message.id }})">Delete message</button>
-                             </div>
-                        {% endif %}
-                    </div>
-                {% endfor %} -->
-
-
-        <div ng-repeat="m in issueData.messages">
-            <div class="messageBubble" ng-init="m.showReplyControls = {value:false}">
+        <div ng-repeat="m in issueData.messages" ng-controller="replyController" ng-init="replies = m.replies">
+            <div class="messageBubble">
                 <h3 class="poster">{{m.poster.username}}</h3>
                 <h3 class="time-posted">{{m.created | date: 'short'}}</h3>
                 <p class="messageText">{{m.text}}</p>
 
                 <img class="thumbsup" ng-src="{{ m.liked ? '../../static/img/thumbs-up-green.png' : '../../static/img/thumbs-up.png' }}" ng-click="likeMessage(m)">
-                <div class="reply" ng-click="toggleReplyControls(m)">Vastaa</div>
-                <div ng-show="m.showReplyControls.value">
-                    <textarea ng-mogel="replyText" name="replyfield" id="replyfield" rows="6" cols="70"></textarea>
+                <div class="reply" ng-click="toggleReplyControls()">Vastaa</div>
+                <div ng-show="showReplyControls.value">
+                    <textarea ng-model="replyText" name="replyfield" rows="6" cols="70"></textarea>
                     <div class="button">
                         <button ng-click="replyToMessage(m, replyText)">Lähetä viesti</button>
                     </div>
                 </div>
             </div>
+            <div ng-repeat="r in replies">
+                <div class="messageBubble">
+                    <h2>Vastaus</h2>
+                    <h3 class="poster">{{r.poster.username}}</h3>
+                    <h3 class="time-posted">{{r.created | date: 'short'}}</h3>
+                    <p class="messageText">{{r.text}}</p>
+                    <img class="thumbsup" ng-src="{{ r.liked ? '../../static/img/thumbs-up-green.png' : '../../static/img/thumbs-up.png' }}" ng-click="likeMessage(m)">
+                </div>
+            </div>
         </div>
-
-        <!--<form id="messageform" action="/issue/{{ issueID }}/messages/" method="post">
-                        {% csrf_token %} -->
     </div>
 
 </div>

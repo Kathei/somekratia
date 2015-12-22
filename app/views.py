@@ -97,7 +97,7 @@ def current_user(request):
             subs.append({'issueId': s.issue.id, 'title': s.issue.title})
         return JsonResponse(userdata)
     else:
-        return HttpResponseForbidden()
+        return JsonResponse({'id': 0, 'subscriptions': []})
 
 def user_picture(request, userID):
     user = get_object_or_404(UserWithProfile, user=userID)
@@ -332,7 +332,7 @@ def get_issue_subscriptions(request, userID=None):
         if request.user.is_authenticated():
             userID = request.user.id
         else:
-            return HttpResponseBadRequest()
+            return JsonResponse({'subscriptions': {}})
     list = {'subscriptions' : get_subscription_dict(userID)};
     return JsonResponse(list)
 
