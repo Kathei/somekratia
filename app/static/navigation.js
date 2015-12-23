@@ -519,7 +519,11 @@ app.controller('searchController', function($scope, $http, $timeout, IssueData, 
         IssueData.issueId = feature.getId();
         $scope.content = {issueId: feature.getId()};
         console.log($scope.content);
-        $scope.map.window.show = !$scope.map.window.show;
+        if($scope.map.window.marker.id != feature.getId()) {
+            $scope.map.window.show = true;
+        } else {
+            $scope.map.window.show = !$scope.map.window.show;
+        }
         var geometry = feature.getGeometry().get();
         var lat = geometry.lat;
         var lng = geometry.lng;
