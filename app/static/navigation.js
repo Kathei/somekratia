@@ -13,7 +13,42 @@ app.config(['$httpProvider', function($httpProvider) {
 }]);
 
 app.factory('MapHolder', function() {
-    return {'map': undefined};
+    var subscriptions = undefined;
+    var map = undefined;
+    var data = {
+        get map() {
+            return map;
+        },
+        set map(newVal) {
+            if(newVal != map) {
+                map = newVal;
+                this.subscriptionsUpdated(subscriptions);
+            }
+        }
+    }
+
+    function updateFeatureSubscribedProperty(dataLayer, subscriptions, subscribeValue) {
+        if(subscriptions != undefined) {
+            for (var sub in subscriptions) {
+                if (subscriptions.hasOwnProperty(sub)) {
+                    var feature = dataLayer.getFeatureById(sub);
+                    if(feature != undefined) {
+                        feature.setProperty('subscribed', subscribeValue);
+                    }
+                }
+            }
+        }
+    }
+
+    data.subscriptionsUpdated = function(newSubs, oldSubs) {
+        subscriptions = newSubs;
+        if(data.map == undefined) {
+            return;
+        }
+        updateFeatureSubscribedProperty(map.data, oldSubs, false);
+        updateFeatureSubscribedProperty(map.data, newSubs, true);
+    };
+    return data;
 })
 
 app.factory('UiState', function() {
@@ -27,8 +62,20 @@ app.factory('UiState', function() {
    };
 });
 
-app.factory('UserData', function($http){
-    var data = {'userId': 0, 'username': undefined, 'subscriptions': []};
+app.factory('UserData', function($http, MapHolder){
+    var subscriptions = {};
+    var data = {
+        'userId': 0,
+        'username': undefined,
+        get subscriptions() {
+            return subscriptions;
+        },
+        set subscriptions(newVal) {
+            var oldVal = subscriptions;
+            subscriptions = newVal;
+            MapHolder.subscriptionsUpdated(newVal, oldVal);
+        }
+    };
     data.isLoggedIn = function() {
         return data.username != undefined && data.userId != 0;
     };

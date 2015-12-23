@@ -2,7 +2,7 @@
  * Created by tiitulahti on 18/12/15.
  */
 
-app.controller('loginWindowController', ['$scope', '$http', 'UserData', 'UiState', function($scope, $http, UserData, UiState){
+app.controller('loginWindowController', ['$scope', '$http', 'UserData', 'UiState', 'MapHolder', function($scope, $http, UserData, UiState, MapHolder){
     $scope.userData = UserData;
     $scope.uiState = UiState;
 
@@ -54,6 +54,7 @@ angular.module('myApp').controller('logoutController', ['$scope', '$http', 'User
             alert("Uloskirjautuminen onnistui.");
             $scope.userData.username = undefined;
             $scope.userData.userId = 0;
+            $scope.userData.subscriptions = {};
         }).error(function(){
             alert("Uloskirjautumisessa tapahtui virhe, yritäthän uudelleen!");
         })
