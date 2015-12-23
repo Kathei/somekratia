@@ -8,5 +8,6 @@ angular.module('myApp').controller('recentIssuesController', ['$scope', '$http',
     $scope.openRecent = function() {
         $scope.uiState.showRecent = true;
     }
+
 }
 ]);

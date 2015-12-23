@@ -26,7 +26,7 @@ from app.views import decisions
 from app.views import register
 from app.views import user_profile, user_picture, messages
 from app.views import get_issue_subscriptions
-from app.views import current_user, reply_to_message
+from app.views import current_user, reply_to_message, recent_decisions
 from django.views.generic.edit import CreateView
 from django.contrib.auth.forms import UserCreationForm
 
@@ -46,6 +46,7 @@ urlpatterns = [
     url(r'^issues/area$', issues_bbox),
     url(r'^issues/text/$', issues_search_text),
     url(r'^issues/category/(?P<category_id>[0-9]+)/$', issues_category),
+    url(r'^issues/recent$', recent_decisions),
     url(r'^$', index),
     url(r'^issue/(?P<issueID>[0-9]+)/$', issue),
     url(r'^issue/(?P<issueID>[0-9]+)/messages/$', post_message),

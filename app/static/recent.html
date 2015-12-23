@@ -1,9 +1,11 @@
-<div class="searchResults" ng-controller="searchController">
+<div class="searchResults" ng-controller="recentDecisionsController">
     <img src="/static/img/x-grey.png" class="close" ng-controller="closeController" ng-click="closeRecent()"/>
     <div id="searchHead">Viimeisimmät päätökset </div>
-   <!-- <ul>
-        <li ng-repeat="x in searchResults">
-            <div ng-controller="windowController" ng-click="windowClick(x)">{{ x.subject }}</div>
+   <ul>
+        <li ng-repeat="issue in recentIssues">
+            <div ng-controller="windowController" ng-click="windowClick(issue.issueId)">
+                {{ issue.issueTitle }} Viimeisin päätös: {{ issue.lastDecisionTime }}
+            </div>
         </li>
-    </ul>-->
+    </ul>
 </div>

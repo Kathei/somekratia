@@ -202,8 +202,6 @@ app.service('MessageService', function($http, IssueData) {
         console.log("nappia painettu");
         return $http.post("/message/" + message.id + "/reply", "replyfield="+encodeURIComponent(newMessageText), config).success(function(response) {
             console.log("replies: " + message.replies);
-            //showReplyControls.value = !showReplyControls.value;
-            //console.log($scope.showReplyControls);
             callback(response);
         }).error(function() {
             alert("vastaus ei toimi");
@@ -406,7 +404,6 @@ app.controller('subController', function($scope, $http, UserData, IssueData, Map
         if (issue.subscribed) {
             var config = {headers: { 'Content-Type': 'application/x-www-form-urlencoded'}}
             $http.post("/issue/" + issue.id + "/subscribe", config).success(function(response) {
-                //issue.imagesrc = "../../static/img/yellowstar.png";
                 $scope.subscribeClass = "blue";
                 $scope.subscribeText = " Lopeta seuraaminen";
                 $scope.userData.subscriptions[response.issueId.toString()] = response;
@@ -422,7 +419,6 @@ app.controller('subController', function($scope, $http, UserData, IssueData, Map
                 method: 'DELETE',
             };
             $http.delete("/issue/" + issue.id + "/subscribe", config).success(function(response) {
-                //issue.imagesrc = "../../static/img/graystar.png";
                 $scope.subscribeClass = "grey";
                 $scope.subscribeText = " Seuraa";
                 delete UserData.subscriptions[issue.id.toString()];
@@ -435,6 +431,14 @@ app.controller('subController', function($scope, $http, UserData, IssueData, Map
     };
 
 });
+
+app.controller('recentDecisionsController', function($scope, $http) {
+    $http.get('/issues/recent').success(function(response){
+        $scope.recentIssues = response.recent_decisions;
+        console.log(response);
+    });
+});
+
 
 app.controller('recentController', function($scope, $http) {
     $http.get('/issues/recent/comments').success(function(response){

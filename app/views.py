@@ -53,7 +53,7 @@ def login_view(request):
             return HttpResponse('Account no longer active')
     else:
         return HttpResponse('Invalid password or username', status=403)
-    return jsonDict
+
 
 def register(request):
     context = RequestContext(request)
@@ -100,6 +100,7 @@ def current_user(request):
         return JsonResponse(userdata)
     else:
         return JsonResponse({'id': 0, 'subscriptions': []})
+
 
 def user_picture(request, userID):
     user = get_object_or_404(UserWithProfile, user=userID)
@@ -168,6 +169,19 @@ def issues_search_text(request):
     return JsonResponse(get_url_as_json(url))
 
 
+def recent_decisions(request):
+    recent_decisions = Issue.objects.order_by('-last_decision_time')
+    issuelist = {}
+    issuelist['recent_decisions'] = []
+    maxIssues = 20
+    for issue in recent_decisions:
+        issuelist['recent_decisions'].append({'issueId' : issue.id, 'issueTitle': issue.title, 'lastDecisionTime': issue.last_decision_time})
+        if len(issuelist['recent_decisions']) >= maxIssues:
+            break
+    return JsonResponse(issuelist)
+
+
+
 def issues_category(request, category_id):
     url = 'http://dev.hel.fi/openahjo/v1/issue/search/?category=%d&format=json%s'\
           % (int(category_id), get_paging_info(request))
@@ -232,7 +246,7 @@ def issues_with_messages(request):
             if users_votes.count() > 0:
                 voted = True
         issuelist['commented'].append({'message' : message.text, 'issueId' : issue.id, 'issueTitle': issue.title, 'votes': int(votes_counted), 'voted': bool(voted), 'poster': poster})
-        if len(issuelist) > maxIssues:
+        if len(distinctIssues) >= maxIssues:
             break
     return JsonResponse(issuelist)
 
