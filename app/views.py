@@ -312,7 +312,7 @@ def reply_to_message(request, messageID):
                     reply_to=get_object_or_404(Message, id=messageID),
                     issue_id=get_object_or_404(Message, id=messageID).issue.id)
         m.save()
-        response = {'text': m.text, 'poster': m.poster.username, 'created':m.created, 'edited':m.edited, 'id': m.id }
+        response = m.message_json(False)
         return JsonResponse(response)
 
 
