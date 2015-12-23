@@ -548,6 +548,9 @@ app.controller('searchController', function($scope, $http, $timeout, IssueData, 
         $scope.map.window.marker.issue = $scope.content;
         $scope.map.window.marker.coords = [geometry.lng(), geometry.lat()];
         $scope.map.window.issue = $scope.content;
+        if($scope.map.window.show) {
+            MapHolder.map.panTo(geometry);
+        }
         $scope.$apply();
     };
 
