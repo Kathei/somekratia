@@ -221,7 +221,6 @@ def issues_with_messages(request):
             continue
         else:
             distinctIssues.append(issue.id)
-        message = issue.messages.latest('edited')
         poster = message.poster.username
         votes = MessageVote.objects.filter(message=message)
         votes_counted = votes.count()
@@ -230,7 +229,7 @@ def issues_with_messages(request):
             users_votes = votes.filter(user=request.user)
             if users_votes.count() > 0:
                 voted = True
-        issuelist['commented'].append({'message' : message.text, 'issueID' : issue.id, 'votes': int(votes_counted), 'voted': bool(voted), 'poster': poster})
+        issuelist['commented'].append({'message' : message.text, 'issueId' : issue.id, 'issueTitle': issue.title, 'votes': int(votes_counted), 'voted': bool(voted), 'poster': poster})
         if len(issuelist) > maxIssues:
             break
     return JsonResponse(issuelist)

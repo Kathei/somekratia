@@ -1,7 +1,7 @@
 /**
  * Created by vihtori on 26/11/15.
  */
-angular.module('myApp').controller('navbarController', ['$scope', '$http', function($scope, $http) {
+angular.module('myApp').controller('navbarController', ['$scope', '$http', 'MapHolder', function($scope, $http, MapHolder) {
     $scope.categories = [{id:0, name: "Kaikki kategoriat", origin_id: ""}];
     $scope.category = $scope.categories[0];
     $scope.selectCategory = $scope.category;
@@ -16,7 +16,7 @@ angular.module('myApp').controller('navbarController', ['$scope', '$http', funct
         var searchController = document.getElementById('map-container');
         var searchScope = angular.element(searchController).scope();
         searchScope.category = $scope.categorySelect;
-        alert($scope.category);
+        MapHolder.categorySelected($scope.categorySelect);
     };
 }
 ]);

@@ -15,6 +15,7 @@ app.config(['$httpProvider', function($httpProvider) {
 app.factory('MapHolder', function() {
     var subscriptions = undefined;
     var map = undefined;
+    var filterCategory = "";
     var data = {
         get map() {
             return map;
@@ -23,6 +24,7 @@ app.factory('MapHolder', function() {
             if(newVal != map) {
                 map = newVal;
                 this.subscriptionsUpdated(subscriptions);
+                this.categorySelected(filterCategory);
             }
         }
     }
@@ -37,6 +39,21 @@ app.factory('MapHolder', function() {
                     }
                 }
             }
+        }
+    }
+    function startsWith (string, prefix) {
+        return string.slice(0, prefix.length) == prefix;
+    }
+    data.categorySelected = function(category) {
+        filter = category;
+        if(map != undefined) {
+            map.data.forEach(function(feature) {
+                if(!feature.getProperty('tooOld')) {
+                    var featureCategory = feature.getProperty('category_origin_id');
+                    var categoryHidden = !startsWith(featureCategory, category);
+                    feature.setProperty('category_hidden', categoryHidden);
+                }
+            });
         }
     }
 
@@ -415,38 +432,8 @@ app.controller('subController', function($scope, $http, UserData, IssueData, Map
 
 app.controller('recentController', function($scope, $http) {
     $http.get('/issues/recent/comments').success(function(response){
-
         $scope.recentlyCommented = response.commented;
-        //console.log(response.commented);
-
-        var max;
-
-        if (response.commented.length < 10) {
-            max = response.commented.length;
-        } else {
-            max = 10;
-        }
-        for (i = 0; i < max; i++) {
-            //console.log(i);
-            $scope.getNameOfIssue($scope.recentlyCommented[i].issueID, i);
-        }
-        //console.log($scope.recentlyCommented[0].issueID);
     });
-
-    $scope.getNameOfIssue = function(issueID, i) {
-        $http.get('/issue/'+ issueID).success(function(response){
-            //console.log(response);
-            var issueName = response.jsondetails.subject;
-            $scope.recentlyCommented[i].issue = response.jsondetails;
-            $scope.recentlyCommented[i].name = issueName;
-            //console.log(issueName);
-        }).error(function(foo, bar, baz) {
-            alert("could not find recent issue");
-        });
-    }
-
-
-
 });
 
 function timeStamp() {
@@ -553,7 +540,22 @@ app.controller('searchController', function($scope, $http, $timeout, IssueData, 
                 });
 
             });
+
             map.data.setStyle(function(feature) {
+                //Filter categories
+                var category = feature.getProperty('category_origin_id');
+                var icon =  '/static/img/marker-orange.png';
+                if (UserData.subscriptions.hasOwnProperty(feature.getId())) {
+                    icon = 'static/img/marker-blue.png';
+                }
+                var tooOld = feature.getProperty("tooOld");
+                var categoryHidden = feature.getProperty('category_hidden');
+                categoryHidden = categoryHidden != undefined && categoryHidden;
+                return { visible: !categoryHidden && !tooOld, icon: icon};
+            });
+
+            map.data.addListener('addfeature', function(e) {
+                var feature = e.feature;
                 //Show only issues with decisions less than 6 months ago
                 var lastModified = new Date(feature.getProperty('latest_decision_date'));
                 var now = new Date();
@@ -566,13 +568,9 @@ app.controller('searchController', function($scope, $http, $timeout, IssueData, 
                     now.setFullYear(now.getFullYear()-Math.ceil(maxTimeSinceLatestDecision / 12));
                 }
                 var tooOld = lastModified.getTime() < now.getTime();
-                //Filter categories
-                var category = feature.getProperty('category_origin_id');
-                var icon =  '/static/img/marker-orange.png';
-                if (UserData.subscriptions.hasOwnProperty(feature.getId())) {
-                    icon = 'static/img/marker-blue.png';
+                if(tooOld) {
+                    feature.setProperty("tooOld", true);
                 }
-                return { visible: !tooOld, icon: icon};
             });
         }},};
 

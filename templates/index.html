@@ -97,8 +97,8 @@
         <div class="recentMessageContainer">
             <div ng-repeat="i in recentlyCommented">
                 <div class="recent-message">
-                    <div class="recent-message-txt" ng-controller="windowController" ng-click="windowClick(i.issue.id)">
-                        {{ i.name }}
+                    <div class="recent-message-txt" ng-controller="windowController" ng-click="windowClick(i.issueId)">
+                        {{ i.issueTitle }}
                     </div>
                 </div>
             </div>
