@@ -334,23 +334,31 @@ input[type="file"] {
 .searchResults {
     background: white;
     width: 65vw;
-    margin-left: 5vw;
-    margin-right: 5vw;
-    margin-top: 11vw;
+    margin: 11vw 5vw 0 5vw;
     top: 0vw;
     left: 0vw;
     position: absolute;
-    border-top-left-radius: 1vw;
-    border-top-right-radius: 1vw;
-    border-bottom-left-radius: 1vw;
-    border-bottom-right-radius: 1vw;
+    border-radius: 1vw;
     font-family: Tw Cen MT;
     overflow: scroll;
+    padding: 1vw;
+}
+
+.searchResults li {
+    color: #939291;
+    list-style-type: none;
+    cursor: pointer;
+    margin-left: -26px;
+
+}
+
+.searchResults li:hover {
+    color: #555555;
 }
 
 #searchHead {
     padding-left: 1vw;
-    padding-top: 1vw;
+    padding-top: 2vw;
     color: #939291;
 }
 
