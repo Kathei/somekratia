@@ -74,7 +74,9 @@ def register(request):
                 profile.picture = request.FILES['picture']
             profile.save()
             registered = True
-            return HttpResponseRedirect('/user/%d/' % profile.user_id)
+            new_user = authenticate(username=request.POST['username'], password=request.POST['password'])
+            login(request, new_user)
+            return HttpResponseRedirect('/user/')
         else:
             print(user_form.errors, profile_form.errors)
     else:
