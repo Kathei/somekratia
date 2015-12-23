@@ -54,7 +54,7 @@
                 <p class="messageText">{{m.text}}</p>
 
                 <img class="thumbsup" ng-src="{{ m.liked ? '../../static/img/thumbs-up-green.png' : '../../static/img/thumbs-up.png' }}" ng-click="likeMessage(m)">
-                <div class="reply" ng-click="toggleReplyControls()">Vastaa</div>
+                <div class="reply" ng-show="userData.isLoggedIn()" ng-click="toggleReplyControls()">Vastaa</div>
                 <div ng-show="showReplyControls.value">
                     <textarea ng-model="replyText" name="replyfield" rows="6" cols="70"></textarea>
                     <div class="button">

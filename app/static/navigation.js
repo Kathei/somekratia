@@ -363,7 +363,8 @@ app.controller('messageController', function($scope, $http, IssueData, MessageSe
     };
 });
 
-app.controller('replyController', function($scope, MessageService) {
+app.controller('replyController', function($scope, MessageService, UserData) {
+    $scope.userData = UserData;
 
     $scope.showReplyControls = {value:false};
 
