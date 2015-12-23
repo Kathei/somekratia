@@ -188,7 +188,7 @@ app.service('MessageService', function($http, IssueData) {
 
     this.postMessage = function(issueId, newMessageText) {
         var config = {headers: { 'Content-Type': 'application/x-www-form-urlencoded'}};
-        $http.post("/issue/" + issueId + "/messages/", "messagefield="+encodeURIComponent(newMessageText), config).success(function(response) {
+        return $http.post("/issue/" + issueId + "/messages/", "messagefield="+encodeURIComponent(newMessageText), config).success(function(response) {
             IssueData.messages.push(response);
 
         }).error(function(){
@@ -199,7 +199,7 @@ app.service('MessageService', function($http, IssueData) {
     this.replyToMessage = function(message, newMessageText, callback) {
         var config = {headers: { 'Content-Type': 'application/x-www-form-urlencoded'}};
         console.log("nappia painettu");
-        $http.post("/message/" + message.id + "/reply", "replyfield="+encodeURIComponent(newMessageText), config).success(function(response) {
+        return $http.post("/message/" + message.id + "/reply", "replyfield="+encodeURIComponent(newMessageText), config).success(function(response) {
             console.log("replies: " + message.replies);
             //showReplyControls.value = !showReplyControls.value;
             //console.log($scope.showReplyControls);
@@ -214,7 +214,7 @@ app.service('MessageService', function($http, IssueData) {
         var config = {
             method: 'DELETE',
         };
-        $http.delete("/message/" + messageId + '/', config)
+        return $http.delete("/message/" + messageId + '/', config)
             .success(function() {
                 var idx = 0;
                 for(;idx < messages.length; idx++) {
@@ -244,9 +244,11 @@ app.service('IssueService', function($http, MessageService){
     };
 });
 
-app.controller('messageController', function($scope, $http, IssueData, MessageService, UiState) {
+app.controller('messageController', function($scope, $http, IssueData, MessageService, UiState, UserData) {
     $scope.issueData = IssueData;
     $scope.uiState = UiState;
+    $scope.userData = UserData;
+    $scope.messageText = {'value': ""};
     $scope.$watch('issueData.messages', function(messages, oldVal){
         if(messages == undefined || messages.length == 0) {
                 $scope.latestMessage = 'undefined';
@@ -275,8 +277,10 @@ app.controller('messageController', function($scope, $http, IssueData, MessageSe
         MessageService.deleteMessage(messageId);
     };
 
-    $scope.postMessage = function(issueId, newMessageText) {
-        MessageService.postMessage(issueId, newMessageText);
+    $scope.postMessage = function(issueId) {
+        MessageService.postMessage(issueId, $scope.messageText.value).then(function(result) {
+            $scope.messageText.value = "";
+        });
     };
 
     $scope.getDecisions = function(issueID) {
@@ -365,18 +369,17 @@ app.controller('messageController', function($scope, $http, IssueData, MessageSe
 
 app.controller('replyController', function($scope, MessageService, UserData) {
     $scope.userData = UserData;
-
     $scope.showReplyControls = {value:false};
-
+    $scope.replyText = {'value': ""};
     $scope.toggleReplyControls = function() {
         $scope.showReplyControls.value = !$scope.showReplyControls.value;
     }
 
-    $scope.replyToMessage = function(message, newMessageText) {
-        MessageService.replyToMessage(message, newMessageText, function(reply) {
-            $scope.replies.push(reply);
-            $scope.showReplyControls.value = false;
-
+    $scope.replyToMessage = function(message) {
+        $scope.showReplyControls.value = false;
+        MessageService.replyToMessage(message, $scope.replyText.value).then(function(response) {
+            $scope.replies.push(response.data);
+            $scope.replyText.value = "";
         });
 
     };

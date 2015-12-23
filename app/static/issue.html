@@ -21,13 +21,13 @@
         <h4 class="date">Päivämäärä: {{ issueData.data.latest_decision_date }}</h4>
         <p>{{ issueData.data.summary }} </p>
 
-       <div ng-controller="subController" ng-show="userData.isLoggedIn()">
+       <div ng-show="userData.isLoggedIn()">
         <div>
             <label for="messagefield" ng-keyup="$event.keyCode == 13 && postMessage(issueData.issueId, messageText)">
-                <textarea ng-model="messageText" id="messagefield" name="messagefield" rows="6" cols="65"></textarea>
+                <textarea ng-model="messageText.value" id="messagefield" name="messagefield" rows="6" cols="65"></textarea>
             </label>
             <div class="button">
-                <button ng-click="postMessage(issueData.issueId,messageText)">Lähetä viesti</button>
+                <button ng-click="postMessage(issueData.issueId)">Lähetä viesti</button>
             </div>
             <!--</form>-->
         </div>
@@ -59,9 +59,9 @@
                 <img class="thumbsup" ng-show="userData.isLoggedIn()"ng-src="{{ m.liked ? '../../static/img/thumbs-up-green.png' : '../../static/img/thumbs-up.png' }}" ng-click="likeMessage(m)">
                 <div class="reply" ng-show="userData.isLoggedIn()" ng-click="toggleReplyControls()">Vastaa</div>
                 <div ng-show="showReplyControls.value">
-                    <textarea ng-model="replyText" name="replyfield" rows="6" cols="70"></textarea>
+                    <textarea ng-model="replyText.value" name="replyfield" rows="6" cols="70"></textarea>
                     <div class="button">
-                        <button ng-click="replyToMessage(m, replyText)">Lähetä viesti</button>
+                        <button ng-click="replyToMessage(m)">Lähetä viesti</button>
                     </div>
                 </div>
             </div>
