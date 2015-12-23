@@ -7,7 +7,7 @@
     <div class="user-subscriptions profileRight" ng-controller="subscriptionController">
         <h2>Seuratut päätökset</h2>
         <ul>
-            <li ng-repeat="(id, issue) in subscriptions">
+            <li ng-repeat="(id, issue) in userData.subscriptions">
                 <div ng-controller="windowController" ng-click="windowClick(id)">
                     {{ issue.title }}
 
