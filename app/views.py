@@ -191,7 +191,7 @@ def issue(request, issueID):
             subscribed = True
             details['subscribed'] = True
     issuedetails = {'issueID': issueID, 'user': {'id' : request.user.id, 'username': request.user.username}, 'jsondetails': details, 'subscribed':subscribed}
-    messages = Message.objects.filter(issue=issueID)
+    messages = Message.objects.filter(issue=issueID, reply_to__isnull=True)
     messageJsons = []
     issuedetails['messages'] = messageJsons
     for message in messages:
