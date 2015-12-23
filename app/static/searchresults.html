@@ -3,7 +3,7 @@
     <div id="searchHead">Hakusanalla "{{ searchText.value }}" löytyi {{ searchResults.length }} hakutulosta. </div>
     <ul>
         <li ng-repeat="x in searchResults">
-            <div ng-controller="windowController" ng-click="windowClick(x)">{{ x.subject }}</div>
+            <div ng-controller="windowController" ng-click="windowClick(x.id)">{{ x.subject }}</div>
         </li>
     </ul>
 </div>
