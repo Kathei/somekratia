@@ -285,10 +285,25 @@ form {
 /*SEARCH RESULTS -IKKUNA*/
 .searchResults {
     background: white;
-    width: 50vw;
-    top: 10vw;
-    left: 10vw;
+    width: 60vw;
+    margin-left: 5vw;
+    margin-right: 5vw;
+    margin-top: 11vw;
+    top: 0vw;
+    left: 0vw;
     position: absolute;
+    border-top-left-radius: 1vw;
+    border-top-right-radius: 1vw;
+    border-bottom-left-radius: 1vw;
+    border-bottom-right-radius: 1vw;
+    font-family: Tw Cen MT;
+    overflow: scroll;
+}
+
+#searchHead {
+    padding-left: 1vw;
+    padding-top: 1vw;
+    color: #939291;
 }
 
 .infowindow {

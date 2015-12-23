@@ -25,6 +25,7 @@
     <script src="/static/navbar_controller.js"></script>
     <script src="/static/searchresult_controller.js"></script>
     <script src="/static/login_controller.js"></script>
+    <script src="/static/recent_issues_controller.js"></script>
     <link rel="stylesheet" type="text/css" media="screen" href="../static/style.css" />
 </head>
 <body>
@@ -34,7 +35,7 @@
         <a href="index.html"><img src="/static/img/somekratia_logo_small.png" class="logo"/></a>
         <ul id="mainnav">
             <li class="nav-item selected"><a href="index.html">KOTI</a></li>
-            <li class="nav-item"><a href=""></a>VIIMEISIMMÄT</li>
+            <li class="nav-item" ng-controller="recentIssuesController" ng-click="openRecent()">VIIMEISIMMÄT</li>
             {% verbatim %}
             <select name="categorySelect" id="category" class="nav-item" ng-model="categorySelect"
                     ng-change="categoryChanged()">
@@ -44,10 +45,10 @@
             {% endverbatim %}
         </ul>
 
-        <div class="nav-field nav-item">
-            <input type="text" id="search" name="search" placeholder="Haku" data-ng-model="text"/>
+        <div class="nav-field nav-item" ng-controller="textSearchController">
+            <input type="text" ng-keyup="$event.keyCode == 13 && textSearch(text)" id="search" name="search" placeholder="Haku" data-ng-model="text"/>
 
-            <button type="submit" class="nav-item search-button" ng-controller="textSearchController" ng-click="textSearch(text)">HAE</button>
+            <button type="submit" class="nav-item search-button"  ng-click="textSearch(text)">HAE</button>
 
         </div>
 
@@ -79,6 +80,10 @@
         </ui-gmap-window>
     </ui-gmap-google-map>
        </div>
+
+    <div class="recentContainer" ng-controller="recentIssuesController" ng-show="uiState.showRecent">
+        <div ng-include src="'static/recent.html'"></div>
+    </div>
 
     <div class="searchResultContainer" ng-controller="searchResultController" ng-show="uiState.showSearchResults">
         <div ng-include src="'static/searchresults.html'"></div>
