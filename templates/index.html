@@ -102,7 +102,7 @@
     <div id="recentMessages" ng-controller="recentController">
         <h3>Viimeksi kommentoidut</h3>
         <div class="recentMessageContainer">
-            <div ng-repeat="i in recentlyCommented">
+            <div ng-repeat="i in issueData.recentlyCommented">
                 <div class="recent-message">
                     <div class="recent-message-txt" ng-controller="windowController" ng-click="windowClick(i.issueId)">
                         {{ i.issueTitle }}

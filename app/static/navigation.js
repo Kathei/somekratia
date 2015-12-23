@@ -115,6 +115,8 @@ app.factory('UserData', function($http, MapHolder){
 
 app.factory('IssueData', function($http, $q, UserData) {
     var issueId = 0;
+    var recentlyCommentedIssues;
+
     var requestCanceller;
     function updateIssueData(issueId) {
         if(requestCanceller != undefined) {
@@ -149,7 +151,15 @@ app.factory('IssueData', function($http, $q, UserData) {
                 issueId = val;
                 updateIssueData(val);
             }
-        }
+        },
+        get recentlyCommented() {
+            return recentlyCommentedIssues;
+        },
+        reloadRecentlyCommentedIssues: function() {
+            $http.get('/issues/recent/comments').success(function (response) {
+                recentlyCommentedIssues = response.commented;
+            })
+        },
     };
     return data;
 });
@@ -191,18 +201,17 @@ app.service('MessageService', function($http, IssueData) {
         var config = {headers: { 'Content-Type': 'application/x-www-form-urlencoded'}};
         return $http.post("/issue/" + issueId + "/messages/", "messagefield="+encodeURIComponent(newMessageText), config).success(function(response) {
             IssueData.messages.push(response);
-
+            IssueData.reloadRecentlyCommentedIssues();
         }).error(function(){
             alert("Post doesn't work");
         });
     };
 
-    this.replyToMessage = function(message, newMessageText, callback) {
+    this.replyToMessage = function(message, newMessageText) {
         var config = {headers: { 'Content-Type': 'application/x-www-form-urlencoded'}};
         console.log("nappia painettu");
         return $http.post("/message/" + message.id + "/reply", "replyfield="+encodeURIComponent(newMessageText), config).success(function(response) {
-            console.log("replies: " + message.replies);
-            callback(response);
+            IssueData.reloadRecentlyCommentedIssues();
         }).error(function() {
             alert("vastaus ei toimi");
         });
@@ -440,10 +449,9 @@ app.controller('recentDecisionsController', function($scope, $http) {
 });
 
 
-app.controller('recentController', function($scope, $http) {
-    $http.get('/issues/recent/comments').success(function(response){
-        $scope.recentlyCommented = response.commented;
-    });
+app.controller('recentController', function($scope, $http, IssueData) {
+    $scope.issueData = IssueData;
+    IssueData.reloadRecentlyCommentedIssues();
 });
 
 function timeStamp() {
