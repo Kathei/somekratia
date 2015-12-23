@@ -267,9 +267,10 @@ form {
     z-index: 10000;
     position: absolute;
     top: 20vw;
-    left: 40vw;
+    left: 38vw;
     padding: 2vw;
      border-radius: 1vw;
+    width: 24vw;
 }
 
 .login {
@@ -280,6 +281,53 @@ form {
     top: 0;
     left: 0;
     z-index: 1000;
+}
+
+.loginRegister {
+    padding-bottom: 15px;
+}
+
+.login h5 {
+    display: inline;
+    font-family: "Tw Cen MT";
+    color: #939291;
+    cursor: pointer;
+}
+
+.loginRegister h5:hover {
+    color: #555555;
+}
+
+.registerfieldcontainer {
+    width: 24vw;
+}
+
+.registerfieldcontainer input {
+    float: right;
+    width: 14vw;
+}
+
+input[type="file"] {
+    margin-top: 7px;
+}
+
+
+.registerfieldcontainer h5 {
+    float: left;
+    width: 0;
+    cursor: auto;
+}
+
+.registerfieldcontainer .first {
+    margin-top: 0;
+}
+
+.register .button {
+    margin-top: 10vw;
+}
+
+.login-box.register {
+    top: 17vw;
 }
 
 /*SEARCH RESULTS -IKKUNA*/
@@ -363,6 +411,7 @@ form {
     list-style-type: none;
     margin: 0 0 10px -38px;
     cursor: pointer;
+
 }
 
 .profileContainer li:hover {

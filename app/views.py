@@ -84,7 +84,7 @@ def register(request):
         profile_form = UserProfileForm()
 
     return render_to_response(
-            'register.html',
+        'static/register.html',
             {'user_form': user_form, 'profile_form': profile_form, 'registered': registered},
             context)
 

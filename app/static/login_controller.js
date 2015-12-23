@@ -17,10 +17,42 @@ app.controller('loginWindowController', ['$scope', '$http', 'UserData', 'UiState
             return;
         }
         else {
-            $scope.uiState.showLogin = !$scope.uiState.showLogin;
+            $scope.uiState.showLoginWindow = !$scope.uiState.showLoginWindow;
             console.log("else");
         }
     }
+
+    $scope.toggleLoginRegister = function() {
+        $scope.uiState.showRegister = !$scope.uiState.showRegister;
+        $scope.uiState.showLogin = !$scope.uiState.showLogin;
+
+
+    }
+
+    $scope.add = function(){
+      var f = document.getElementById('file').files[0],
+          r = new FileReader();
+      r.onloadend = function(e){
+        var data = e.target.result;
+        //send you binary data via $http or $resource or do anything else with it
+      }
+      r. readAsArrayBuffer(f);
+    }
+
+    $scope.register = function(username, email, password, file) {
+        var config = {
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded'},
+            method: 'POST',
+        };
+        $http.post("/register/", "username=" + encodeURIComponent(username) + "&password=" + encodeURIComponent(password) + "email=" + encodeURIComponent(email), config).success(function(response){
+            alert("Tervetuloa "+ username);
+
+            console.log("response: " + response);
+        }).error(function(){
+            alert("Rekisteröitymisessä tapahtui virhe, yritäthän uudelleen!");
+        });
+    }
+
 
     $scope.login = function(username, password){
         var config = {
@@ -32,7 +64,7 @@ app.controller('loginWindowController', ['$scope', '$http', 'UserData', 'UiState
             $scope.userData.username = response.name;
             $scope.userData.userId = response.id;
             $scope.userData.subscriptions = response.subscriptions;
-            $scope.uiState.showLogin = false;
+            $scope.uiState.showLoginWindow = false;
             console.log($scope.userData.username);
         }).error(function(){
             alert("Kirjautumisessa tapahtui virhe, yritäthän uudelleen!");

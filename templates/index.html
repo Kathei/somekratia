@@ -69,8 +69,10 @@
 
 </div>
 
-<div class="login" ng-controller="loginWindowController" ng-show="uiState.showLogin" ng-click="toggleShow()">
-   <div ng-include src="'static/login.html'" ></div>
+<div class="login" ng-controller="loginWindowController" ng-show="uiState.showLoginWindow" ng-click="toggleShow()">
+   <div ng-include ng-show="uiState.showLogin" src="'static/login.html'" ></div>
+    <div ng-include ng-show="uiState.showRegister" src="'static/register.html'" ></div>
+
 </div>
 {% verbatim %}
 <div id= 'map-container' ng-controller="searchController" >

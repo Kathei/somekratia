@@ -72,7 +72,8 @@ app.factory('UiState', function() {
    return {
        'showProfile' : false,
        'showDetails': false,
-       'showLogin': false,
+       'showLoginWindow': false,
+       'showLogin': true,
        'showRegister': false,
        'showSearchResults': false,
        'showRecent': false,
