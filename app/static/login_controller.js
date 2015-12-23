@@ -44,7 +44,7 @@ app.controller('loginWindowController', ['$scope', '$http', 'UserData', 'UiState
             headers: { 'Content-Type': 'application/x-www-form-urlencoded'},
             method: 'POST',
         };
-        $http.post("/register/", "username=" + encodeURIComponent(username) + "&password=" + encodeURIComponent(password) + "email=" + encodeURIComponent(email), config).success(function(response){
+        $http.post("/register/", "username=" + encodeURIComponent(username) + "&password=" + encodeURIComponent(password) + "&email=" + encodeURIComponent(email), config).success(function(response){
             alert("Tervetuloa "+ username);
 
             console.log("response: " + response);
