@@ -58,6 +58,7 @@ app.factory('UiState', function() {
        'showLogin': false,
        'showRegister': false,
        'showSearchResults': false,
+       'showRecent': false,
        'inputClick': false
    };
 });
@@ -482,6 +483,7 @@ app.controller('textSearchController', function($scope, $http){
                 resultScope.searchText.value = searchResult.config.params.search;
                 resultScope.searchResults = searchResult.data.objects;
             });
+
     }
 });
 
@@ -605,6 +607,14 @@ app.controller('closeController', function($scope, IssueData, UiState){
     $scope.closeIssue = function() {
         console.log('ruksia klikattiin');
         UiState.showDetails = false;
+    }
+
+    $scope.closeSearchResults = function() {
+        UiState.showSearchResults = false;
+    }
+
+    $scope.closeRecent = function() {
+        UiState.showRecent = false;
     }
 });
 

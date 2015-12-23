@@ -6,7 +6,7 @@ angular.module('myApp').controller('searchResultController', ['$scope', '$http',
     $scope.searchText = {value: ""};
     $scope.$watch('searchResults', function(newval, oldval){
         if (typeof newval != "undefined"){
-            UiState.showseashowResults = true;
+            UiState.showSearchResults = true;
         }
     });
 }
