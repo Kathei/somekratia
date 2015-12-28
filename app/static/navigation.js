@@ -5,7 +5,7 @@
 var searchIssues = new SearchIssues();
 
 
-var app = angular.module('myApp', ['ngRoute', 'uiGmapgoogle-maps']);
+var app = angular.module('myApp', ['ngRoute', 'uiGmapgoogle-maps', 'infiniteScroll']);
 
 app.config(['$httpProvider', function($httpProvider) {
     $httpProvider.defaults.xsrfCookieName = 'csrftoken';
@@ -129,7 +129,6 @@ app.factory('UserData', function($http, MapHolder){
 app.factory('IssueData', function($http, $q, UserData) {
     var issueId = 0;
     var recentlyCommentedIssues;
-
     var requestCanceller;
     function updateIssueData(issueId) {
         if(requestCanceller != undefined) {
@@ -154,6 +153,8 @@ app.factory('IssueData', function($http, $q, UserData) {
         });
     }
     var data =  {
+        textSearchResults: [],
+        textSearchLoading: false,
         'messages' : [],
         'data': undefined,
         get issueId() {
@@ -262,17 +263,51 @@ app.service('MessageService', function($http, IssueData) {
     }
 });
 
-app.service('IssueService', function($http, MessageService){
+app.service('IssueService', function($http, IssueData){
+    var searchInfo = {text: undefined, page: 0, pageSize: 40};
     this.getDecisions = function(issueId) {
 
     };
-
     this.subscribe = function(issueId) {
 
     };
 
     this.unsubscribe = function(issueId) {
 
+    };
+    this.textSearch = function(text, page, pageSize) {
+        if (page == 1) {
+            IssueData.textSearchResults.length = 0;
+        }
+        searchInfo.text = text;
+        searchInfo.page = page;
+        searchInfo.pageSize = pageSize
+
+        console.log("test");
+        var config = {
+            method: 'GET',
+            params: {
+                search: searchInfo.text,
+                format: 'json',
+                pageSize: searchInfo.pageSize,
+                page: searchInfo.page,
+            },
+            url: '/issues/text/'
+        };
+        IssueData.textSearchLoading = true;
+        return $http(config).then(function(searchResult) {
+            IssueData.textSearchResults.push.apply(IssueData.textSearchResults, searchResult.data.objects);
+            IssueData.textSearchLoading = false;
+            IssueData.textSearchResultCount = searchResult.data.meta.total_count;
+            searchInfo.page = searchResult.data.meta.page;
+            /*var resultController = document.querySelector('[ng-controller="searchResultController"]');
+            var resultScope = angular.element(resultController).scope();
+            resultScope.searchText.value = searchResult.config.params.search;
+            resultScope.searchResults.appen = searchResult.data.objects;*/
+        });
+    };
+    this.loadMoreTextResults = function() {
+        return this.textSearch(searchInfo.text, searchInfo.page + 1, searchInfo.pageSize);
     };
 });
 
@@ -498,30 +533,16 @@ function timeStamp() {
     return date.join(".") + " " + time.join(":");
 }
 
-app.controller('textSearchController', function($scope, $http){
+app.controller('textSearchController', function($scope, IssueService, UiState){
     $scope.textSearch = function(text) {
-
-        console.log("test");
-        var config = {
-            method: 'GET',
-            params: {
-                search: text,
-                format: 'json',
-            },
-            url: '/issue/text/'
-        };
-        $http(config)
-            .then(function(searchResult) {
-                var resultController = document.querySelector('[ng-controller="searchResultController"]');
-                var resultScope = angular.element(resultController).scope();
-                resultScope.searchText.value = searchResult.config.params.search;
-                resultScope.searchResults = searchResult.data.objects;
-            });
-
+        IssueService.textSearch(text, 1, 40);
+        UiState.showSearchResults = true;
     }
 });
 
-app.controller('searchController', function($scope, $http, $timeout, IssueData, UserData, MapHolder){
+app.controller('searchController', function($scope, $http, $timeout, IssueData, IssueService, UserData, MapHolder){
+    $scope.canLoad = true;
+    $scope.issueData = IssueData;
     $scope.issueMarkers = [];
     $scope.currentIssues = {};
     $scope.templateUrl = {};
@@ -636,8 +657,12 @@ app.controller('searchController', function($scope, $http, $timeout, IssueData, 
     $scope.closeClick = function() {
         $scope.map.window.show = false;
     };
-
-
+    $scope.loadMoreSearchResults = function() {
+        $scope.canLoad = false;
+        IssueService.loadMoreTextResults().then(function (result) {
+            $scope.canLoad = true;
+        });
+    }
 });
 
 app.controller('windowController', function($scope, $http, IssueData, UiState) {

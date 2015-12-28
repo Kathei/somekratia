@@ -1,9 +1,15 @@
-<div class="searchResults" ng-controller="searchController">
+<div class="searchResults" ng-controller="searchController" infinite-scroll="loadMoreSearchResults()" threshold="100" can-load="!issueData.textSearchLoading">
     <img src="/static/img/x-grey.png" class="close" ng-controller="closeController" ng-click="closeSearchResults()"/>
-    <div id="searchHead">Hakusanalla "{{ searchText.value }}" löytyi {{ searchResults.length }} hakutulosta. </div>
-    <ul>
-        <li ng-repeat="x in searchResults">
-            <div ng-controller="windowController" ng-click="windowClick(x.id)">{{ x.subject }}</div>
-        </li>
-    </ul>
+    <div id="searchHead">Hakusanalla "{{ issueData.textSearchResultCount }}" löytyi {{ searchResults.length }} hakutulosta. </div>
+    <div>
+        <ul>
+            <li ng-repeat="x in issueData.textSearchResults">
+                <div ng-controller="windowController" ng-click="windowClick(x.id)">{{ x.subject }}</div>
+            </li>
+            <li ng-show="issueData.textSearchLoading">
+                <img src="/static/loader.gif"/>
+            </li>
+        </ul>
+
+    </div>
 </div>
