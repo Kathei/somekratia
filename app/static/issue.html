@@ -69,7 +69,7 @@
                     <h3 class="poster">{{r.poster.username}}</h3>
                     <h3 class="time-posted">{{r.created | date: 'short'}}</h3>
                     <p class="messageText">{{r.text}}</p>
-                    <img class="thumbsup" ng-src="{{ r.liked ? '../../static/img/thumbs-up-green.png' : '../../static/img/thumbs-up.png' }}" ng-click="likeMessage(m)">
+                    <img class="thumbsup" ng-src="{{ r.liked ? '../../static/img/thumbs-up-green.png' : '../../static/img/thumbs-up.png' }}" ng-click="likeMessage(r)">
                 </div>
             </div>
         </div>
