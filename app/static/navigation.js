@@ -137,7 +137,7 @@ app.factory('IssueData', function($http, $q, UserData) {
         });
 
         $http.get('/issue/' + issueId + '/decisions').then(function(response) {
-            data.decisions = response.data;
+            data.decisions = response.data.objects;
         });
     }
     var data =  {
@@ -441,6 +441,14 @@ app.controller('subController', function($scope, $http, UserData, IssueData, Map
 
 });
 
+app.controller('attachmentsController', function($scope){
+        $scope.attachmentsShow = {value:false};
+        $scope.toggleAttachments = function() {
+            $scope.attachmentsShow.value = !$scope.attachmentsShow.value;
+        };
+    }
+);
+
 app.controller('recentDecisionsController', function($scope, $http) {
     $http.get('/issues/recent').success(function(response){
         $scope.recentIssues = response.recent_decisions;
@@ -486,8 +494,8 @@ app.controller('textSearchController', function($scope, $http){
                 var resultScope = angular.element(resultController).scope();
                 resultScope.searchText.value = searchResult.config.params.search;
                 resultScope.searchResults = searchResult.data.objects;
+                console.log(resultScope.searchResults.length);
             });
-
     }
 });
 

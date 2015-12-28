@@ -1,4 +1,4 @@
-/**
+3/**
  * Created by vihtori on 26/11/15.
  */
 angular.module('myApp').controller('searchResultController', ['$scope', '$http', 'UiState', function($scope, $http, UiState) {
