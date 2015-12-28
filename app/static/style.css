@@ -209,6 +209,15 @@ form {
     transform: translateX(-50%);
 }
 
+.issueLogin {
+    cursor: pointer;
+    color: #d8752f;
+}
+.issueLogin:hover {
+    color: #555555;
+}
+
+
 .issueInfo {
     float: left;
     width: 40vw;
