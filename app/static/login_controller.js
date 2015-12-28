@@ -58,8 +58,13 @@ app.controller('loginWindowController', ['$scope', '$http', 'UserData', 'UiState
         var config = {
             headers: { 'Content-Type': 'application/x-www-form-urlencoded'},
             method: 'POST',
+            data: {
+                username: username,
+                password: password
+            },
+            url: "/login"
         };
-        $http.post("/login", "username=" + encodeURIComponent(username) + "&password=" + encodeURIComponent(password), config).success(function(response){
+        $http(config).success(function(response){
             alert("Tervetuloa "+ username);
             $scope.userData.username = response.name;
             $scope.userData.userId = response.id;
