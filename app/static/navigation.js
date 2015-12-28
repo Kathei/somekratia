@@ -180,8 +180,8 @@ app.service('MessageService', function($http, IssueData) {
             $scope.firstMessage = messages[0];
             var first = Date.parse(messages[0].created);
             var last = Date.parse(messages[0].created);
-            for (message of messages) {
-                var created = Date.parse(message.created);
+            for (var i = 0; i < messages.length; i++) {
+                var created = Date.parse(messages[i].created);
                 if (created >= last) {
                     $scope.latestMessage = created;
                     last = created;
@@ -268,8 +268,8 @@ app.controller('messageController', function($scope, $http, IssueData, MessageSe
         $scope.firstMessage = messages[0];
         var first = Date.parse(messages[0].created);
         var last = Date.parse(messages[0].created);
-        for (message of $scope.issueData.messages) {
-            var created = Date.parse(message.created);
+        for (var i = 0; i < $scope.issueData.messages.length; i++){
+            var created = Date.parse(messages[i].created);
             if (created >= last) {
                 $scope.latestMessage = created;
                 last = created;
@@ -306,8 +306,8 @@ app.controller('messageController', function($scope, $http, IssueData, MessageSe
             $scope.firstDecision = decisions[0];
             var first = Date.parse(decisions[0].origin_last_modified_time);
             var last = Date.parse(decisions[0].origin_last_modified_time);
-            for (decision of decisions) {
-                var created = Date.parse(decision.origin_last_modified_time);
+            for (var i = 0; i < decisions.length; i++) {
+                var created = Date.parse(decisions[i].origin_last_modified_time);
                 if (created >= last) {
                     $scope.latestDecision = created;
                     last = created;

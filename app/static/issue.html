@@ -13,7 +13,7 @@
     <div class="issueInfo">
         <h2>{{ issueData.data.subject }} </h2>
 
-        <div ng-controller="loginWindowController" ng-show="!userData.isLoggedIn()"><p><span ng-click="toggleShow()" class="issueLogin">Kirjaudu sisään</span> osallistuaksesi keskusteluun</p></div>
+        <div ng-controller="loginWindowController" ng-show="!userData.isLoggedIn()"><p><span ng-click="toggleShow()" class="issueLogin">Kirjaudu sisään</span> osallistuaksesi keskusteluun.</p></div>
 
         <div class="subscribe" ng-controller="subController" ng-show="userData.isLoggedIn()">
             <h5 ng-click="subscribeIssue(issueData.data)"><span ng-class="subscribeClass">★</span> {{ subscribeText }}</h5>
@@ -29,7 +29,6 @@
             <div class="button">
                 <button ng-click="postMessage(issueData.issueId)">Lähetä viesti</button>
             </div>
-            <!--</form>-->
         </div>
        </div>
         <h4 class="attachment-heading">Päätökset: </h4>
