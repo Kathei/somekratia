@@ -43,19 +43,79 @@ h1 {
     z-index: -1001;
 }
 
+/* MAIN NAVIGATION */
+
+#mainnav {
+    padding: 0 2vw;
+    text-align: left;
+    display: inline;
+    list-style: none;
+}
+
 #mainnav li {
+    display: inline-block;
+    position: relative;
+    padding: 0 2.5vw;
+    background: #fff;
+    cursor: pointer;
+    -webkit-transition: all 0.2s;
+    -moz-transition: all 0.2s;
+    -ms-transition: all 0.2s;
+    -o-transition: all 0.2s;
+    transition: all 0.2s;
+}
+
+#mainnav li a {
     font-size: 25px;
     font-family: Neou Bold;
     color: #939291;
+    text-decoration: none;
+}
+
+#mainnav li a:hover {
+    color: #555;
+}
+
+#mainnav li ul {
+    padding: 0;
+    position: absolute;
+    left: 11px;
+    width: 240px;
+    display: none;
+    -webkit-transiton: opacity 0.2s;
+    -moz-transition: opacity 0.2s;
+    -ms-transition: opacity 0.2s;
+    -o-transition: opacity 0.2s;
+    -transition: opacity 0.2s;
+}
+
+#mainnav li ul li {
+    display: block;
+    padding: 2px 20px 10px 20px;
 
 }
 
-li.selected a {
+#mainnav li ul li a {
+    color: #939291;
+    font-family: "Tw Cen MT";
+    font-size: 16px;
+    text-decoration: none;
+
+}
+
+
+#mainnav li ul li a:hover {
+    color: #555;
+}
+
+
+#mainnav li:hover ul {
+    display: block;
+}
+
+
+#mainnav li a:focus, #mainnav li ul li .selectedCategory {
     color: #d8752f;
-}
-
-#mainnav {
-    display: inline;
 }
 
 .hide {
@@ -75,16 +135,18 @@ li.selected a {
 
 .nav-item {
     display: inline;
-    padding-right: 40px;
 }
 
 .nav-field {
     display:inline;
 }
 
+#search {
+    width: 160px;
+}
+
 .nav-contents {
-    float: right;
-    margin-right: 3vw;
+
 }
 
 .login-button {
@@ -97,8 +159,8 @@ li.selected a {
 
 .login-button, .logout-button-button {
     -webkit-appearance: none;
-   -moz-appearance: none;
-   appearance: none;
+    -moz-appearance: none;
+    appearance: none;
     border: 0;
     background-color: #6fc1dd;
     color: #FFFFFF;
@@ -112,11 +174,12 @@ form {
 
 .logo {
     vertical-align: middle;
+    margin-right: 7vw;
 }
 
 
-.navbar button {
-    padding: 3px;
+.navbar .login-button {
+    padding: 6px 11px;
 }
 
 
@@ -144,7 +207,7 @@ form {
 }
 
 .issueDetails {
-   display: inline-block;
+    display: inline-block;
     width: 82vw;
     margin: 3vw 0 0 4vw;
 }
@@ -181,11 +244,11 @@ form {
 
 .timeline-decision {
     width: 3vw;
-	height: 3vw;
-	background: #d8752f;
-	-moz-border-radius: 1.5vw;
-	-webkit-border-radius: 1.5vw;
-	border-radius: 1.5vw;
+    height: 3vw;
+    background: #d8752f;
+    -moz-border-radius: 1.5vw;
+    -webkit-border-radius: 1.5vw;
+    border-radius: 1.5vw;
     display: inline;
     position: absolute;
     top: 5.5vw;
@@ -198,11 +261,11 @@ form {
 
 .timeline-message {
     width: 2vw;
-	height: 2vw;
-	background: #d8752f;
-	-moz-border-radius: 1vw;
-	-webkit-border-radius: 1vw;
-	border-radius: 1vw;
+    height: 2vw;
+    background: #d8752f;
+    -moz-border-radius: 1vw;
+    -webkit-border-radius: 1vw;
+    border-radius: 1vw;
     display: inline;
     position: absolute;
     top: 6vw;
@@ -278,7 +341,7 @@ form {
     top: 20vw;
     left: 38vw;
     padding: 2vw;
-     border-radius: 1vw;
+    border-radius: 1vw;
     width: 24vw;
 }
 

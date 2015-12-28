@@ -10,12 +10,25 @@ var app = angular.module('myApp', ['ngRoute', 'uiGmapgoogle-maps']);
 app.config(['$httpProvider', function($httpProvider) {
     $httpProvider.defaults.xsrfCookieName = 'csrftoken';
     $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
+    $httpProvider.defaults.transformRequest = function(data){
+        if (data === undefined) {
+            return data;
+        }
+        var dataString = '';
+        for (var key in data) {
+            if (data.hasOwnProperty(key)) {
+                dataString = dataString.concat(key, '=', encodeURIComponent(data[key]), '&');
+            }
+        }
+        return dataString.substring(0, dataString.length - 1); //Drop the trailing '?' or '&'
+    }
+    $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8';
 }]);
 
 app.factory('MapHolder', function() {
     var subscriptions = undefined;
     var map = undefined;
-    var filterCategory = "";
+    var filter = "";
     var data = {
         get map() {
             return map;
@@ -24,8 +37,11 @@ app.factory('MapHolder', function() {
             if(newVal != map) {
                 map = newVal;
                 this.subscriptionsUpdated(subscriptions);
-                this.categorySelected(filterCategory);
+                this.categorySelected(filter);
             }
+        },
+        get filterCategory() {
+            return filter;
         }
     }
 
@@ -45,12 +61,12 @@ app.factory('MapHolder', function() {
         return string.slice(0, prefix.length) == prefix;
     }
     data.categorySelected = function(category) {
-        filter = category;
+        filter = category.origin_id;
         if(map != undefined) {
             map.data.forEach(function(feature) {
                 if(!feature.getProperty('tooOld')) {
                     var featureCategory = feature.getProperty('category_origin_id');
-                    var categoryHidden = !startsWith(featureCategory, category);
+                    var categoryHidden = !startsWith(featureCategory, filter);
                     feature.setProperty('category_hidden', categoryHidden);
                 }
             });
@@ -198,8 +214,14 @@ app.service('MessageService', function($http, IssueData) {
     };
 
     this.postMessage = function(issueId, newMessageText) {
-        var config = {headers: { 'Content-Type': 'application/x-www-form-urlencoded'}};
-        return $http.post("/issue/" + issueId + "/messages/", "messagefield="+encodeURIComponent(newMessageText), config).success(function(response) {
+        var config = {
+            data: {
+                messagefield: newMessageText
+            },
+            method: 'POST',
+            url: "/issue/" + issueId + "/messages/"
+        };
+        return $http(config).success(function(response) {
             IssueData.messages.push(response);
             IssueData.reloadRecentlyCommentedIssues();
         }).error(function(){
@@ -208,9 +230,13 @@ app.service('MessageService', function($http, IssueData) {
     };
 
     this.replyToMessage = function(message, newMessageText) {
-        var config = {headers: { 'Content-Type': 'application/x-www-form-urlencoded'}};
+        var config = {
+            method: 'POST',
+            url: "/message/" + message.id + "/reply",
+            data: { replyfield: newMessageText, }
+        };
         console.log("nappia painettu");
-        return $http.post("/message/" + message.id + "/reply", "replyfield="+encodeURIComponent(newMessageText), config).success(function(response) {
+        return $http(config).success(function(response) {
             IssueData.reloadRecentlyCommentedIssues();
         }).error(function() {
             alert("vastaus ei toimi");
@@ -221,8 +247,9 @@ app.service('MessageService', function($http, IssueData) {
         console.log("test");
         var config = {
             method: 'DELETE',
+            url: "/message/" + messageId + '/',
         };
-        return $http.delete("/message/" + messageId + '/', config)
+        return $http(config)
             .success(function() {
                 var idx = 0;
                 for(;idx < messages.length; idx++) {
@@ -357,21 +384,21 @@ app.controller('messageController', function($scope, $http, IssueData, MessageSe
     };
 
     $scope.likeMessage = function(message) {
-        var config = {headers: { 'Content-Type': 'application/x-www-form-urlencoded'}};
+        var config = {
+            url: '/message/' + message.id + '/vote',
+            data: {
+                value: 1
+            },
+            method: message.liked ? 'DELETE' : 'POST'
+        };
         message.liked = !message.liked;
-        if(message.liked) {
-            $http.post("/message/" + message.id + "/vote", "value=1", config).success(function(response) {
-                message.imagesrc = "../../static/img/thumbs-up-green.png";
-            }).error(function(foo, bar, baz) {
-                alert("like failed")
-            });
-        } else {
-            $http.delete("/message/" + message.id + "/vote", config).success(function(response) {
-                message.imagesrc = "../../static/img/thumbs-up.png";
-            }).error(function(foo, bar, baz) {
-                alert("unlike failed");
-            });
-        }
+
+        $http(config).success(function(response) {
+            message.imagesrc = message.liked ?
+                "../../static/img/thumbs-up-green.png" :  "../../static/img/thumbs-up.png";
+        }).error(function(foo, bar, baz) {
+            alert((message.liked ? "" : "un") + "like failed");
+        });
     };
 });
 
@@ -411,8 +438,11 @@ app.controller('subController', function($scope, $http, UserData, IssueData, Map
     $scope.subscribeIssue = function(issue) {
         issue.subscribed = !issue.subscribed;
         if (issue.subscribed) {
-            var config = {headers: { 'Content-Type': 'application/x-www-form-urlencoded'}}
-            $http.post("/issue/" + issue.id + "/subscribe", config).success(function(response) {
+            var config = {
+                            method: 'POST',
+                            url: "/issue/" + issue.id + "/subscribe"
+            };
+            $http(config).success(function(response) {
                 $scope.subscribeClass = "blue";
                 $scope.subscribeText = " Lopeta seuraaminen";
                 $scope.userData.subscriptions[response.issueId.toString()] = response;
@@ -426,8 +456,9 @@ app.controller('subController', function($scope, $http, UserData, IssueData, Map
         } else {
             var config = {
                 method: 'DELETE',
+                url: '/issue/' + issue.id + '/subscribe'
             };
-            $http.delete("/issue/" + issue.id + "/subscribe", config).success(function(response) {
+            $http(config).success(function(response) {
                 $scope.subscribeClass = "grey";
                 $scope.subscribeText = " Seuraa";
                 delete UserData.subscriptions[issue.id.toString()];
@@ -483,12 +514,14 @@ app.controller('textSearchController', function($scope, $http){
 
         console.log("test");
         var config = {
-            'params' : {
-                'search': text,
-                'format': 'json',
+            method: 'GET',
+            params: {
+                search: text,
+                format: 'json',
             },
+            url: '/issue/text/'
         };
-        $http.get("/issues/text/", config)
+        $http(config)
             .then(function(searchResult) {
                 var resultController = document.querySelector('[ng-controller="searchResultController"]');
                 var resultScope = angular.element(resultController).scope();
@@ -619,11 +652,16 @@ app.controller('searchController', function($scope, $http, $timeout, IssueData, 
 });
 
 app.controller('windowController', function($scope, $http, IssueData, UiState) {
+    $scope.uiState = UiState;
     $scope.issueData = IssueData;
     $scope.windowClick = function (issueId) {
         $scope.issueData.issueId = issueId;
-        UiState.showDetails = true;
-        UiState.showProfile = false;
+        for (var key in $scope.uiState) {
+            if ($scope.uiState.hasOwnProperty(key)) {
+                $scope.uiState[key] = false;
+            }
+        }
+        $scope.uiState.showDetails = true;
         //console.log(issue);
         //console.log("täällä! showIssue: " + UiState.showIssue);
     };
@@ -635,25 +673,26 @@ app.controller('templateController', function(){});
 app.controller('closeController', function($scope, IssueData, UiState){
     var controller = document.querySelector('[ng-controller="messageController"]');
     var topscope = angular.element(controller).scope();
+    $scope.uiState = UiState;
     $scope.issueData = IssueData;
     $scope.closeIssue = function() {
-        console.log('ruksia klikattiin');
-        UiState.showDetails = false;
+        //console.log('ruksia klikattiin');
+        $scope.uiState.showDetails = false;
     }
 
     $scope.closeSearchResults = function() {
-        UiState.showSearchResults = false;
+        $scope.uiState.showSearchResults = false;
     }
 
     $scope.closeRecent = function() {
-        UiState.showRecent = false;
+        $scope.uiState.showRecent = false;
     }
 });
 
 app.controller('profileController', function($scope, $http, UserData, UiState) {
     $scope.userData = UserData;
     $scope.uiState = UiState;
-    console.log(UiState.showProfile);
+    //console.log(UiState.showProfile);
 
     $http.get("/user/").success(function(response){
         $scope.user = response;
@@ -678,15 +717,22 @@ app.controller('profileNavController', function($scope, $http, UserData, UiState
 
 
     $scope.toggleShow = function() {
-        UiState.showProfile = true;
+        for (var key in $scope.uiState) {
+            if ($scope.uiState.hasOwnProperty(key)) {
+                $scope.uiState[key] = false;
+            }
+        }
+        $scope.uiState.showProfile = true;
     }
 
 });
 
 app.controller('closeProfileController', function($scope, UiState){
+    $scope.uiState = UiState;
+
     $scope.closeProfile = function() {
         //console.log('ruksia klikattiin');
-        UiState.showProfile = false;
+        $scope.uiState.showProfile = false;
     }
 });
 

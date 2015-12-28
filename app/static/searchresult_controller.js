@@ -6,7 +6,12 @@ angular.module('myApp').controller('searchResultController', ['$scope', '$http',
     $scope.searchText = {value: ""};
     $scope.$watch('searchResults', function(newval, oldval){
         if (typeof newval != "undefined"){
-            UiState.showSearchResults = true;
+            for (var key in $scope.uiState) {
+                if ($scope.uiState.hasOwnProperty(key)) {
+                    $scope.uiState[key] = false;
+                }
+            }
+            $scope.uiState.showSearchResults = true;
         }
     });
 }
