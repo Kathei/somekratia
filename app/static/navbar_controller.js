@@ -12,11 +12,15 @@ angular.module('myApp').controller('navbarController', ['$scope', '$http', 'MapH
     }).error(function(foo, bar, baz){
         alert("Post doesn't work");
     });
-    $scope.categoryChanged = function() {
-        var searchController = document.getElementById('map-container');
+    $scope.categoryChanged = function(category) {
+        /*var searchController = document.getElementById('map-container');
         var searchScope = angular.element(searchController).scope();
-        searchScope.category = $scope.categorySelect;
-        MapHolder.categorySelected($scope.categorySelect);
+        searchScope.category = $scope.categorySelect;*/
+        MapHolder.categorySelected(category);
     };
+
+    $scope.isSelected = function(option) {
+        return MapHolder.filterCategory == option.origin_id;
+    }
 }
 ]);

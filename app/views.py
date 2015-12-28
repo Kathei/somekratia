@@ -162,10 +162,11 @@ def issues_bbox(request):
 
 def issues_search_text(request):
     text = request.GET.get('search')
+    paging_info = "&page=1&limit=1000"
     if text is None or len(text) < 4:
         return HttpResponse('{ "msg" : "Search term must be at least 4 characters long" }', 400)
     url = 'http://dev.hel.fi/openahjo/v1/issue/search/?text=%s&format=json%s'\
-          % (quote(text), get_paging_info(request))
+          % (quote(text), paging_info)
     return JsonResponse(get_url_as_json(url))
 
 
@@ -278,7 +279,7 @@ def post_message(request, issueID):
             votes = None
 
         for m in messages:
-            message = m.message_json();
+            message = m.message_json()
             if votes is not None:
                 message['liked'] = votes.filter(message=m).count() > 0
             else:
@@ -357,6 +358,6 @@ def get_issue_subscriptions(request, userID=None):
             userID = request.user.id
         else:
             return JsonResponse({'subscriptions': {}})
-    list = {'subscriptions' : get_subscription_dict(userID)};
+    list = {'subscriptions' : get_subscription_dict(userID)}
     return JsonResponse(list)
 

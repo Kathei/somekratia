@@ -35,14 +35,14 @@
     <div class="nav-contents" ng-controller="navbarController">
         <a href="index.html"><img src="/static/img/somekratia_logo_small.png" class="logo"/></a>
         <ul id="mainnav">
-            <li class="nav-item selected"><a href="index.html">KOTI</a></li>
-            <li class="nav-item" ng-controller="recentIssuesController" ng-click="openRecent()">VIIMEISIMMÄT</li>
+            <li class="" ng-controller="recentIssuesController" ng-click="openRecent()"><a href="">VIIMEISIMMÄT</a></li>
             {% verbatim %}
-            <select name="categorySelect" id="category" class="nav-item" ng-model="categorySelect"
-                    ng-change="categoryChanged()">
-                    <option value="">KATEGORIAT</option>
-                    <option ng-repeat="option in categories" value="{{option.origin_id}}">{{option.name}}</option>
-            </select>
+            <li><a href="">KATEGORIAT</a>
+                <ul name="categorySelect" id="category" class="nav-item" ng-model="categorySelect"
+                        ng-change="categoryChanged()">
+                        <li ng-repeat="option in categories"><a href="" ng-click="categoryChanged(option)" ng-class="isSelected(option) ? 'selectedCategory' : 'unselected'">{{option.name}}</a></li>
+                </ul>
+            </li>
             {% endverbatim %}
         </ul>
 

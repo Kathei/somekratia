@@ -28,7 +28,7 @@ app.config(['$httpProvider', function($httpProvider) {
 app.factory('MapHolder', function() {
     var subscriptions = undefined;
     var map = undefined;
-    var filterCategory = "";
+    var filter = "";
     var data = {
         get map() {
             return map;
@@ -37,8 +37,11 @@ app.factory('MapHolder', function() {
             if(newVal != map) {
                 map = newVal;
                 this.subscriptionsUpdated(subscriptions);
-                this.categorySelected(filterCategory);
+                this.categorySelected(filter);
             }
+        },
+        get filterCategory() {
+            return filter;
         }
     }
 
@@ -58,12 +61,12 @@ app.factory('MapHolder', function() {
         return string.slice(0, prefix.length) == prefix;
     }
     data.categorySelected = function(category) {
-        filter = category;
+        filter = category.origin_id;
         if(map != undefined) {
             map.data.forEach(function(feature) {
                 if(!feature.getProperty('tooOld')) {
                     var featureCategory = feature.getProperty('category_origin_id');
-                    var categoryHidden = !startsWith(featureCategory, category);
+                    var categoryHidden = !startsWith(featureCategory, filter);
                     feature.setProperty('category_hidden', categoryHidden);
                 }
             });
@@ -149,7 +152,7 @@ app.factory('IssueData', function($http, $q, UserData) {
         });
 
         $http.get('/issue/' + issueId + '/decisions').then(function(response) {
-            data.decisions = response.data;
+            data.decisions = response.data.objects;
         });
     }
     var data =  {
@@ -278,6 +281,7 @@ app.service('IssueService', function($http, IssueData){
     this.textSearch = function(text, page, pageSize) {
         if (page == 1) {
             IssueData.textSearchResults.length = 0;
+            IssueData.textSearchResultsDone = false;
         }
         searchInfo.text = text;
         searchInfo.page = page;
@@ -300,10 +304,15 @@ app.service('IssueService', function($http, IssueData){
             IssueData.textSearchLoading = false;
             IssueData.textSearchResultCount = searchResult.data.meta.total_count;
             searchInfo.page = searchResult.data.meta.page;
+            if (IssueData.textSearchResults.length == IssueData.textSearchResultCount) {
+                IssueData.textSearchResultsDone = true;
+            }
             /*var resultController = document.querySelector('[ng-controller="searchResultController"]');
             var resultScope = angular.element(resultController).scope();
             resultScope.searchText.value = searchResult.config.params.search;
             resultScope.searchResults.appen = searchResult.data.objects;*/
+        }, function(data) {
+            alert("Loading text search results failed: " + data);
         });
     };
     this.loadMoreTextResults = function() {
@@ -504,6 +513,14 @@ app.controller('subController', function($scope, $http, UserData, IssueData, Map
 
 });
 
+app.controller('attachmentsController', function($scope){
+        $scope.attachmentsShow = {value:false};
+        $scope.toggleAttachments = function() {
+            $scope.attachmentsShow.value = !$scope.attachmentsShow.value;
+        };
+    }
+);
+
 app.controller('recentDecisionsController', function($scope, $http) {
     $http.get('/issues/recent').success(function(response){
         $scope.recentIssues = response.recent_decisions;
@@ -663,14 +680,22 @@ app.controller('searchController', function($scope, $http, $timeout, IssueData, 
             $scope.canLoad = true;
         });
     }
+    $scope.canLoadMoreTextResults = function() {
+        return $scope.canLoad && !IssueData.textSearchResultsDone;
+    }
 });
 
 app.controller('windowController', function($scope, $http, IssueData, UiState) {
+    $scope.uiState = UiState;
     $scope.issueData = IssueData;
     $scope.windowClick = function (issueId) {
         $scope.issueData.issueId = issueId;
-        UiState.showDetails = true;
-        UiState.showProfile = false;
+        for (var key in $scope.uiState) {
+            if ($scope.uiState.hasOwnProperty(key)) {
+                $scope.uiState[key] = false;
+            }
+        }
+        $scope.uiState.showDetails = true;
         //console.log(issue);
         //console.log("täällä! showIssue: " + UiState.showIssue);
     };
@@ -682,25 +707,26 @@ app.controller('templateController', function(){});
 app.controller('closeController', function($scope, IssueData, UiState){
     var controller = document.querySelector('[ng-controller="messageController"]');
     var topscope = angular.element(controller).scope();
+    $scope.uiState = UiState;
     $scope.issueData = IssueData;
     $scope.closeIssue = function() {
-        console.log('ruksia klikattiin');
-        UiState.showDetails = false;
+        //console.log('ruksia klikattiin');
+        $scope.uiState.showDetails = false;
     }
 
     $scope.closeSearchResults = function() {
-        UiState.showSearchResults = false;
+        $scope.uiState.showSearchResults = false;
     }
 
     $scope.closeRecent = function() {
-        UiState.showRecent = false;
+        $scope.uiState.showRecent = false;
     }
 });
 
 app.controller('profileController', function($scope, $http, UserData, UiState) {
     $scope.userData = UserData;
     $scope.uiState = UiState;
-    console.log(UiState.showProfile);
+    //console.log(UiState.showProfile);
 
     $http.get("/user/").success(function(response){
         $scope.user = response;
@@ -725,15 +751,22 @@ app.controller('profileNavController', function($scope, $http, UserData, UiState
 
 
     $scope.toggleShow = function() {
-        UiState.showProfile = true;
+        for (var key in $scope.uiState) {
+            if ($scope.uiState.hasOwnProperty(key)) {
+                $scope.uiState[key] = false;
+            }
+        }
+        $scope.uiState.showProfile = true;
     }
 
 });
 
 app.controller('closeProfileController', function($scope, UiState){
+    $scope.uiState = UiState;
+
     $scope.closeProfile = function() {
         //console.log('ruksia klikattiin');
-        UiState.showProfile = false;
+        $scope.uiState.showProfile = false;
     }
 });
 

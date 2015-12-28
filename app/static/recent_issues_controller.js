@@ -6,6 +6,13 @@ angular.module('myApp').controller('recentIssuesController', ['$scope', '$http',
     $scope.uiState = UiState;
 
     $scope.openRecent = function() {
+
+        for (var key in $scope.uiState) {
+            if ($scope.uiState.hasOwnProperty(key)) {
+                $scope.uiState[key] = false;
+            }
+        }
+
         $scope.uiState.showRecent = true;
     }
 

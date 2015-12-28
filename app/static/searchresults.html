@@ -1,4 +1,4 @@
-<div class="searchResults" ng-controller="searchController" infinite-scroll="loadMoreSearchResults()" threshold="100" can-load="!issueData.textSearchLoading">
+<div class="searchResults" ng-controller="searchController" infinite-scroll="loadMoreSearchResults()" threshold="100" can-load="canLoadMoreTextResults()">
     <img src="/static/img/x-grey.png" class="close" ng-controller="closeController" ng-click="closeSearchResults()"/>
     <div id="searchHead">Hakusanalla "{{ issueData.textSearchResultCount }}" löytyi {{ searchResults.length }} hakutulosta. </div>
     <div>
