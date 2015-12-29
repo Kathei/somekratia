@@ -219,8 +219,8 @@ app.service('MessageService', function($http, IssueData) {
         });
     };
 
-    this.postMessage = function(issueId, newMessageText, replaceNewlines) {
-        var text = replaceNewlines ? replaceNewLinesWithBreaks(newMessageText) : newMessageText;
+    this.postMessage = function(issueId, newMessageText, replaceNewLines) {
+        var text = replaceNewLines ? replaceNewLinesWithBreaks(newMessageText) : newMessageText;
         var config = {
             data: {
                 messagefield: text
@@ -237,7 +237,7 @@ app.service('MessageService', function($http, IssueData) {
     };
 
     this.replyToMessage = function(message, newMessageText, replaceNewLines) {
-        var text = replaceNewlines ? replaceNewLinesWithBreaks(newMessageText) : newMessageText;
+        var text = replaceNewLines ? replaceNewLinesWithBreaks(newMessageText) : newMessageText;
         var config = {
             method: 'POST',
             url: "/message/" + message.id + "/reply",
