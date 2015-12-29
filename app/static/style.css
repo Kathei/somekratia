@@ -186,12 +186,31 @@ h1 {
     background-color: #c9c9c9;
 }
 
-.send-button.disabled-send-button:hover {
+.reply-input .send-button.disabled-send-button {
+    background-color: #9fd5e8;
+}
+
+.reply-input .send-button.disabled-send-button:hover {
+    background-color: #9fd5e8;
+    cursor: default;
+}
+
+.send-button.disabled-send-button:hover{
     background-color: #c9c9c9;
+    cursor: default;
 }
 
 .login-button:hover, .logout-button-button:hover, .send-button:hover {
     background-color: #4B9CB8;
+}
+
+.reply-input .send-button {
+    background-color: #4B9CB8;
+}
+
+.reply-input .send-button:hover {
+    background-color: #3288A6;
+    cursor: pointer;
 }
 
 form {
@@ -201,6 +220,7 @@ form {
 .logo {
     vertical-align: middle;
     margin-right: 7vw;
+    cursor: pointer;
 }
 
 
@@ -221,7 +241,7 @@ form {
     height: 67vh;
     margin-left: 5vw;
     margin-right: 5vw;
-    margin-top: 11vw;
+    margin-top: 20vh;
     position: absolute;
     top: 0vw;
     left: 0;
@@ -326,6 +346,14 @@ textarea:focus {
     border: solid 5px #939291;
 }
 
+.reply-input textarea {
+    border-color: #4B9CB8;
+}
+
+.reply-input textarea:focus {
+    border-color: #3288A6;
+}
+
 .send-button {
     font-size: 16px;
     font-family: "Tw Cen MT";
@@ -359,6 +387,7 @@ textarea:focus {
 }
 .decision-details {
     margin-bottom: 1.5em;
+    padding-right: 1vw;
 }
 
 .liitteet {
@@ -381,9 +410,21 @@ textarea:focus {
     color: #d8752f;
 }
 .decision-arrow{
-    margin-bottom: -2px;
     cursor: pointer;
+    margin-bottom: -1px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: 0;
+    background: url(img/arrow_down.png) no-repeat transparent;
+    outline: none;
 }
+
+.decision-arrow:hover {
+    background: url(img/arrow_down_dark.png) no-repeat transparent;
+
+}
+
 .inactive > .decision-arrow {
     -ms-transform: rotate(-90deg); /* IE 9 */
     -webkit-transform: rotate(-90deg); /* Chrome, Safari, Opera */
@@ -420,6 +461,10 @@ textarea:focus {
     clear: right;
 }
 
+.messageText {
+    margin-top: 4vw;
+}
+
 .replyBubble {
     background-color: #9fd5e8;
     width: 80%;
@@ -434,6 +479,10 @@ textarea:focus {
 .time-posted {
     float: right;
     width: 33%;
+}
+
+.messageBubble textarea {
+    width: 96%;
 }
 
 /* LOGIN-IKKUNA */
@@ -716,16 +765,14 @@ select {
     cursor: pointer;
 }
 
-
-
-input[type="text"] {
+input[type="text"], input[type="password"] {
     padding: 5px;
     border: solid 3px #c9c9c9;
     transition: border 0.3s;
     border-radius: 2px;
 }
 input[type="text"]:focus,
-input[type="text"].focus {
+input[type="password"]:focus {
     outline: none;
     border: solid 3px #939291;
 }

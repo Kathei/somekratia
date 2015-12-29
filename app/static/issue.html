@@ -18,7 +18,7 @@
         <div class="subscribe" ng-controller="subController" ng-show="userData.isLoggedIn()">
             <h5 ng-click="subscribeIssue(issueData.data)"><span ng-class="subscribeClass">★</span> {{ subscribeText }}</h5>
         </div>
-        <h4 class="date">Päivämäärä: {{ issueData.data.latest_decision_date }}</h4>
+        <h4 class="date">Viimeisin päätös: {{ lastDecisionTime() }}</h4>
         <p>{{ issueData.data.summary }} </p>
 
         <div ng-show="userData.isLoggedIn()">
@@ -57,25 +57,27 @@
     </div>
 
     <div class="messages">
-        <div ng-repeat="m in issueData.messages" ng-controller="replyController" ng-init="replies = m.replies">
+        <div ng-repeat="m in issueData.messages | orderBy:'-created'" ng-controller="replyController" ng-init="replies = m.replies">
             <div class="messageBubble">
-                <h3 class="poster">{{m.poster.username}}</h3>
-                <h3 class="time-posted">{{m.created | date: 'short'}}</h3>
+                <div class="messageInfo">
+                    <h3 class="poster">{{m.poster.username}}</h3>
+                    <h3 class="time-posted">{{m.created | date: 'dd.MM.yyyy HH:mm'}}</h3>
+                </div>
                 <p class="messageText">{{m.text}}</p>
 
                 <img class="thumbsup" ng-show="userData.isLoggedIn()"ng-src="{{ m.liked ? '../../static/img/thumbs-up-green.png' : '../../static/img/thumbs-up.png' }}" ng-click="likeMessage(m)">
                 <div class="reply" ng-show="userData.isLoggedIn()" ng-click="toggleReplyControls()">Vastaa</div>
-                <div ng-show="showReplyControls.value">
+                <div class="reply-input" ng-show="showReplyControls.value">
                     <textarea ng-model="replyText.value" name="replyfield" rows="6" cols="70"></textarea>
-                    <div class="button">
-                        <button class="send-button" ng-click="replyToMessage(m)">Lähetä viesti</button>
+                    <div class="button" ng-init="isDisabled = true">
+                        <button ng-class="isTextLongEnough() ? ' ' : 'disabled-send-button'" class="send-button" ng-click="replyToMessage(m)">Lähetä viesti</button>
                     </div>
                 </div>
             </div>
             <div ng-repeat="r in replies">
                 <div class="replyBubble">
                     <h3 class="poster">{{r.poster.username}}</h3>
-                    <h3 class="time-posted">{{r.created | date: 'short'}}</h3>
+                    <h3 class="time-posted">{{r.created | date: 'dd.MM.yy HH:mm'}}</h3>
                     <p class="messageText">{{r.text}}</p>
                     <img class="thumbsup" ng-src="{{ r.liked ? '../../static/img/thumbs-up-green.png' : '../../static/img/thumbs-up.png' }}" ng-click="likeMessage(r)">
                 </div>

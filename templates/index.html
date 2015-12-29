@@ -33,7 +33,7 @@
 
 <div class="navbar">
     <div class="nav-contents" ng-controller="navbarController">
-        <a href="index.html"><img src="/static/img/somekratia_logo_small.png" class="logo"/></a>
+        <img src="/static/img/somekratia_logo_small.png" class="logo" ng-click="closeAll()"/>
         <ul id="mainnav">
             <li class="" ng-controller="recentIssuesController" ng-click="openRecent()"><a href="">VIIMEISIMMÄT</a></li>
             {% verbatim %}
