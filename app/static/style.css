@@ -454,7 +454,7 @@ input[type="file"] {
 }
 
 .searchResults ul {
-    padding: 1vw 2vw;
+    padding: 0 2vw 1vw 2vw;
 }
 
 .searchResults li {
@@ -468,10 +468,15 @@ input[type="file"] {
     color: #555555;
 }
 
+.resultlist {
+    padding: 5px 0px;
+}
+
 #searchHead {
     padding-left: 2vw;
     padding-top: 2vw;
-    color: #939291;
+    color: #555555;
+    font-size: 22px;
 }
 
 .infowindow {

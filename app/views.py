@@ -164,7 +164,7 @@ def issues_search_text(request):
     text = request.GET.get('search')
     if text is None or len(text) < 1:
         return HttpResponse('{ "msg" : "Search term must be at least 1 character long" }', 400)
-    url = 'http://dev.hel.fi/openahjo/v1/issue/search/?text=%s&format=json%s'\
+    url = 'http://dev.hel.fi/openahjo/v1/issue/search/?text=%s&format=json&order_by=-latest_decision_date%s'\
           % (quote(text), get_paging_info(request))
     return JsonResponse(get_url_as_json(url))
 

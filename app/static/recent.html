@@ -2,9 +2,9 @@
     <img src="/static/img/x-grey.png" class="close" ng-controller="closeController" ng-click="closeRecent()"/>
     <div id="searchHead">Viimeisimmät päätökset </div>
    <ul>
-        <li ng-repeat="issue in recentIssues">
+        <li class="resultlist" ng-repeat="issue in recentIssues">
             <div ng-controller="windowController" ng-click="windowClick(issue.issueId)">
-                {{ issue.issueTitle }} Viimeisin päätös: {{ issue.lastDecisionTime }}
+                {{ issue.issueTitle }}<br/>Viimeisin päätös: {{ issue.lastDecisionTime }}
             </div>
         </li>
     </ul>
