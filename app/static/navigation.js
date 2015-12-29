@@ -688,9 +688,11 @@ app.controller('windowController', function($scope, $http, IssueData, UiState) {
     $scope.issueData = IssueData;
     $scope.windowClick = function (issueId) {
         $scope.issueData.issueId = issueId;
-        for (var key in $scope.uiState) {
-            if ($scope.uiState.hasOwnProperty(key)) {
-                $scope.uiState[key] = false;
+        if ($scope.uiState.showSearchResults == false && $scope.uiState.showRecent == false) {
+            for (var key in $scope.uiState) {
+                if ($scope.uiState.hasOwnProperty(key)) {
+                    $scope.uiState[key] = false;
+                }
             }
         }
         $scope.uiState.showDetails = true;
