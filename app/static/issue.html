@@ -57,7 +57,7 @@
     </div>
 
     <div class="messages">
-        <div ng-repeat="m in issueData.messages" ng-controller="replyController" ng-init="replies = m.replies">
+        <div ng-repeat="m in issueData.messages | orderBy:'-created'" ng-controller="replyController" ng-init="replies = m.replies">
             <div class="messageBubble">
                 <h3 class="poster">{{m.poster.username}}</h3>
                 <h3 class="time-posted">{{m.created | date: 'short'}}</h3>
