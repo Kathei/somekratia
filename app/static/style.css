@@ -154,10 +154,10 @@ h1 {
 }
 
 .logout-button-button {
-    margin-left: -2vw;
+    margin-left: 3vw;
 }
 
-.login-button, .logout-button-button {
+.login-button, .logout-button-button, .send-button {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
@@ -166,6 +166,12 @@ h1 {
     color: #FFFFFF;
     cursor: pointer;
     border-radius: 5px;
+    padding: 6px 11px;
+
+}
+
+.login-button:hover, .logout-button-button:hover, .send-button:hover {
+    background-color: #4B9CB8;
 }
 
 form {
@@ -280,10 +286,67 @@ form {
     color: #555555;
 }
 
-
 .issueInfo {
     float: left;
     width: 40vw;
+}
+
+
+textarea {
+    padding: 5px;
+    border: solid 5px #c9c9c9;
+    transition: border 0.3s;
+    border-radius: 2px;
+    width: 32vw;
+    height: 15vh;
+}
+
+textarea:focus {
+    outline: none;
+    border: solid 5px #939291;
+}
+
+.send-button {
+    font-size: 16px;
+    font-family: "Tw Cen MT";
+    margin-top: 2vh;
+
+}
+.attachment-heading {
+    margin-bottom: 1vw;
+}
+
+.decision-list {
+    font-family: "Tw Cen MT";
+    color: #939291;
+    font-size: 20px;
+    /*list-style: none;*/
+}
+.decision {
+    cursor: pointer;
+}
+.decision:hover {
+    color: #555555;
+}
+.attachment-list {
+    font-size: 16px;
+}
+.attachment-list a {
+    color: #939291;
+    text-decoration: none;
+}
+.attachment-list a:hover {
+    color: #d8752f;
+}
+.decision-arrow{
+    margin-bottom: -2px;
+    cursor: pointer;
+}
+.inactive > .decision-arrow {
+    -ms-transform: rotate(-90deg); /* IE 9 */
+    -webkit-transform: rotate(-90deg); /* Chrome, Safari, Opera */
+    transform: rotate(-90deg);
+
 }
 
 /* KÄYTTÄJIEN VIESTIT */
@@ -418,7 +481,7 @@ input[type="file"] {
 }
 
 .searchResults ul {
-    padding: 1vw 2vw;
+    padding: 0 2vw 1vw 2vw;
 }
 
 .searchResults li {
@@ -432,10 +495,15 @@ input[type="file"] {
     color: #555555;
 }
 
+.resultlist {
+    padding: 5px 0px;
+}
+
 #searchHead {
     padding-left: 2vw;
     padding-top: 2vw;
-    color: #939291;
+    color: #555555;
+    font-size: 22px;
 }
 
 .infowindow {
@@ -448,8 +516,8 @@ input[type="file"] {
 }
 
 .nav-profile {
-    margin-left: 4vw;
     float: right;
+    margin-right: 2vw;
 }
 
 .username {
@@ -576,6 +644,10 @@ select {
     cursor: pointer;
 }
 
+.subscribe h5:hover {
+    color: #555555;
+}
+
 .subscribe {
     margin-top: -2vw;
 }
@@ -601,32 +673,17 @@ select {
     cursor: pointer;
 }
 
-.attachment-heading {
-    margin-bottom: 1vw;
-}
 
-.decision-list {
-    font-family: "Tw Cen MT";
-    color: #939291;
-    font-size: 20px;
-    /*list-style: none;*/
-}
 
-.attachment-list {
-    font-size: 16px;
+input[type="text"] {
+    padding: 5px;
+    border: solid 3px #c9c9c9;
+    transition: border 0.3s;
+    border-radius: 2px;
 }
-
-.attachment-list a {
-    color: #939291;
-    text-decoration: none;
-}
-
-.attachment-list a:hover {
-    color: #d8752f;
-}
-
-.decision-arrow {
-    margin-bottom: -2px;
-    cursor: pointer;
+input[type="text"]:focus,
+input[type="text"].focus {
+    outline: none;
+    border: solid 3px #939291;
 }
 

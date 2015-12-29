@@ -27,15 +27,17 @@
                     <textarea ng-model="messageText.value" id="messagefield" name="messagefield" rows="6" cols="65"></textarea>
                 </label>
                 <div class="button">
-                    <button ng-click="postMessage(issueData.issueId)">Lähetä viesti</button>
+                    <button class="send-button" ng-click="postMessage(issueData.issueId)">Lähetä viesti</button>
                 </div>
             </div>
         </div>
         <h4 class="attachment-heading">Päätökset: </h4>
         <ul class="decision-list">
             <li ng-controller="attachmentsController" data-ng-repeat="d in issueData.decisions">
-                {{ d.meeting.policymaker_name + " " + d.meeting.date}}
-                <img class="decision-arrow" ng-src="/static/img/arrow_down.png" ng-click="toggleAttachments()">
+                <div ng-class="attachmentsShow.value ? 'active' : 'inactive'" class="decision" ng-click="toggleAttachments()">
+                    {{ d.meeting.policymaker_name + " " + d.meeting.date}}
+                    <img class="decision-arrow" ng-src="/static/img/arrow_down.png">
+                </div>
                 <ul class="attachment-list" ng-show="attachmentsShow.value">
                     <li data-ng-repeat="a in d.attachments | filter:{ public: true} ">
                        <a href="{{ a.file_uri }}" target="_blank">{{ a.name }}: {{ a.file_type }}</a>
@@ -60,7 +62,7 @@
                 <div ng-show="showReplyControls.value">
                     <textarea ng-model="replyText.value" name="replyfield" rows="6" cols="70"></textarea>
                     <div class="button">
-                        <button ng-click="replyToMessage(m)">Lähetä viesti</button>
+                        <button class="send-button" ng-click="replyToMessage(m)">Lähetä viesti</button>
                     </div>
                 </div>
             </div>
