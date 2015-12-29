@@ -38,14 +38,20 @@
                     {{ d.meeting.policymaker_name + " " + d.meeting.date}}
                     <img class="decision-arrow" ng-src="/static/img/arrow_down.png">
                 </div>
-                <ul class="attachment-list" ng-show="attachmentsShow.value">
-                    <li data-ng-repeat="a in d.attachments | filter:{ public: true} ">
-                       <a href="{{ a.file_uri }}" target="_blank">{{ a.name }}: {{ a.file_type }}</a>
-                    </li>
-                    <li data-ng-repeat="a in d.attachments | filter:{ public: false} ">
-                       Salainen liite
-                    </li>
-                </ul>
+                <div class="decision-details" ng-show="attachmentsShow.value">
+                    <div data-ng-repeat="c in d.content">
+                        <div ng-bind-html="to_trusted(c.text)"></div>
+                    </div>
+                    <ul class="attachment-list">
+                        <div ng-show="d.attachments.length > 0"class="liitteet">Liitteet</div>
+                        <li data-ng-repeat="a in d.attachments | filter:{ public: true} ">
+                           <a href="{{ a.file_uri }}" target="_blank">{{ a.name }}: {{ a.file_type }}</a>
+                        </li>
+                        <li data-ng-repeat="a in d.attachments | filter:{ public: false} ">
+                           Salainen liite
+                        </li>
+                    </ul>
+                </div>
             </li>
         </ul>
     </div>
