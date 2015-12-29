@@ -63,7 +63,7 @@
                     <h3 class="poster">{{m.poster.username}}</h3>
                     <h3 class="time-posted">{{m.created | date: 'dd.MM.yyyy HH:mm'}}</h3>
                 </div>
-                <p class="messageText">{{m.text}}</p>
+                <p class="messageText"><span ng-bind-html="m.text"></span></p>
 
                 <img class="thumbsup" ng-show="userData.isLoggedIn()"ng-src="{{ m.liked ? '../../static/img/thumbs-up-green.png' : '../../static/img/thumbs-up.png' }}" ng-click="likeMessage(m)">
                 <div class="reply" ng-show="userData.isLoggedIn()" ng-click="toggleReplyControls()">Vastaa</div>
@@ -78,7 +78,7 @@
                 <div class="replyBubble">
                     <h3 class="poster">{{r.poster.username}}</h3>
                     <h3 class="time-posted">{{r.created | date: 'dd.MM.yy HH:mm'}}</h3>
-                    <p class="messageText">{{r.text}}</p>
+                    <p class="messageText"><span ng-bind="r.text"></span></p>
                     <img class="thumbsup" ng-src="{{ r.liked ? '../../static/img/thumbs-up-green.png' : '../../static/img/thumbs-up.png' }}" ng-click="likeMessage(r)">
                 </div>
             </div>

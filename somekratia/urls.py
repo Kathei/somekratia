@@ -27,6 +27,7 @@ from app.views import register
 from app.views import user_profile, user_picture, messages
 from app.views import get_issue_subscriptions
 from app.views import current_user, reply_to_message, recent_decisions
+from django.views.generic import RedirectView
 from django.views.generic.edit import CreateView
 from django.contrib.auth.forms import UserCreationForm
 
@@ -58,4 +59,7 @@ urlpatterns = [
     url(r'^issue/(?P<issueID>[0-9]+)/subscribe', subscribe_issue),
     url(r'^issue/(?P<issueID>[0-9]+)/messages', messages),
     url(r'^message/(?P<messageID>[0-9]+)/reply$', reply_to_message),
+    url(r'^accounts/login/$', RedirectView.as_view(url='/')),
+    url(r'^reset_password', 'django.contrib.auth.views.password_reset', {'post_reset_redirect': 'index.html'}),
+    url('^', include('django.contrib.auth.urls')),
 ]

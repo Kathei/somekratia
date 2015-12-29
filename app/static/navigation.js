@@ -5,7 +5,7 @@
 var searchIssues = new SearchIssues();
 
 
-var app = angular.module('myApp', ['ngRoute', 'uiGmapgoogle-maps', 'infiniteScroll']);
+var app = angular.module('myApp', ['ngRoute', 'ngSanitize', 'uiGmapgoogle-maps', 'infiniteScroll']);
 
 app.config(['$httpProvider', function($httpProvider) {
     $httpProvider.defaults.xsrfCookieName = 'csrftoken';
@@ -185,6 +185,9 @@ app.factory('IssueData', function($http, $q, UserData) {
 
 
 app.service('MessageService', function($http, IssueData) {
+    function replaceNewLinesWithBreaks(str) {
+        return str.replace(/(?:\r\n|\r|\n)/g, '<br />');
+    }
     this.getMessages = function(issueId) {
         $http.get("/issue/"+ issueID +"/messages/").success(function(response) {
             console.log(response);
@@ -216,10 +219,11 @@ app.service('MessageService', function($http, IssueData) {
         });
     };
 
-    this.postMessage = function(issueId, newMessageText) {
+    this.postMessage = function(issueId, newMessageText, replaceNewlines) {
+        var text = replaceNewlines ? replaceNewLinesWithBreaks(newMessageText) : newMessageText;
         var config = {
             data: {
-                messagefield: newMessageText
+                messagefield: text
             },
             method: 'POST',
             url: "/issue/" + issueId + "/messages/"
@@ -232,11 +236,12 @@ app.service('MessageService', function($http, IssueData) {
         });
     };
 
-    this.replyToMessage = function(message, newMessageText) {
+    this.replyToMessage = function(message, newMessageText, replaceNewLines) {
+        var text = replaceNewlines ? replaceNewLinesWithBreaks(newMessageText) : newMessageText;
         var config = {
             method: 'POST',
             url: "/message/" + message.id + "/reply",
-            data: { replyfield: newMessageText, }
+            data: { replyfield: text, }
         };
         console.log("nappia painettu");
         return $http(config).success(function(response) {
@@ -374,7 +379,7 @@ app.controller('messageController', function($scope, $http, IssueData, MessageSe
         if ($scope.isTextLongEnough()){
 
             var usersMessageText = $scope.messageText.value;
-            MessageService.postMessage(issueId, usersMessageText).then(function(result) {
+            MessageService.postMessage(issueId, usersMessageText, true).then(function(result) {
                 $scope.messageText.value = "";
             });
         }
@@ -480,7 +485,7 @@ app.controller('replyController', function($scope, MessageService, UserData) {
     $scope.replyToMessage = function(message) {
         if ($scope.isTextLongEnough()){
             $scope.showReplyControls.value = false;
-            MessageService.replyToMessage(message, $scope.replyText.value).then(function(response) {
+            MessageService.replyToMessage(message, $scope.replyText.value, true).then(function(response) {
                 $scope.replies.push(response.data);
                 $scope.replyText.value = "";
             });

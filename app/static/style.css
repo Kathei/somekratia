@@ -220,6 +220,7 @@ form {
 .logo {
     vertical-align: middle;
     margin-right: 7vw;
+    cursor: pointer;
 }
 
 
