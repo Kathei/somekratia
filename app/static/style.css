@@ -480,6 +480,10 @@ textarea:focus {
     width: 33%;
 }
 
+.messageBubble textarea {
+    width: 96%;
+}
+
 /* LOGIN-IKKUNA */
 
 .login .login-box {
