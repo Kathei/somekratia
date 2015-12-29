@@ -529,31 +529,41 @@ textarea:focus {
 }
 
 .registerfieldcontainer input {
-    float: right;
     width: 14vw;
+    height: 13px;
+    margin-bottom: 5px;
 }
 
 input[type="file"] {
-    margin-top: 7px;
+    margin-top: 5px;
+    height: 17px;
 }
 
 
 .registerfieldcontainer h5 {
     float: left;
-    width: 0;
+    display: inline-block;
     cursor: auto;
+    margin: 0;
+    padding: 7px 0 13px 0;
+    width: 100%;
 }
 
 .registerfieldcontainer .first {
     margin-top: 0;
 }
 
+.register-headings {
+    width: 104px;
+    float: left;
+}
+
 .register .button {
-    margin-top: 10vw;
+    margin-top: 1vw;
 }
 
 .login-box.register {
-    top: 17vw;
+    top: 30vh;
 }
 
 /*SEARCH RESULTS -IKKUNA*/

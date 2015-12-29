@@ -4,7 +4,7 @@
     <div>
         <ul>
             <li class="resultlist" ng-repeat="x in issueData.textSearchResults">
-                <div ng-controller="windowController" ng-click="windowClick(x.id)">{{ x.subject }}<br/>Viimeisin päätös: {{ x.latest_decision_date }}</div>
+                <div ng-controller="windowController" ng-click="windowClick(x.id)">{{ x.subject }}<br/>Viimeisin päätös: {{ x.latest_decision_date | date: 'dd.MM.yyyy' }}</div>
             </li>
             <li  class="middle" ng-show="issueData.textSearchLoading">
                 <img src="/static/loader.gif" width="30"/>
