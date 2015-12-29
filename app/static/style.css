@@ -154,7 +154,8 @@ h1 {
 }
 
 .logout-button-button {
-    margin-left: -2vw;
+    margin-left: 3vw;
+    padding: 6px 11px;
 }
 
 .login-button, .logout-button-button {
@@ -483,8 +484,8 @@ input[type="file"] {
 }
 
 .nav-profile {
-    margin-left: 4vw;
     float: right;
+    margin-right: 2vw;
 }
 
 .username {
