@@ -200,19 +200,23 @@ def decisions(request, issueID):
 
 
 def issue(request, issueID):
-    details = get_issue_as_json(issueID)
+    fetch_full_details = request.GET.get('fullDetails')
+    if fetch_full_details == "true":
+        details = get_issue_as_json(issueID)
+    else:
+        details = get_object_or_404(Issue, id=issueID)
+        details = details.issue_json(include_messages=False)
     subscribed = False
     if request.user.is_authenticated():
         subscribes = IssueSubscription.objects.filter(user=request.user, issue=issueID)
         if subscribes.count() > 0:
             subscribed = True
             details['subscribed'] = True
-    issuedetails = {'issueID': issueID, 'user': {'id' : request.user.id, 'username': request.user.username}, 'jsondetails': details, 'subscribed':subscribed}
+    issuedetails = {'issueID': issueID, 'jsondetails': details, 'subscribed': subscribed}
     messages = Message.objects.filter(issue=issueID, reply_to__isnull=True)
-    messageJsons = []
-    issuedetails['messages'] = messageJsons
+    issuedetails['messages'] = []
     for message in messages:
-        messageJsons.append(message.message_json())
+        issuedetails['messages'].append(message.message_json())
 
     return JsonResponse(issuedetails)
 

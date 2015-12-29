@@ -12,15 +12,27 @@ class UserWithProfile(models.Model):
 
 class Issue(models.Model):
     title = models.TextField()
+    summary = models.TextField(default="")
+    category_name = models.TextField(default="")
     modified_time = models.DateTimeField(null=True)
     last_decision_time = models.DateTimeField(null=True, blank=True)
+
+    def issue_json(self, include_messages=False):
+        json = {'id': self.id, 'subject': self.title, 'last_decision_time': self.last_decision_time,
+                'summary': self.summary, 'category_name': self.category_name }
+        if include_messages:
+            messages = self.messages
+            json['messages'] = []
+            for message in messages.all():
+                json['messages'].append(message.message_json())
+        return json
 
 
 class Message(models.Model):
     text = models.TextField()
     poster = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     reply_to = models.ForeignKey('self', blank=True, null=True, related_name='replies')
-    issue = models.ForeignKey(Issue)
+    issue = models.ForeignKey(Issue, related_name='messages')
     created = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True)
 

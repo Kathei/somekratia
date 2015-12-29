@@ -53,6 +53,8 @@ while path is not None:
 for issue in issues:
     print("%s - %s" % (issue['last_modified_time'], issue['subject']))
     point_count = 0
+    if 'summary' not in issue:
+        issue['summary'] = ""
     for geometry in issue['geometries']:
         if geometry['category'] == 'address' and len(geometry['coordinates']) == 2:
             point_count += 1
@@ -67,7 +69,7 @@ with open(output, 'w') as outfile:
 print("updating database")
 cur = conn.cursor()
 cur.execute("""DELETE FROM app_issue""")
-cur.executemany("""INSERT INTO app_issue(id, title, modified_time, last_decision_time) VALUES (%(id)s, %(subject)s, %(last_modified_time)s, %(latest_decision_date)s)""", issues)
+cur.executemany("""INSERT INTO app_issue(id, title, summary,category_name, modified_time, last_decision_time) VALUES (%(id)s, %(subject)s, %(summary)s, %(category_name)s, %(last_modified_time)s, %(latest_decision_date)s)""", issues)
 conn.commit()
 cur.close()
 conn.close()

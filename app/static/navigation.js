@@ -140,6 +140,7 @@ app.factory('IssueData', function($http, $q, UserData) {
         requestCanceller = $q.defer();
         data.data = null;
         data.messages.length = 0;
+        data.decisions.length = 0;
         $http.get('/issue/' + issueId +'/').then(function (response) {
             var issue = response.data.jsondetails;
             if(UserData.subscriptions.hasOwnProperty(issue.id)) {
@@ -159,6 +160,7 @@ app.factory('IssueData', function($http, $q, UserData) {
         textSearchResults: [],
         textSearchLoading: false,
         'messages' : [],
+        'decisions' : [],
         'data': undefined,
         get issueId() {
             return issueId;
