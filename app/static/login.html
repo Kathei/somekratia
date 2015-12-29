@@ -7,7 +7,7 @@
           <input type="text" ng-model="username" id="usernameinput" name="username" placeholder="Käyttäjänimi" />
      </label>
      <label for="passwordinput">
-          <input type="text" ng-model="password" ng-keyup="$event.keyCode == 13 && login(username, password)" id="passwordinput" name="password" placeholder="Salasana" />
+          <input type="password" ng-model="password" ng-keyup="$event.keyCode == 13 && login(username, password)" id="passwordinput" name="password" placeholder="Salasana" />
       </label>
      <div class="button">
          <button ng-click="login(username,password)">Kirjaudu</button>

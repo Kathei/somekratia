@@ -22,12 +22,12 @@
         <p>{{ issueData.data.summary }} </p>
 
         <div ng-show="userData.isLoggedIn()">
-            <div>
+            <div ng-controller="messageInputController">
                 <label for="messagefield" ng-keyup="$event.keyCode == 13 && postMessage(issueData.issueId, messageText)">
                     <textarea ng-model="messageText.value" id="messagefield" name="messagefield" rows="6" cols="65"></textarea>
                 </label>
-                <div class="button">
-                    <button class="send-button" ng-click="postMessage(issueData.issueId)">Lähetä viesti</button>
+                <div class="button" ng-init="isDisabled = true">
+                    <button ng-class="isTextLongEnough() ? ' ' : 'disabled-send-button'" class="send-button" ng-click="postMessage(issueData.issueId)">Lähetä viesti</button>
                 </div>
             </div>
         </div>
