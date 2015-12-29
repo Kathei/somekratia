@@ -325,8 +325,21 @@ app.controller('messageController', function($scope, $http, IssueData, MessageSe
     $scope.userData = UserData;
     $scope.messageText = {'value': ""};
 
+    $scope.lastDecisionTime = function() {
+        var data = $scope.issueData.data;
+
+        var formatDate = function (datum) {
+            var date = new Date(datum);
+            return date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
+        };
+
+        return data == undefined ? "" : formatDate(data.last_decision_time);
+    }
+
+
+
     $scope.isTextLongEnough = function () {
-        return $scope.messageText.value.length > 4;
+        return $scope.messageText.value.length > 3;
     }
     $scope.$watch('issueData.messages', function(messages, oldVal){
         if(messages == undefined || messages.length == 0) {
@@ -359,7 +372,9 @@ app.controller('messageController', function($scope, $http, IssueData, MessageSe
     $scope.postMessage = function(issueId) {
 
         if ($scope.isTextLongEnough()){
-            MessageService.postMessage(issueId, $scope.messageText.value).then(function(result) {
+
+            var usersMessageText = $scope.messageText.value;
+            MessageService.postMessage(issueId, usersMessageText).then(function(result) {
                 $scope.messageText.value = "";
             });
         }
@@ -458,12 +473,18 @@ app.controller('replyController', function($scope, MessageService, UserData) {
         $scope.showReplyControls.value = !$scope.showReplyControls.value;
     }
 
+    $scope.isTextLongEnough = function () {
+        return $scope.replyText.value.length > 3;
+    }
+
     $scope.replyToMessage = function(message) {
-        $scope.showReplyControls.value = false;
-        MessageService.replyToMessage(message, $scope.replyText.value).then(function(response) {
-            $scope.replies.push(response.data);
-            $scope.replyText.value = "";
-        });
+        if ($scope.isTextLongEnough()){
+            $scope.showReplyControls.value = false;
+            MessageService.replyToMessage(message, $scope.replyText.value).then(function(response) {
+                $scope.replies.push(response.data);
+                $scope.replyText.value = "";
+            });
+        }
 
     };
 

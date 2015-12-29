@@ -186,12 +186,31 @@ h1 {
     background-color: #c9c9c9;
 }
 
-.send-button.disabled-send-button:hover {
+.reply-input .send-button.disabled-send-button {
+    background-color: #9fd5e8;
+}
+
+.reply-input .send-button.disabled-send-button:hover {
+    background-color: #9fd5e8;
+    cursor: default;
+}
+
+.send-button.disabled-send-button:hover{
     background-color: #c9c9c9;
+    cursor: default;
 }
 
 .login-button:hover, .logout-button-button:hover, .send-button:hover {
     background-color: #4B9CB8;
+}
+
+.reply-input .send-button {
+    background-color: #4B9CB8;
+}
+
+.reply-input .send-button:hover {
+    background-color: #3288A6;
+    cursor: pointer;
 }
 
 form {
@@ -221,7 +240,7 @@ form {
     height: 67vh;
     margin-left: 5vw;
     margin-right: 5vw;
-    margin-top: 11vw;
+    margin-top: 20vh;
     position: absolute;
     top: 0vw;
     left: 0;
@@ -326,6 +345,14 @@ textarea:focus {
     border: solid 5px #939291;
 }
 
+.reply-input textarea {
+    border-color: #4B9CB8;
+}
+
+.reply-input textarea:focus {
+    border-color: #3288A6;
+}
+
 .send-button {
     font-size: 16px;
     font-family: "Tw Cen MT";
@@ -418,6 +445,10 @@ textarea:focus {
 .messageBubble {
     background-color: #6fc1dd;
     clear: right;
+}
+
+.messageText {
+    margin-top: 4vw;
 }
 
 .replyBubble {
@@ -716,16 +747,14 @@ select {
     cursor: pointer;
 }
 
-
-
-input[type="text"] {
+input[type="text"], input[type="password"] {
     padding: 5px;
     border: solid 3px #c9c9c9;
     transition: border 0.3s;
     border-radius: 2px;
 }
 input[type="text"]:focus,
-input[type="text"].focus {
+input[type="password"]:focus {
     outline: none;
     border: solid 3px #939291;
 }
