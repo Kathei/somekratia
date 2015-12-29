@@ -1,7 +1,7 @@
 <div class="login-box register" ng-controller="loginWindowController" ng-click="textfieldClick()">
     <div class="loginRegister">
         <h5 ng-click="toggleLoginRegister()">Kirjaudu</h5>
-        <h5>Rekisteröidy</h5>
+        <h5 class="loginRegister-active">Rekisteröidy</h5>
     </div>
     <div class="registerfieldcontainer">
         <div class="register-headings">
@@ -37,8 +37,8 @@
         </div>
     </div>
     <div class="button">
-        <button ng-click="register(username, email, password, file)">Rekisteröidy</button>
-        <button ng-click="toggleShow()">Peruuta</button>
+        <button class="blue-button" ng-click="register(username, email, password, file)">Rekisteröidy</button>
+        <button class="blue-button" ng-click="toggleShow()">Peruuta</button>
     </div>
 
 </div>

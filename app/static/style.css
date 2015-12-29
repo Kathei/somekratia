@@ -169,7 +169,7 @@ h1 {
     margin-left: 3vw;
 }
 
-.login-button, .logout-button-button, .send-button {
+.login-button, .logout-button-button, .send-button, .blue-button {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
@@ -200,7 +200,7 @@ h1 {
     cursor: default;
 }
 
-.login-button:hover, .logout-button-button:hover, .send-button:hover {
+.login-button:hover, .logout-button-button:hover, .send-button:hover, .blue-button:hover {
     background-color: #4B9CB8;
 }
 
@@ -211,6 +211,10 @@ h1 {
 .reply-input .send-button:hover {
     background-color: #3288A6;
     cursor: pointer;
+}
+
+.button-container {
+    margin-top: 1vw;
 }
 
 form {
@@ -511,6 +515,10 @@ textarea:focus {
 
 .loginRegister {
     padding-bottom: 15px;
+}
+
+.loginRegister h5.loginRegister-active {
+    color: #d8752f;
 }
 
 .login h5 {

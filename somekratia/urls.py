@@ -27,6 +27,7 @@ from app.views import register
 from app.views import user_profile, user_picture, messages
 from app.views import get_issue_subscriptions
 from app.views import current_user, reply_to_message, recent_decisions
+from app.views import update_user_picture
 from django.views.generic import RedirectView
 from django.views.generic.edit import CreateView
 from django.contrib.auth.forms import UserCreationForm
@@ -35,6 +36,7 @@ from django.contrib.auth.forms import UserCreationForm
 urlpatterns = [
     url(r'^register/$', register, name='register'),
     url(r'^user/$', current_user),
+    url(r'^user/picture$', update_user_picture),
     url(r'^user/(?P<userID>[0-9]+)/$', user_profile),
     url(r'^user/(?P<userID>[0-9]+)/picture$', user_picture),
     url(r'^user/(?P<userID>[0-9]+)/subscriptions', get_issue_subscriptions),
