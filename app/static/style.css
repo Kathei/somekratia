@@ -66,7 +66,7 @@ h1 {
 }
 
 #mainnav li a {
-    font-size: 25px;
+    font-size: 2vw;
     font-family: Neou Bold;
     color: #939291;
     text-decoration: none;
@@ -142,7 +142,19 @@ h1 {
 }
 
 #search {
-    width: 160px;
+    width: 12vw;
+}
+
+.search-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: 0;
+    background: url(img/magnifying_glass.png) no-repeat transparent;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    outline: none;
 }
 
 .nav-contents {
@@ -167,7 +179,15 @@ h1 {
     cursor: pointer;
     border-radius: 5px;
     padding: 6px 11px;
+    outline: none;
+}
 
+.disabled-send-button {
+    background-color: #c9c9c9;
+}
+
+.send-button.disabled-send-button:hover {
+    background-color: #c9c9c9;
 }
 
 .login-button:hover, .logout-button-button:hover, .send-button:hover {
@@ -516,8 +536,9 @@ input[type="file"] {
 }
 
 .nav-profile {
-    float: right;
-    margin-right: 2vw;
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 2vw;
 }
 
 .username {
@@ -625,7 +646,7 @@ input[type="file"] {
 }
 
 .recentMessageContainer {
-    height: 30vh;
+    height: 35vh;
     overflow: scroll;
     margin-bottom: 5vh;
 }

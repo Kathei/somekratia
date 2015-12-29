@@ -324,6 +324,10 @@ app.controller('messageController', function($scope, $http, IssueData, MessageSe
     $scope.uiState = UiState;
     $scope.userData = UserData;
     $scope.messageText = {'value': ""};
+
+    $scope.isTextLongEnough = function () {
+        return $scope.messageText.value.length > 4;
+    }
     $scope.$watch('issueData.messages', function(messages, oldVal){
         if(messages == undefined || messages.length == 0) {
                 $scope.latestMessage = 'undefined';
@@ -353,9 +357,13 @@ app.controller('messageController', function($scope, $http, IssueData, MessageSe
     };
 
     $scope.postMessage = function(issueId) {
-        MessageService.postMessage(issueId, $scope.messageText.value).then(function(result) {
-            $scope.messageText.value = "";
-        });
+
+        if ($scope.isTextLongEnough()){
+            MessageService.postMessage(issueId, $scope.messageText.value).then(function(result) {
+                $scope.messageText.value = "";
+            });
+        }
+
     };
 
     $scope.getDecisions = function(issueID) {
@@ -785,8 +793,9 @@ app.controller('subscriptionController', function($scope, $http, UserData){
 
 });
 
+app.controller('messageInputController', function($scope) {
 
-
+});
 
 
 
