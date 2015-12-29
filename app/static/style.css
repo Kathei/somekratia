@@ -286,7 +286,6 @@ form {
     color: #555555;
 }
 
-
 .issueInfo {
     float: left;
     width: 40vw;
@@ -311,6 +310,43 @@ textarea:focus {
     font-size: 16px;
     font-family: "Tw Cen MT";
     margin-top: 2vh;
+
+}
+.attachment-heading {
+    margin-bottom: 1vw;
+}
+
+.decision-list {
+    font-family: "Tw Cen MT";
+    color: #939291;
+    font-size: 20px;
+    /*list-style: none;*/
+}
+.decision {
+    cursor: pointer;
+}
+.decision:hover {
+    color: #555555;
+}
+.attachment-list {
+    font-size: 16px;
+}
+.attachment-list a {
+    color: #939291;
+    text-decoration: none;
+}
+.attachment-list a:hover {
+    color: #d8752f;
+}
+.decision-arrow{
+    margin-bottom: -2px;
+    cursor: pointer;
+}
+.inactive > .decision-arrow {
+    -ms-transform: rotate(-90deg); /* IE 9 */
+    -webkit-transform: rotate(-90deg); /* Chrome, Safari, Opera */
+    transform: rotate(-90deg);
+
 }
 
 /* KÄYTTÄJIEN VIESTIT */
@@ -445,7 +481,7 @@ input[type="file"] {
 }
 
 .searchResults ul {
-    padding: 1vw 2vw;
+    padding: 0 2vw 1vw 2vw;
 }
 
 .searchResults li {
@@ -459,10 +495,15 @@ input[type="file"] {
     color: #555555;
 }
 
+.resultlist {
+    padding: 5px 0px;
+}
+
 #searchHead {
     padding-left: 2vw;
     padding-top: 2vw;
-    color: #939291;
+    color: #555555;
+    font-size: 22px;
 }
 
 .infowindow {
@@ -632,34 +673,7 @@ select {
     cursor: pointer;
 }
 
-.attachment-heading {
-    margin-bottom: 1vw;
-}
 
-.decision-list {
-    font-family: "Tw Cen MT";
-    color: #939291;
-    font-size: 20px;
-    /*list-style: none;*/
-}
-
-.attachment-list {
-    font-size: 16px;
-}
-
-.attachment-list a {
-    color: #939291;
-    text-decoration: none;
-}
-
-.attachment-list a:hover {
-    color: #d8752f;
-}
-
-.decision-arrow {
-    margin-bottom: -2px;
-    cursor: pointer;
-}
 
 input[type="text"] {
     padding: 5px;

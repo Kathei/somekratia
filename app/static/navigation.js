@@ -268,6 +268,7 @@ app.service('MessageService', function($http, IssueData) {
 
 app.service('IssueService', function($http, IssueData){
     var searchInfo = {text: undefined, page: 0, pageSize: 40};
+    this.searchInfo = searchInfo;
     this.getDecisions = function(issueId) {
 
     };
@@ -287,7 +288,6 @@ app.service('IssueService', function($http, IssueData){
         searchInfo.page = page;
         searchInfo.pageSize = pageSize
 
-        console.log("test");
         var config = {
             method: 'GET',
             params: {
@@ -307,10 +307,7 @@ app.service('IssueService', function($http, IssueData){
             if (IssueData.textSearchResults.length == IssueData.textSearchResultCount) {
                 IssueData.textSearchResultsDone = true;
             }
-            /*var resultController = document.querySelector('[ng-controller="searchResultController"]');
-            var resultScope = angular.element(resultController).scope();
-            resultScope.searchText.value = searchResult.config.params.search;
-            resultScope.searchResults.appen = searchResult.data.objects;*/
+
         }, function(data) {
             alert("Loading text search results failed: " + data);
         });
@@ -560,6 +557,7 @@ app.controller('textSearchController', function($scope, IssueService, UiState){
 app.controller('searchController', function($scope, $http, $timeout, IssueData, IssueService, UserData, MapHolder){
     $scope.canLoad = true;
     $scope.issueData = IssueData;
+    $scope.issueService = IssueService;
     $scope.issueMarkers = [];
     $scope.currentIssues = {};
     $scope.templateUrl = {};
