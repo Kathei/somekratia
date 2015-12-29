@@ -386,6 +386,7 @@ textarea:focus {
 }
 .decision-details {
     margin-bottom: 1.5em;
+    padding-right: 1vw;
 }
 
 .liitteet {
@@ -408,9 +409,21 @@ textarea:focus {
     color: #d8752f;
 }
 .decision-arrow{
-    margin-bottom: -2px;
     cursor: pointer;
+    margin-bottom: -1px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: 0;
+    background: url(img/arrow_down.png) no-repeat transparent;
+    outline: none;
 }
+
+.decision-arrow:hover {
+    background: url(img/arrow_down_dark.png) no-repeat transparent;
+
+}
+
 .inactive > .decision-arrow {
     -ms-transform: rotate(-90deg); /* IE 9 */
     -webkit-transform: rotate(-90deg); /* Chrome, Safari, Opera */
