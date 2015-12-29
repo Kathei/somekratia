@@ -27,7 +27,7 @@
                     <textarea ng-model="messageText.value" id="messagefield" name="messagefield" rows="6" cols="65"></textarea>
                 </label>
                 <div class="button">
-                    <button ng-click="postMessage(issueData.issueId)">Lähetä viesti</button>
+                    <button class="send-button" ng-click="postMessage(issueData.issueId)">Lähetä viesti</button>
                 </div>
             </div>
         </div>
@@ -60,7 +60,7 @@
                 <div ng-show="showReplyControls.value">
                     <textarea ng-model="replyText.value" name="replyfield" rows="6" cols="70"></textarea>
                     <div class="button">
-                        <button ng-click="replyToMessage(m)">Lähetä viesti</button>
+                        <button class="send-button" ng-click="replyToMessage(m)">Lähetä viesti</button>
                     </div>
                 </div>
             </div>

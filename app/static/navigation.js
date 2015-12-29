@@ -89,7 +89,7 @@ app.factory('UiState', function() {
        'showProfile' : false,
        'showDetails': false,
        'showLoginWindow': false,
-       'showLogin': true,
+       'showLogin': false,
        'showRegister': false,
        'showSearchResults': false,
        'showRecent': false,
@@ -738,6 +738,7 @@ app.controller('profileController', function($scope, $http, UserData, UiState) {
 
 app.controller('profileNavController', function($scope, $http, UserData, UiState){
     //profileScope.showProfile = false;
+    $scope.uiState = UiState;
     $scope.userData = UserData;
     $http.get("/user/").success(function(response){
         $scope.userData.userId = response.id;

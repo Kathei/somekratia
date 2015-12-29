@@ -18,6 +18,7 @@ app.controller('loginWindowController', ['$scope', '$http', 'UserData', 'UiState
         }
         else {
             $scope.uiState.showLoginWindow = !$scope.uiState.showLoginWindow;
+             $scope.uiState.showLogin = !$scope.uiState.showLogin;
             console.log("else");
         }
     }

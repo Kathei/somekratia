@@ -155,10 +155,9 @@ h1 {
 
 .logout-button-button {
     margin-left: 3vw;
-    padding: 6px 11px;
 }
 
-.login-button, .logout-button-button {
+.login-button, .logout-button-button, .send-button {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
@@ -167,6 +166,12 @@ h1 {
     color: #FFFFFF;
     cursor: pointer;
     border-radius: 5px;
+    padding: 6px 11px;
+
+}
+
+.login-button:hover, .logout-button-button:hover, .send-button:hover {
+    background-color: #4B9CB8;
 }
 
 form {
@@ -285,6 +290,27 @@ form {
 .issueInfo {
     float: left;
     width: 40vw;
+}
+
+
+textarea {
+    padding: 5px;
+    border: solid 5px #c9c9c9;
+    transition: border 0.3s;
+    border-radius: 2px;
+    width: 32vw;
+    height: 15vh;
+}
+
+textarea:focus {
+    outline: none;
+    border: solid 5px #939291;
+}
+
+.send-button {
+    font-size: 16px;
+    font-family: "Tw Cen MT";
+    margin-top: 2vh;
 }
 
 /* KÄYTTÄJIEN VIESTIT */
@@ -577,6 +603,10 @@ select {
     cursor: pointer;
 }
 
+.subscribe h5:hover {
+    color: #555555;
+}
+
 .subscribe {
     margin-top: -2vw;
 }
@@ -629,5 +659,17 @@ select {
 .decision-arrow {
     margin-bottom: -2px;
     cursor: pointer;
+}
+
+input[type="text"] {
+    padding: 5px;
+    border: solid 3px #c9c9c9;
+    transition: border 0.3s;
+    border-radius: 2px;
+}
+input[type="text"]:focus,
+input[type="text"].focus {
+    outline: none;
+    border: solid 3px #939291;
 }
 
