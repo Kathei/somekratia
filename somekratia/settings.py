@@ -87,6 +87,11 @@ DATABASES = {
     }
 }
 
+EMAIL_HOST = 'localhost'
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+EMAIL_PORT = 1025
+EMAIL_USE_TLS = False
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
