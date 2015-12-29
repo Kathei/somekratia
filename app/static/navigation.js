@@ -520,11 +520,14 @@ app.controller('subController', function($scope, $http, UserData, IssueData, Map
 
 });
 
-app.controller('attachmentsController', function($scope){
+app.controller('attachmentsController', function($scope, $sce){
         $scope.attachmentsShow = {value:false};
         $scope.toggleAttachments = function() {
             $scope.attachmentsShow.value = !$scope.attachmentsShow.value;
         };
+        $scope.to_trusted = function (html) {
+            return $sce.trustAsHtml(html);
+        }
     }
 );
 
@@ -561,6 +564,7 @@ app.controller('textSearchController', function($scope, IssueService, UiState){
     $scope.textSearch = function(text) {
         IssueService.textSearch(text, 1, 40);
         UiState.showSearchResults = true;
+        UiState.showDetails = false;
     }
 });
 

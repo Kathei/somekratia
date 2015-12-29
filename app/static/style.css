@@ -340,6 +340,7 @@ textarea:focus {
     font-family: "Tw Cen MT";
     color: #939291;
     font-size: 20px;
+    margin-bottom: 1em;
     /*list-style: none;*/
 }
 .decision {
@@ -348,8 +349,29 @@ textarea:focus {
 .decision:hover {
     color: #555555;
 }
+
+.decision-list p, .decision-list table, .decision-list ul, .decision-list ol, .decision-list dl {
+    font-size: 16px;
+}
+
+.decision-list h3 {
+    font-size: 18px;
+}
+.decision-details {
+    margin-bottom: 1.5em;
+}
+
+.liitteet {
+    font-size: 19px;
+    padding: 0.5em 0;
+}
+
 .attachment-list {
     font-size: 16px;
+    padding-left: 0;
+}
+.attachment-list li {
+    margin-left: 2em;
 }
 .attachment-list a {
     color: #939291;
