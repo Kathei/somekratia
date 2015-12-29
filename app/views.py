@@ -83,10 +83,7 @@ def register(request):
         user_form = UserForm()
         profile_form = UserProfileForm()
 
-    return render_to_response(
-        'static/register.html',
-            {'user_form': user_form, 'profile_form': profile_form, 'registered': registered},
-            context)
+    return JsonResponse({'errors': {'profile': profile_form.errors, 'user': user_form.errors}}, status=422);
 
 
 def current_user(request):
