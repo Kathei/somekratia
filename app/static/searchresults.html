@@ -1,6 +1,6 @@
 <div class="searchResults" ng-controller="searchController" infinite-scroll="loadMoreSearchResults()" threshold="100" can-load="canLoadMoreTextResults()">
     <img src="/static/img/x-grey.png" class="close" ng-controller="closeController" ng-click="closeSearchResults()"/>
-    <div id="searchHead">Hakusanalla "{{ issueData.textSearchResultCount }}" löytyi {{ searchResults.length }} hakutulosta. </div>
+    <div id="searchHead">Hakusanalla "{{ issueService.searchInfo.text }}" löytyi {{ issueData.textSearchResultCount }} hakutulosta. </div>
     <div>
         <ul>
             <li ng-repeat="x in issueData.textSearchResults">

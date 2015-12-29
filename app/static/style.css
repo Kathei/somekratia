@@ -280,10 +280,45 @@ form {
     color: #555555;
 }
 
-
 .issueInfo {
     float: left;
     width: 40vw;
+}
+
+.attachment-heading {
+    margin-bottom: 1vw;
+}
+
+.decision-list {
+    font-family: "Tw Cen MT";
+    color: #939291;
+    font-size: 20px;
+    /*list-style: none;*/
+}
+.decision {
+    cursor: pointer;
+}
+.decision:hover {
+    color: #555555;
+}
+.attachment-list {
+    font-size: 16px;
+}
+.attachment-list a {
+    color: #939291;
+    text-decoration: none;
+}
+.attachment-list a:hover {
+    color: #d8752f;
+}
+.decision-arrow{
+    margin-bottom: -2px;
+    cursor: pointer;
+}
+.inactive > .decision-arrow {
+    -ms-transform: rotate(-90deg); /* IE 9 */
+    -webkit-transform: rotate(-90deg); /* Chrome, Safari, Opera */
+    transform: rotate(-90deg);
 }
 
 /* KÄYTTÄJIEN VIESTIT */
@@ -601,32 +636,5 @@ select {
     cursor: pointer;
 }
 
-.attachment-heading {
-    margin-bottom: 1vw;
-}
 
-.decision-list {
-    font-family: "Tw Cen MT";
-    color: #939291;
-    font-size: 20px;
-    /*list-style: none;*/
-}
-
-.attachment-list {
-    font-size: 16px;
-}
-
-.attachment-list a {
-    color: #939291;
-    text-decoration: none;
-}
-
-.attachment-list a:hover {
-    color: #d8752f;
-}
-
-.decision-arrow {
-    margin-bottom: -2px;
-    cursor: pointer;
-}
 
