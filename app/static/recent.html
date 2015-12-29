@@ -4,7 +4,7 @@
    <ul>
         <li class="resultlist" ng-repeat="issue in recentIssues">
             <div ng-controller="windowController" ng-click="windowClick(issue.issueId)">
-                {{ issue.issueTitle }}<br/>Viimeisin päätös: {{ issue.lastDecisionTime }}
+                {{ issue.issueTitle }}<br/>Viimeisin päätös: {{ issue.lastDecisionTime | date: 'dd.MM.yyyy' }}
             </div>
         </li>
     </ul>

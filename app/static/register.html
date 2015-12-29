@@ -1,42 +1,39 @@
 <div class="login-box register" ng-controller="loginWindowController" ng-click="textfieldClick()">
     <div class="loginRegister">
         <h5 ng-click="toggleLoginRegister()">Kirjaudu</h5>
-        <h5><b>Rekisteröidy</b></h5>
+        <h5>Rekisteröidy</h5>
     </div>
     <div class="registerfieldcontainer">
-        <div>
-            <h5 class="first">Etunimi: </h5>
+        <div class="register-headings">
+            <h5>Etunimi: </h5>
+            <h5>Sukunimi: </h5>
+            <h5>Käyttäjänimi: </h5>
+            <h5>Sähköposti: </h5>
+            <h5>Salasana: </h5>
+            <h5>Lataa profiilikuva: </h5>
+        </div>
+        <div class="register-fields">
             <label for="firstnameinput">
                 <input type="text" ng-model="firstname" id="firstnameinput" name="firstname" placeholder="Etunimi" />
             </label>
-        </div>
-        <div>
-            <h5>Sukunimi: </h5>
+
             <label for="lastnameinput">
                 <input type="text" ng-model="lastname" id="lastnameinput" name="lastname" placeholder="Sukunimi" />
             </label>
-        </div>
-        <div>
-            <h5>Käyttäjänimi: </h5>
+
             <label for="usernameinput">
                 <input type="text" ng-model="username" id="usernameinput" name="username" placeholder="Käyttäjänimi" />
             </label>
-        </div>
-        <div>
-            <h5>Sähköposti: </h5>
+
             <label for="emailinput">
                 <input type="text" ng-model="email" id="emailinput" name="email" placeholder="Sähköposti" />
             </label>
-        </div>
-        <div>
-            <h5>Salasana: </h5>
+
             <label for="passwordinput">
                 <input type="password" ng-model="password" ng-keyup="$event.keyCode == 13 && login(username, password)" id="passwordinput" name="password" placeholder="Salasana" />
             </label>
-        </div>
-        <div>
-            <h5>Lataa profiilikuva: </h5>
-            <input type="file" id="file" name="file"/>
+
+            <input type="file" file-model="myFile" id="file" name="file"/>
         </div>
     </div>
     <div class="button">

@@ -35,7 +35,7 @@
         <ul class="decision-list">
             <li ng-controller="attachmentsController" data-ng-repeat="d in issueData.decisions">
                 <div ng-class="attachmentsShow.value ? 'active' : 'inactive'" class="decision" ng-click="toggleAttachments()">
-                    {{ d.meeting.policymaker_name + " " + d.meeting.date}}
+                    {{ d.meeting.policymaker_name + " " }} {{ d.meeting.date | date: 'dd.MM.yyyy' }}
                     <img class="decision-arrow" ng-src="/static/img/arrow_down.png">
                 </div>
                 <div class="decision-details" ng-show="attachmentsShow.value">
