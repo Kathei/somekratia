@@ -6,10 +6,9 @@
             <li class="resultlist" ng-repeat="x in issueData.textSearchResults">
                 <div ng-controller="windowController" ng-click="windowClick(x.id)">{{ x.subject }}<br/>Viimeisin päätös: {{ x.latest_decision_date }}</div>
             </li>
-            <li ng-show="issueData.textSearchLoading">
-                <img src="/static/loader.gif"/>
+            <li  class="middle" ng-show="issueData.textSearchLoading">
+                <img src="/static/loader.gif" width="30"/>
             </li>
         </ul>
-
     </div>
 </div>

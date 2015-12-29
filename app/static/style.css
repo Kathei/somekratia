@@ -687,3 +687,7 @@ input[type="text"].focus {
     border: solid 3px #939291;
 }
 
+.middle {
+    text-align: center;
+    margin-top: 15px;
+}
