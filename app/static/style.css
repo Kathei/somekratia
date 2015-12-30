@@ -303,6 +303,7 @@ form {
     position: absolute;
     top: 5.5vw;
     transform: translateX(-50%);
+    cursor: pointer;
 }
 
 .timeline-background {
@@ -320,6 +321,7 @@ form {
     position: absolute;
     top: 6vw;
     transform: translateX(-50%);
+    cursor: pointer;
 }
 
 .timeline-message-picture {
@@ -526,7 +528,7 @@ textarea:focus {
     height: 3vw;
     position: absolute;
     left: 0vw;
-    margin-top: -2vw;
+    margin-top: -35px;
 }
 
 .replyBubble .poster-picture-wrapper {
@@ -673,8 +675,17 @@ input[type="file"] {
 }
 
 .user-avatar {
-    width: 2.5vw;
     height: 2.5vw;
+    position: absolute;
+    margin-left: -50%;
+}
+
+.user-avatar-container {
+    position: relative;
+    height: 2.5vw;
+    width: 2.5vw;
+    overflow: hidden;
+    margin: 0 auto;
 }
 
 .nav-profile {

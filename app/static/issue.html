@@ -2,10 +2,10 @@
 <div class="timeline-background">
     <div class="placeholder-timeline">&nbsp;</div>
     <div ng-repeat="d in issueData.decisions">
-        <div class="timeline-decision" ng-style="getStyle($index, d.origin_last_modified_time);"></div>
+        <div class="timeline-decision" ng-style="getStyle($index, d.origin_last_modified_time);" ng-click="gotoDecision(d.id)"></div>
     </div>
     <div ng-repeat="m in issueData.messages">
-        <div class="timeline-message" ng-style="getStyle($index, m.created);">
+        <div class="timeline-message" ng-style="getStyle($index, m.created);" ng-click="gotoMessage(m.id)">
             <div class="timeline-m-picture-container">
                 <img class="timeline-message-picture" ng-src="/user/{{ m.poster.id }}/picture"/>
             </div>
@@ -38,11 +38,12 @@
         <h4 class="attachment-heading">Päätökset: </h4>
         <ul class="decision-list">
             <li ng-controller="attachmentsController" data-ng-repeat="d in issueData.decisions">
-                <div ng-class="attachmentsShow.value ? 'active' : 'inactive'" class="decision" ng-click="toggleAttachments()">
+                <div ng-class="d.attachmentsShow.value ? 'active' : 'inactive'" class="decision" ng-click="toggleAttachments(d.id)">
+                    <a ng-attr-id="{{ d.id }}"></a>
                     {{ d.meeting.policymaker_name + " " }} {{ d.meeting.date | date: 'dd.MM.yyyy' }}
                     <img class="decision-arrow" ng-src="/static/img/arrow_down.png">
                 </div>
-                <div class="decision-details" ng-show="attachmentsShow.value">
+                <div class="decision-details" ng-show="d.attachmentsShow.value">
                     <div data-ng-repeat="c in d.content">
                         <div ng-bind-html="to_trusted(c.text)"></div>
                     </div>
@@ -64,6 +65,7 @@
         <div class="message-container" ng-repeat="m in issueData.messages | orderBy:'-created'" ng-controller="replyController" ng-init="replies = m.replies">
 
             <div class="messageBubble">
+                <a ng-attr-id="{{ m.id }}"></a>
                 <div class="poster-picture-wrapper">
                     <div class="poster-picture-container">
                         <img class="poster-picture" ng-src="/user/{{ m.poster.id }}/picture"/>

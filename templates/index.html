@@ -62,7 +62,9 @@
             {% verbatim %}
             <div class="nav-field nav-profile" ng-controller="profileNavController" ng-show="userData.isLoggedIn()">
                 <div class="user-container">
-                    <img class=" user-avatar" ng-src="/user/{{ userData.userId }}/picture" ng-click="toggleShow()"/>
+                    <div class="user-avatar-container">
+                        <img class=" user-avatar" ng-src="/user/{{ userData.userId }}/picture" ng-click="toggleShow()"/>
+                    </div>
                     <span class="username" ng-click="toggleShow()">{{ userData.username }}</span>
                 </div>
             </div>

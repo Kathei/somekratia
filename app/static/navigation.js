@@ -174,7 +174,12 @@ app.factory('IssueData', function($http, $q, UserData) {
 
         $http.get('/issue/' + issueId + '/decisions').then(function(response) {
             data.decisions = response.data.objects;
-            console.log(data.decisions);
+            var value = false;
+            for (i = 0; i < data.decisions.length; i++) {
+                var d = data.decisions[i];
+                d.attachmentsShow = [value];
+            }
+            //console.log(data.decisions);
 
             if (data.decisions.length == 0) {
                 return;
@@ -379,7 +384,7 @@ app.service('IssueService', function($http, IssueData){
     };
 });
 
-app.controller('messageController', function($scope, $http, IssueData, MessageService, UiState, UserData) {
+app.controller('messageController', function($scope, $http, $location, $anchorScroll, IssueData, MessageService, UiState, UserData) {
     $scope.issueData = IssueData;
     $scope.uiState = UiState;
     $scope.userData = UserData;
@@ -395,6 +400,25 @@ app.controller('messageController', function($scope, $http, IssueData, MessageSe
 
         return data == undefined ? "" : formatDate(data.last_decision_time);
     }
+
+    $scope.gotoMessage = function(id) {
+      // set the location.hash to the id of
+      // the element you wish to scroll to.
+      $location.hash(id);
+
+      // call $anchorScroll()
+      $anchorScroll();
+    };
+
+    $scope.gotoDecision = function(id) {
+      $location.hash(id);
+      $anchorScroll();
+
+        var controller = document.querySelector('[ng-controller="attachmentsController"]');
+        var topscope = angular.element(controller).scope();
+
+        topscope.toggleAttachments(id);
+    };
 
 
 
@@ -613,10 +637,20 @@ app.controller('subController', function($scope, $http, UserData, IssueData, Map
 
 });
 
-app.controller('attachmentsController', function($scope, $sce){
-        $scope.attachmentsShow = {value:false};
-        $scope.toggleAttachments = function() {
-            $scope.attachmentsShow.value = !$scope.attachmentsShow.value;
+app.controller('attachmentsController', function($scope, $sce, IssueData){
+        //$scope.attachmentsShow = {value:false};
+        $scope.toggleAttachments = function(id) {
+            console.log(IssueData.decisions);
+            //IssueData.decisions[id]
+            for (i = 0; i < IssueData.decisions.length; i++) {
+                console.log(IssueData.decisions[i]);
+                var d = IssueData.decisions[i];
+                if (d.id == id) {
+                    d.attachmentsShow.value = !d.attachmentsShow.value;
+                    console.log(d.attachmentsShow.value);
+                }
+            }
+            //$scope.attachmentsShow.value = !$scope.attachmentsShow.value;
         };
         $scope.to_trusted = function (html) {
             return $sce.trustAsHtml(html);
