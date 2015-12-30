@@ -516,7 +516,7 @@ app.controller('messageController', function($scope, $http, $location, $anchorSc
     }
 
     $scope.getStyle = function(index, timing) {
-        console.log("style");
+        //console.log("style");
         var timeStamp = Date.parse(timing);
         var firstAndLast = getTimeSpan();
         var timeSpan = firstAndLast.end - firstAndLast.begin;
@@ -640,14 +640,14 @@ app.controller('subController', function($scope, $http, UserData, IssueData, Map
 app.controller('attachmentsController', function($scope, $sce, IssueData){
         //$scope.attachmentsShow = {value:false};
         $scope.toggleAttachments = function(id) {
-            console.log(IssueData.decisions);
+            //console.log(IssueData.decisions);
             //IssueData.decisions[id]
             for (i = 0; i < IssueData.decisions.length; i++) {
-                console.log(IssueData.decisions[i]);
+                //console.log(IssueData.decisions[i]);
                 var d = IssueData.decisions[i];
                 if (d.id == id) {
                     d.attachmentsShow.value = !d.attachmentsShow.value;
-                    console.log(d.attachmentsShow.value);
+                    //console.log(d.attachmentsShow.value);
                 }
             }
             //$scope.attachmentsShow.value = !$scope.attachmentsShow.value;

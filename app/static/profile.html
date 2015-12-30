@@ -3,6 +3,11 @@
     <div class="profileLeft">
         <h1 class="usernameTitle">{{ userData.username }}</h1>
         <img height="128" src="{{ userData.profilePictureUrl() }}" />
+        <div ng-controller="pictureController">
+            <p>Vaihda profiilikuva:</p>
+            <input type="file" file="file" id="file" name="profile_picture"/>
+            <button class="blue-button" ng-click="changePicture()">Vaihda kuva</button>
+        </div>
     </div>
     <div class="user-subscriptions profileRight" ng-controller="subscriptionController">
         <h2>Seuratut päätökset</h2>

@@ -754,6 +754,17 @@ input[type="file"] {
     width: 20vw;
 }
 
+.profileLeft p {
+    font-family: "Tw Cen MT";
+    font-size: 14px;
+    color: #939291;
+}
+
+.profileLeft .blue-button {
+    margin-top: 20px;
+}
+
+
 .profileRight {
     float: right;
     width: 60vw;

@@ -2,10 +2,10 @@
 <div class="timeline-background">
     <div class="placeholder-timeline">&nbsp;</div>
     <div ng-repeat="d in issueData.decisions">
-        <div class="timeline-decision" ng-style="getStyle($index, d.origin_last_modified_time);" ng-click="gotoDecision(d.id)"></div>
+        <div title="Katso päätös klikkaamalla tästä" class="timeline-decision" ng-style="getStyle($index, d.origin_last_modified_time);" ng-click="gotoDecision(d.id)"></div>
     </div>
     <div ng-repeat="m in issueData.messages">
-        <div class="timeline-message" ng-style="getStyle($index, m.created);" ng-click="gotoMessage(m.id)">
+        <div title="Katso kommentti klikkaamalla tästä" class="timeline-message" ng-style="getStyle($index, m.created);" ng-click="gotoMessage(m.id)">
             <div class="timeline-m-picture-container">
                 <img class="timeline-message-picture" ng-src="/user/{{ m.poster.id }}/picture"/>
             </div>

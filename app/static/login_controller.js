@@ -2,21 +2,6 @@
  * Created by tiitulahti on 18/12/15.
  */
 
-app.directive('file', function () {
-    return {
-        scope: {
-            file: '='
-        },
-        link: function (scope, el, attrs) {
-            el.bind('change', function (event) {
-                var file = event.target.files[0];
-                scope.file = file ? file : undefined;
-                scope.$apply();
-            });
-        }
-    };
-});
-
 
 app.controller('loginWindowController', ['$scope', '$http', 'UserData', 'UiState', 'MapHolder', function($scope, $http, UserData, UiState, MapHolder){
     $scope.userData = UserData;
@@ -91,7 +76,7 @@ app.controller('loginWindowController', ['$scope', '$http', 'UserData', 'UiState
                 username: username,
                 password: password,
                 email: email,
-                file: $scope.file,
+                //file: $scope.file,
             },
             transformRequest: function (data, headersGetter) {
                 var formData = new FormData();
