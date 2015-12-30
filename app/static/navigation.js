@@ -179,6 +179,9 @@ app.factory('IssueData', function($http, $q, UserData) {
                 recentlyCommentedIssues = response.commented;
             })
         },
+        isMessageLiked: function(message) {
+            return message.liked_by.indexOf(UserData.userId) > -1
+        }
     };
     return data;
 });
@@ -290,6 +293,7 @@ app.service('IssueService', function($http, IssueData){
         if (page == 1) {
             IssueData.textSearchResults.length = 0;
             IssueData.textSearchResultsDone = false;
+            IssueData.textSearchResultCount = 0;
         }
         searchInfo.text = text;
         searchInfo.page = page;
@@ -452,18 +456,27 @@ app.controller('messageController', function($scope, $http, IssueData, MessageSe
     };
 
     $scope.likeMessage = function(message) {
+        var messageLiked =  IssueData.isMessageLiked(message);
         var config = {
             url: '/message/' + message.id + '/vote',
             data: {
                 value: 1
             },
-            method: message.liked ? 'DELETE' : 'POST'
+            method: messageLiked ? 'DELETE' : 'POST'
         };
         message.liked = !message.liked;
 
         $http(config).success(function(response) {
-            message.imagesrc = message.liked ?
-                "../../static/img/thumbs-up-green.png" :  "../../static/img/thumbs-up.png";
+            var likes = message.liked_by;
+            if (config.method == 'POST') {
+                likes.push(UserData.userId)
+            } else {
+                // Delete like
+                var idx = likes.indexOf(UserData.userId);
+                if (idx > -1) {
+                    likes.splice(idx, 1);
+                }
+            }
         }).error(function(foo, bar, baz) {
             alert((message.liked ? "" : "un") + "like failed");
         });
