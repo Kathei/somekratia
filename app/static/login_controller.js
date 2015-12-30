@@ -2,6 +2,22 @@
  * Created by tiitulahti on 18/12/15.
  */
 
+app.directive('file', function () {
+    return {
+        scope: {
+            file: '='
+        },
+        link: function (scope, el, attrs) {
+            el.bind('change', function (event) {
+                var file = event.target.files[0];
+                scope.file = file ? file : undefined;
+                scope.$apply();
+            });
+        }
+    };
+});
+
+
 app.controller('loginWindowController', ['$scope', '$http', 'UserData', 'UiState', 'MapHolder', function($scope, $http, UserData, UiState, MapHolder){
     $scope.userData = UserData;
     $scope.uiState = UiState;
@@ -40,18 +56,55 @@ app.controller('loginWindowController', ['$scope', '$http', 'UserData', 'UiState
       r. readAsArrayBuffer(f);
     }
 
-    $scope.register = function(username, email, password, file) {
-        var config = {
+/*var config = {
             headers: { 'Content-Type': 'application/x-www-form-urlencoded'},
             method: 'POST',
             data: {
                 username: username,
                 password: password,
                 email: email,
+                file: $scope.file,
+            },
+            transformRequest: function (data, headersGetter) {
+                var formData = new FormData();
+                angular.forEach(data, function (value, key) {
+                    formData.append(key, value);
+                });
+
+                var headers = headersGetter();
+                delete headers['Content-Type'];
+
+                return formData;
             },
             url: '/register/'
-        };
-        $http(config).success(function(response){
+        };*/
+
+    $scope.register = function(username, email, password, file) {
+
+        $http({
+            method: 'POST',
+            url: '/register/',
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+            data: {
+                username: username,
+                password: password,
+                email: email,
+                file: $scope.file,
+            },
+            transformRequest: function (data, headersGetter) {
+                var formData = new FormData();
+                angular.forEach(data, function (value, key) {
+                    formData.append(key, value);
+                });
+
+                var headers = headersGetter();
+                delete headers['Content-Type'];
+
+                return formData;
+            }
+        }).success(function(response){
             alert("Tervetuloa "+ username);
 
             console.log("response: " + response);
