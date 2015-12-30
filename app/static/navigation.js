@@ -385,6 +385,10 @@ app.controller('messageController', function($scope, $http, $location, $anchorSc
     $scope.uiState = UiState;
     $scope.userData = UserData;
     $scope.messageText = {'value': ""};
+    $scope.showIssue = function (issueId) {
+        UiState.showDetails = true;
+        IssueData.issueId = issueId;
+    }
     $scope.lastDecisionTime = function() {
         var data = $scope.issueData.data;
 

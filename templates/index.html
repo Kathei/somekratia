@@ -97,6 +97,11 @@
     </div>
 
     <div class="issueContainer" ng-controller="messageController" ng-show="uiState.showDetails">
+        {% endverbatim %}
+        {% if issueId %}
+        <div ng-init="showIssue({{ issueId }})"></div>
+        {% endif %}
+        {% verbatim %}
         <div ng-include src="'static/issue.html'" ></div>
     </div>
 

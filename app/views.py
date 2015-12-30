@@ -25,6 +25,10 @@ from app.models import UserWithProfile
 def index(request):
     t = loader.get_template('index.html')
     c = RequestContext(request)
+    issueId = request.GET.get('issueId')
+    if issueId is not None:
+        c = RequestContext(request, {'issueId' : issueId})
+
     if request is not None:
         c['request'] = request
     c.update(csrf(request))
