@@ -97,7 +97,7 @@
                     </div>
                     <h3 class="poster">{{r.poster.username}}</h3>
                     <h3 class="time-posted">{{r.created | date: 'dd.MM.yy HH:mm'}}</h3>
-                    <p class="messageText"><span ng-bind="r.text"></span></p>
+                    <p class="messageText"><span ng-bind-html="r.text"></span></p>
                     <img class="thumbsup" ng-show="userData.isLoggedIn()" ng-src="{{ issueData.isMessageLiked(r) ? '../../static/img/thumbs-up-green.png' : '../../static/img/thumbs-up.png' }}" ng-click="likeMessage(r)">
                     <span class="likes-amount">{{ r.liked_by.length }}</span>
                     <span class="likes-txt" ng-show="!userData.isLoggedIn()"> tykkäystä</span>
