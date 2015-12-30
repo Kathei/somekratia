@@ -148,19 +148,66 @@ app.factory('IssueData', function($http, $q, UserData) {
             }
             data.data = issue;
             data.messages = response.data.messages;
+            if (data.messages.length == 0) {
+                return;
+            }
+            data.latestMessage = data.messages[0];
+            data.firstMessage = data.messages[0];
+            var first = Date.parse(data.messages[0].created);
+            var last = Date.parse(data.messages[0].created);
+            for (var i = 0; i < data.messages.length; i++) {
+                var created = Date.parse(data.messages[i].created);
+                if (created >= last) {
+                    data.latestMessage = created;
+                    last = created;
+                }
+                if (created <= first) {
+                    data.firstMessage = created;
+                    first = created;
+                }
+            }
+            console.log("first: " + data.firstMessage);
+            console.log("last: " + data.latestMessage);
         }, function (response) {
             alert("Could not load messages for issue: " + data.issueId);
         });
 
         $http.get('/issue/' + issueId + '/decisions').then(function(response) {
             data.decisions = response.data.objects;
+            console.log(data.decisions);
+
+            if (data.decisions.length == 0) {
+                return;
+            }
+
+            data.latestDecision = data.decisions[0];
+            data.firstDecision = data.decisions[0];
+            var first = Date.parse(data.decisions[0].origin_last_modified_time);
+            var last = Date.parse(data.decisions[0].origin_last_modified_time);
+            for (var i = 0; i < data.decisions.length; i++) {
+                var created = Date.parse(data.decisions[i].origin_last_modified_time);
+                if (created >= last) {
+                    data.latestDecision = created;
+                    last = created;
+                }
+                if (created <= first) {
+                    data.firstDecision = created;
+                    first = created;
+                }
+            }
+            console.log("first: " + data.firstDecision);
+            console.log("last: " + data.latestDecision);
         });
     }
     var data =  {
         textSearchResults: [],
         textSearchLoading: false,
         'messages' : [],
+        'firstMessage' : undefined,
+        'latestMessage' : undefined,
         'decisions' : [],
+        'firstDecision' : undefined,
+        'latestDecision' : undefined,
         'data': undefined,
         get issueId() {
             return issueId;
@@ -192,6 +239,7 @@ app.service('MessageService', function($http, IssueData) {
         return str.replace(/(?:\r\n|\r|\n)/g, '<br />');
     }
     this.getMessages = function(issueId) {
+        console.log("getMessages");
         $http.get("/issue/"+ issueID +"/messages/").success(function(response) {
             console.log(response);
             var messages = response.messages;
@@ -233,6 +281,9 @@ app.service('MessageService', function($http, IssueData) {
         };
         return $http(config).success(function(response) {
             IssueData.messages.push(response);
+            IssueData.latestMessage = response;
+            console.log(IssueData.messages);
+            console.log(IssueData.latestMessage);
             IssueData.reloadRecentlyCommentedIssues();
         }).error(function(){
             alert("Post doesn't work");
@@ -391,6 +442,7 @@ app.controller('messageController', function($scope, $http, IssueData, MessageSe
     };
 
     $scope.getDecisions = function(issueID) {
+        console.log("getDecisions");
         $http.get("/issue/" + issueID + "/decisions/").success(function (response) {
             console.log(response);
             var decisions = response.objects;
@@ -417,6 +469,7 @@ app.controller('messageController', function($scope, $http, IssueData, MessageSe
                 }
             }
             $scope.decisions = decisions;
+            console.log("first decision: " + $scope.firstDecision);
         }).error(function (foo, bar, baz) {
             alert("Error getting decisions!");
         });
@@ -425,24 +478,25 @@ app.controller('messageController', function($scope, $http, IssueData, MessageSe
 
     function getTimeSpan() {
         var span = {}
-        if ($scope.latestMessage == 'undefined') {
-            span.begin = $scope.firstDecision;
-            span.end = $scope.latestDecision;
-        } else if ($scope.latestDecision == 'undefined') {
-            span.begin = $scope.firstMessage;
-            span.end = $scope.latestMessage;
+        if ($scope.issueData.latestMessage == 'undefined') {
+            span.begin = $scope.issueData.firstDecision;
+            span.end = $scope.issueData.latestDecision;
+        } else if ($scope.issueData.latestDecision == 'undefined') {
+            span.begin = $scope.issueData.firstMessage;
+            span.end = $scope.issueData.latestMessage;
         } else {
-            span.begin = $scope.firstMessage < $scope.firstDecision ? $scope.firstMessage : $scope.firstDecision;
-            span.end = $scope.latestMessage > $scope.latestDecision ? $scope.latestMessage : $scope.latestDecision;
+            span.begin = $scope.issueData.firstMessage < $scope.issueData.firstDecision ? $scope.issueData.firstMessage : $scope.issueData.firstDecision;
+            span.end = $scope.issueData.latestMessage > $scope.issueData.latestDecision ? $scope.issueData.latestMessage : $scope.issueData.latestDecision;
         }
         return span;
     }
 
     $scope.getStyle = function(index, timing) {
+        console.log("style");
         var timeStamp = Date.parse(timing);
         var firstAndLast = getTimeSpan();
         var timeSpan = firstAndLast.end - firstAndLast.begin;
-        //console.log(timeStamp);
+        //console.log(firstAndLast);
         var position = 0;
         if (timeSpan != 0) {
             position = (timeStamp - firstAndLast.begin) / timeSpan;
