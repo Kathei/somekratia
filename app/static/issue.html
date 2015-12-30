@@ -27,7 +27,7 @@
 
         <div ng-show="userData.isLoggedIn()">
             <div ng-controller="messageInputController">
-                <label for="messagefield" ng-keyup="$event.keyCode == 13 && postMessage(issueData.issueId, messageText)">
+                <label for="messagefield">
                     <textarea ng-model="messageText.value" id="messagefield" name="messagefield" rows="6" cols="65"></textarea>
                 </label>
                 <div class="button" ng-init="isDisabled = true">
