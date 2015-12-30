@@ -191,7 +191,7 @@ def recent_decisions(request):
     recent_decisions = Issue.objects.order_by('-last_decision_time')
     issuelist = {}
     issuelist['recent_decisions'] = []
-    maxIssues = 20
+    maxIssues = 50
     for issue in recent_decisions:
         issuelist['recent_decisions'].append({'issueId' : issue.id, 'issueTitle': issue.title, 'lastDecisionTime': issue.last_decision_time})
         if len(issuelist['recent_decisions']) >= maxIssues:
