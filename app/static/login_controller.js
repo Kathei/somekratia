@@ -70,7 +70,7 @@ app.controller('loginWindowController', ['$scope', '$http', 'UserData', 'UiState
             method: 'POST',
             url: '/register/',
             headers: {
-                'Content-Type': 'multipart/form-data',
+                'Content-Type': 'application/x-www-form-urlencoded',
             },
             data: {
                 username: username,
@@ -78,21 +78,12 @@ app.controller('loginWindowController', ['$scope', '$http', 'UserData', 'UiState
                 email: email,
                 //file: $scope.file,
             },
-            transformRequest: function (data, headersGetter) {
-                var formData = new FormData();
-                angular.forEach(data, function (value, key) {
-                    formData.append(key, value);
-                });
 
-                var headers = headersGetter();
-                delete headers['Content-Type'];
-
-                return formData;
-            }
         }).success(function(response){
-            alert("Tervetuloa "+ username);
-
-            console.log("response: " + response);
+            alert("Rekisteröityminen onnistui!");
+            $scope.userData.username = response.name;
+            $scope.userData.userId = response.id;
+            $scope.uiState.showLoginWindow = false;
         }).error(function(){
             alert("Rekisteröitymisessä tapahtui virhe, yritäthän uudelleen!");
         });
@@ -133,7 +124,7 @@ angular.module('myApp').controller('logoutController', ['$scope', '$http', 'User
             method: 'POST',
         };
         $http.post("/logout", config).success(function(response){
-            alert("Uloskirjautuminen onnistui.");
+            //alert("Uloskirjautuminen onnistui.");
             $scope.userData.username = undefined;
             $scope.userData.userId = 0;
             $scope.userData.subscriptions = {};
