@@ -1,6 +1,6 @@
  <div class="login-box" ng-controller="loginWindowController" ng-click="textfieldClick()">
      <div class="loginRegister">
-         <h5><b>Kirjaudu</b></h5>
+         <h5 class="loginRegister-active"><b>Kirjaudu</b></h5>
          <h5 ng-click="toggleLoginRegister()">Rekisteröidy</h5>
      </div>
      <label for="usernameinput">
@@ -9,8 +9,8 @@
      <label for="passwordinput">
           <input type="password" ng-model="password" ng-keyup="$event.keyCode == 13 && login(username, password)" id="passwordinput" name="password" placeholder="Salasana" />
       </label>
-     <div class="button">
-         <button ng-click="login(username,password)">Kirjaudu</button>
-         <button ng-click="toggleShow()">Peruuta</button>
+     <div class="button button-container">
+         <button class="blue-button" ng-click="login(username,password)">Kirjaudu</button>
+         <button class="blue-button" ng-click="toggleShow()">Peruuta</button>
      </div>
  </div>

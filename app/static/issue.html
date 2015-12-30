@@ -64,7 +64,7 @@
                     <h3 class="time-posted">{{m.created | date: 'dd.MM.yyyy HH:mm'}}</h3>
                 </div>
                 <p class="messageText"><span ng-bind-html="m.text"></span></p>
-
+                
                 <img class="thumbsup" ng-show="userData.isLoggedIn()"ng-src="{{ issueData.isMessageLiked(m) ? '../../static/img/thumbs-up-green.png' : '../../static/img/thumbs-up.png' }}" ng-click="likeMessage(m)">
                 <div class="reply" ng-show="userData.isLoggedIn()" ng-click="toggleReplyControls()">Vastaa</div>
                 <div class="reply-input" ng-show="showReplyControls.value">

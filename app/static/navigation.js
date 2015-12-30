@@ -293,6 +293,7 @@ app.service('IssueService', function($http, IssueData){
         if (page == 1) {
             IssueData.textSearchResults.length = 0;
             IssueData.textSearchResultsDone = false;
+            IssueData.textSearchResultCount = 0;
         }
         searchInfo.text = text;
         searchInfo.page = page;
