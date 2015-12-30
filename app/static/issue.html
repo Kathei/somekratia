@@ -5,7 +5,11 @@
         <div class="timeline-decision" ng-style="getStyle($index, d.origin_last_modified_time);"></div>
     </div>
     <div ng-repeat="m in issueData.messages">
-        <div class="timeline-message" ng-style="getStyle($index, m.created);"></div>
+        <div class="timeline-message" ng-style="getStyle($index, m.created);">
+            <div class="timeline-m-picture-container">
+                <img class="timeline-message-picture" ng-src="/user/{{ m.poster.id }}/picture"/>
+            </div>
+        </div>
     </div>
 
 </div>
@@ -57,8 +61,14 @@
     </div>
 
     <div class="messages">
-        <div ng-repeat="m in issueData.messages | orderBy:'-created'" ng-controller="replyController" ng-init="replies = m.replies">
+        <div class="message-container" ng-repeat="m in issueData.messages | orderBy:'-created'" ng-controller="replyController" ng-init="replies = m.replies">
+
             <div class="messageBubble">
+                <div class="poster-picture-wrapper">
+                    <div class="poster-picture-container">
+                        <img class="poster-picture" ng-src="/user/{{ m.poster.id }}/picture"/>
+                    </div>
+                </div>
                 <div class="messageInfo">
                     <h3 class="poster">{{m.poster.username}}</h3>
                     <h3 class="time-posted">{{m.created | date: 'dd.MM.yyyy HH:mm'}}</h3>
@@ -78,6 +88,11 @@
             </div>
             <div ng-repeat="r in replies">
                 <div class="replyBubble">
+                    <div class="poster-picture-wrapper">
+                        <div class="poster-picture-container">
+                            <img class="poster-picture" ng-src="/user/{{ r.poster.id }}/picture"/>
+                        </div>
+                    </div>
                     <h3 class="poster">{{r.poster.username}}</h3>
                     <h3 class="time-posted">{{r.created | date: 'dd.MM.yy HH:mm'}}</h3>
                     <p class="messageText"><span ng-bind="r.text"></span></p>

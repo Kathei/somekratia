@@ -322,6 +322,22 @@ form {
     transform: translateX(-50%);
 }
 
+.timeline-message-picture {
+    height: 2vw;
+    margin: 0 auto;
+    position: absolute;
+}
+
+.timeline-m-picture-container {
+    width: 2vw;
+    height: 2vw;
+    -moz-border-radius: 1vw;
+    -webkit-border-radius: 1vw;
+    border-radius: 1vw;
+    overflow: hidden;
+    position: relative;
+}
+
 .issueLogin {
     cursor: pointer;
     color: #d8752f;
@@ -332,7 +348,7 @@ form {
 
 .issueInfo {
     float: left;
-    width: 40vw;
+    width: 38vw;
 }
 
 
@@ -438,9 +454,14 @@ textarea:focus {
 
 /* KÄYTTÄJIEN VIESTIT */
 
+.message-container {
+    width: 42vw;
+    position: relative;
+}
+
 .messages {
     float: right;
-    width: 40vw;
+    width: 42vw;
     margin-top: 2vw;
 }
 
@@ -463,6 +484,9 @@ textarea:focus {
 .messageBubble {
     background-color: #6fc1dd;
     clear: right;
+    display: inline-block;
+    width: 34vw;
+    margin-left: 4vw;
 }
 
 .messageText {
@@ -471,13 +495,42 @@ textarea:focus {
 
 .replyBubble {
     background-color: #9fd5e8;
-    width: 80%;
+    width: 70%;
     float: right;
 }
 
 .poster {
     float: left;
     width: 62%;
+}
+
+.poster-picture {
+    height: 3vw;
+    position: absolute;
+
+}
+
+.poster-picture-container {
+    position: relative;
+    width: 3vw;
+    height: 3vw;
+    overflow: hidden;
+    -moz-border-radius: 1.5vw;
+    -webkit-border-radius: 1.5vw;
+    border-radius: 1.5vw;
+    margin-top: 10px;
+}
+
+.poster-picture-wrapper {
+    width: 3vw;
+    height: 3vw;
+    position: absolute;
+    left: 0vw;
+    margin-top: -2vw;
+}
+
+.replyBubble .poster-picture-wrapper {
+    left: 4.5vw;
 }
 
 .time-posted {
@@ -805,3 +858,4 @@ input[type="password"]:focus {
     color: #FFFFFF;
     font-size: 16px;
 }
+
