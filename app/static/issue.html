@@ -65,7 +65,7 @@
                 </div>
                 <p class="messageText"><span ng-bind-html="m.text"></span></p>
 
-                <img class="thumbsup" ng-show="userData.isLoggedIn()"ng-src="{{ m.liked ? '../../static/img/thumbs-up-green.png' : '../../static/img/thumbs-up.png' }}" ng-click="likeMessage(m)">
+                <img class="thumbsup" ng-show="userData.isLoggedIn()"ng-src="{{ issueData.isMessageLiked(m) ? '../../static/img/thumbs-up-green.png' : '../../static/img/thumbs-up.png' }}" ng-click="likeMessage(m)">
                 <div class="reply" ng-show="userData.isLoggedIn()" ng-click="toggleReplyControls()">Vastaa</div>
                 <div class="reply-input" ng-show="showReplyControls.value">
                     <textarea ng-model="replyText.value" name="replyfield" rows="6" cols="70"></textarea>
@@ -79,7 +79,7 @@
                     <h3 class="poster">{{r.poster.username}}</h3>
                     <h3 class="time-posted">{{r.created | date: 'dd.MM.yy HH:mm'}}</h3>
                     <p class="messageText"><span ng-bind="r.text"></span></p>
-                    <img class="thumbsup" ng-src="{{ r.liked ? '../../static/img/thumbs-up-green.png' : '../../static/img/thumbs-up.png' }}" ng-click="likeMessage(r)">
+                    <img class="thumbsup" ng-src="{{ issueData.isMessageLiked(r) ? '../../static/img/thumbs-up-green.png' : '../../static/img/thumbs-up.png' }}" ng-click="likeMessage(r)">
                 </div>
             </div>
         </div>
