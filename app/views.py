@@ -115,11 +115,17 @@ def user_picture(request, userID):
 def update_user_picture(request):
     if request.method != 'POST':
         return HttpResponseBadRequest({'error': 'Only POST is accepted'})
+
     user = get_object_or_404(UserWithProfile, user=request.user.id)
-    picture = request.files['profile_picture']
-    if picture is not None:
-        user.picture = request.files['profile_picture']
-        user.save()
+    profile_form = UserProfileForm(data=request.POST)
+
+    if profile_form.is_valid():
+        profile = profile_form.save(commit=False)
+        profile.user = user.user
+        if 'picture' in request.FILES:
+            profile.picture = request.FILES['picture']
+        profile.save()
+        return JsonResponse({'message': 'Profile picture updated'})
     else:
         return HttpResponseBadRequest({'error': 'No picture received from POST files'})
 

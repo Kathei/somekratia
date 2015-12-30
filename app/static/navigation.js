@@ -5,7 +5,7 @@
 var searchIssues = new SearchIssues();
 
 
-var app = angular.module('myApp', ['ngRoute', 'ngSanitize', 'uiGmapgoogle-maps', 'infiniteScroll']);
+var app = angular.module('myApp', ['ngRoute', 'ngSanitize', 'uiGmapgoogle-maps', 'infiniteScroll', 'ngFileUpload']);
 
 app.config(['$httpProvider', function($httpProvider) {
     $httpProvider.defaults.xsrfCookieName = 'csrftoken';

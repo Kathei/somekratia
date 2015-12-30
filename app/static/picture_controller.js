@@ -2,51 +2,26 @@
  * Created by emmilinkola on 30/12/15.
  */
 
-app.directive('file', function () {
-    return {
-        scope: {
-            file: '='
-        },
-        link: function (scope, el, attrs) {
-            el.bind('change', function (event) {
-                var file = event.target.files[0];
-                scope.file = file ? file : undefined;
-                scope.$apply();
-            });
-        }
-    };
-});
 
+app.controller('pictureController', ['$scope', '$http', 'UserData', 'Upload', function($scope, $http, UserData, Upload){
 
-app.controller('pictureController', ['$scope', '$http', 'UserData', function($scope, $http, UserData){
-
-    $scope.changePicture = function() {
-        $http({
-            method: 'POST',
-            url: '/user/' + UserData.userId + "/picture",
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-            data: {
-                file: $scope.file,
-            },
-            transformRequest: function (data, headersGetter) {
-                var formData = new FormData();
-                angular.forEach(data, function (value, key) {
-                    formData.append(key, value);
-                });
-
-                var headers = headersGetter();
-                delete headers['Content-Type'];
-
-                return formData;
-            }
-        }).success(function(response){
-            alert("Profiilikuvan vaihto onnistui!");
-        }).error(function(){
-            alert("Kuvan vaihtamisessa tapahtui virhe, yritäthän uudelleen!");
+    $scope.changePicture = function(file) {
+        file.upload = Upload.upload({
+            url: '/user/picture',
+            data: {picture: file},
         });
 
+        file.upload.then(function (response) {
+          $timeout(function () {
+            file.result = response.data;
+          });
+        }, function (response) {
+          if (response.status > 0)
+            $scope.errorMsg = response.status + ': ' + response.data;
+        }, function (evt) {
+          // Math.min is to fix IE which reports 200% sometimes
+          file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+           });
     }
 
 }]);
