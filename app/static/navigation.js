@@ -255,8 +255,8 @@ app.factory('IssueData', function($http, $q, UserData) {
                     first = created;
                 }
             });
-            data.firstDecision = data.decisions[0];
-            data.latestDecision = data.decisions[0];
+            data.firstDecision = first;
+            data.latestDecision = last;
             console.log("first: " + data.firstDecision);
             console.log("last: " + data.latestDecision);
         }
