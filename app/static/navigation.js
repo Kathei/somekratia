@@ -728,11 +728,14 @@ app.controller('searchController', function($scope, $http, $timeout, IssueData, 
         $scope.map.window.marker.issue = $scope.content;
         $scope.map.window.marker.coords = [geometry.lng(), geometry.lat()];
         $scope.map.window.issue = $scope.content;
+        /*
+            pan the map to make the InfoWindod ~ at the center of the map area
         if($scope.map.window.show) {
             var map = MapHolder.map;
             var lat = (map.getBounds().getNorthEast().lat() - map.getCenter().lat()) / 2 + geometry.lat();
             MapHolder.map.panTo({'lat': lat, 'lng': geometry.lng()});
         }
+        */
         $scope.$apply();
     };
 
