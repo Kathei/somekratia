@@ -133,6 +133,8 @@ app.factory('IssueData', function($http, $q, UserData) {
     var issueId = 0;
     var recentlyCommentedIssues;
     var requestCanceller;
+
+
     function updateIssueData(issueId) {
         if(requestCanceller != undefined) {
             requestCanceller.resolve();
@@ -140,6 +142,7 @@ app.factory('IssueData', function($http, $q, UserData) {
         requestCanceller = $q.defer();
         data.data = null;
         data.messages.length = 0;
+        data.messagesAndReplies.length = 0;
         data.decisions.length = 0;
         $http.get('/issue/' + issueId +'/').then(function (response) {
             var issue = response.data.jsondetails;
@@ -148,26 +151,7 @@ app.factory('IssueData', function($http, $q, UserData) {
             }
             data.data = issue;
             data.messages = response.data.messages;
-            if (data.messages.length == 0) {
-                return;
-            }
-            data.latestMessage = data.messages[0];
-            data.firstMessage = data.messages[0];
-            var first = Date.parse(data.messages[0].created);
-            var last = Date.parse(data.messages[0].created);
-            for (var i = 0; i < data.messages.length; i++) {
-                var created = Date.parse(data.messages[i].created);
-                if (created >= last) {
-                    data.latestMessage = created;
-                    last = created;
-                }
-                if (created <= first) {
-                    data.firstMessage = created;
-                    first = created;
-                }
-            }
-            console.log("first: " + data.firstMessage);
-            console.log("last: " + data.latestMessage);
+            data.updateFirstAndLatestMessageInfo()
         }, function (response) {
             alert("Could not load messages for issue: " + data.issueId);
         });
@@ -180,40 +164,26 @@ app.factory('IssueData', function($http, $q, UserData) {
                 d.attachmentsShow = [value];
             }
             //console.log(data.decisions);
-
-            if (data.decisions.length == 0) {
-                return;
-            }
-
-            data.latestDecision = data.decisions[0];
-            data.firstDecision = data.decisions[0];
-            var first = Date.parse(data.decisions[0].origin_last_modified_time);
-            var last = Date.parse(data.decisions[0].origin_last_modified_time);
-            for (var i = 0; i < data.decisions.length; i++) {
-                var created = Date.parse(data.decisions[i].origin_last_modified_time);
-                if (created >= last) {
-                    data.latestDecision = created;
-                    last = created;
-                }
-                if (created <= first) {
-                    data.firstDecision = created;
-                    first = created;
-                }
-            }
-            console.log("first: " + data.firstDecision);
-            console.log("last: " + data.latestDecision);
+            data.updateFirstAndLatestDecisionInfo();
         });
     }
     var data =  {
         textSearchResults: [],
         textSearchLoading: false,
         'messages' : [],
+        messagesAndReplies: [],
         'firstMessage' : undefined,
         'latestMessage' : undefined,
         'decisions' : [],
         'firstDecision' : undefined,
         'latestDecision' : undefined,
         'data': undefined,
+        addMessage: function(message) {
+            if (message.issue == issueId) {
+                data.messages.push(message);
+                data.updateFirstAndLatestMessageInfo();
+            }
+        },
         get issueId() {
             return issueId;
         },
@@ -235,6 +205,62 @@ app.factory('IssueData', function($http, $q, UserData) {
             return message.liked_by.indexOf(UserData.userId) > -1
         }
     };
+    data.updateFirstAndLatestMessageInfo = function() {
+        if (data.messages.length == 0) {
+            data.lastMessage = undefined;
+            data.firstMessage = undefined;
+        } else {
+            var first = Date.parse(data.messages[0].created);
+            var last = Date.parse(data.messages[0].created);
+            var messagesAndReplies = [];
+            _.each(data.messages, function (message) {
+                messagesAndReplies.push(message);
+                _.each(message.replies, function (reply) {
+                    messagesAndReplies.push(reply);
+                });
+            });
+
+            _.each(messagesAndReplies, function (message) {
+                var created = Date.parse(message.created);
+                if (created >= last) {
+                    last = created;
+                }
+                if (created <= first) {
+                    first = created;
+                }
+            });
+
+            data.firstMessage = first;
+            data.latestMessage = last;
+            data.messagesAndReplies = messagesAndReplies;
+            console.log("first: " + data.firstMessage);
+            console.log("last: " + data.latestMessage);
+        }
+
+    };
+    data.updateFirstAndLatestDecisionInfo = function () {
+        if (data.decisions.length == 0) {
+                data.firstDecision = undefined;
+                data.latestDecision = undefined;
+        } else {
+
+            var first = Date.parse(data.decisions[0].origin_last_modified_time);
+            var last = Date.parse(data.decisions[0].origin_last_modified_time);
+            _.each(data.decisions, function (decision) {
+                var created = Date.parse(decision.origin_last_modified_time);
+                if (created >= last) {
+                    last = created;
+                }
+                if (created <= first) {
+                    first = created;
+                }
+            });
+            data.firstDecision = data.decisions[0];
+            data.latestDecision = data.decisions[0];
+            console.log("first: " + data.firstDecision);
+            console.log("last: " + data.latestDecision);
+        }
+    };
     return data;
 });
 
@@ -243,37 +269,6 @@ app.service('MessageService', function($http, IssueData) {
     function replaceNewLinesWithBreaks(str) {
         return str.replace(/(?:\r\n|\r|\n)/g, '<br />');
     }
-    this.getMessages = function(issueId) {
-        console.log("getMessages");
-        $http.get("/issue/"+ issueID +"/messages/").success(function(response) {
-            console.log(response);
-            var messages = response.messages;
-            if (messages.length == 0) {
-                $scope.latestMessage = 'undefined';
-                $scope.firstMessage = 'undefined';
-                $scope.messages = [];
-                return;
-            }
-            $scope.latestMessage = messages[0];
-            $scope.firstMessage = messages[0];
-            var first = Date.parse(messages[0].created);
-            var last = Date.parse(messages[0].created);
-            for (var i = 0; i < messages.length; i++) {
-                var created = Date.parse(messages[i].created);
-                if (created >= last) {
-                    $scope.latestMessage = created;
-                    last = created;
-                }
-                if (created <= first) {
-                    $scope.firstMessage = created;
-                    first = created;
-                }
-            }
-            $scope.messages = messages;
-        }).error(function(foo, bar, baz){
-            alert("Error getting messages!");
-        });
-    };
 
     this.postMessage = function(issueId, newMessageText, replaceNewLines) {
         var text = replaceNewLines ? replaceNewLinesWithBreaks(newMessageText) : newMessageText;
@@ -285,10 +280,7 @@ app.service('MessageService', function($http, IssueData) {
             url: "/issue/" + issueId + "/messages/"
         };
         return $http(config).success(function(response) {
-            IssueData.messages.push(response);
-            IssueData.latestMessage = response;
-            console.log(IssueData.messages);
-            console.log(IssueData.latestMessage);
+            IssueData.addMessage(response);
             IssueData.reloadRecentlyCommentedIssues();
         }).error(function(){
             alert("Post doesn't work");
@@ -304,6 +296,10 @@ app.service('MessageService', function($http, IssueData) {
         };
         console.log("nappia painettu");
         return $http(config).success(function(response) {
+            if(IssueData.issueId == message.issue) {
+                message.replies.push(response);
+                IssueData.updateFirstAndLatestMessageInfo();
+            }
             IssueData.reloadRecentlyCommentedIssues();
         }).error(function() {
             alert("vastaus ei toimi");
@@ -389,7 +385,6 @@ app.controller('messageController', function($scope, $http, $location, $anchorSc
     $scope.uiState = UiState;
     $scope.userData = UserData;
     $scope.messageText = {'value': ""};
-
     $scope.lastDecisionTime = function() {
         var data = $scope.issueData.data;
 
@@ -420,35 +415,10 @@ app.controller('messageController', function($scope, $http, $location, $anchorSc
         topscope.toggleAttachments(id);
     };
 
-
-
     $scope.isTextLongEnough = function () {
         return $scope.messageText.value.length > 3;
     }
-    $scope.$watch('issueData.messages', function(messages, oldVal){
-        if(messages == undefined || messages.length == 0) {
-                $scope.latestMessage = 'undefined';
-                $scope.firstMessage = 'undefined';
-                $scope.messages = [];
-                return;
-        }
-        $scope.latestMessage = messages[0];
-        $scope.firstMessage = messages[0];
-        var first = Date.parse(messages[0].created);
-        var last = Date.parse(messages[0].created);
-        for (var i = 0; i < $scope.issueData.messages.length; i++){
-            var created = Date.parse(messages[i].created);
-            if (created >= last) {
-                $scope.latestMessage = created;
-                last = created;
-            }
-            if (created <= first) {
-                $scope.firstMessage = created;
-                first = created;
-            }
-        }
-        $scope.messages = $scope.issueData.messages;
-    });
+
     $scope.deleteMessage = function(messageId){
         MessageService.deleteMessage(messageId);
     };
@@ -471,8 +441,8 @@ app.controller('messageController', function($scope, $http, $location, $anchorSc
             console.log(response);
             var decisions = response.objects;
             if (decisions.length == 0) {
-                $scope.latestDecision = 'undefined';
-                $scope.firstDecision = 'undefined';
+                $scope.latestDecision = undefined;
+                $scope.firstDecision = undefined;
                 $scope.messages = [];
                 return;
             }
@@ -502,10 +472,10 @@ app.controller('messageController', function($scope, $http, $location, $anchorSc
 
     function getTimeSpan() {
         var span = {}
-        if ($scope.issueData.latestMessage == 'undefined') {
+        if ($scope.issueData.latestMessage == undefined) {
             span.begin = $scope.issueData.firstDecision;
             span.end = $scope.issueData.latestDecision;
-        } else if ($scope.issueData.latestDecision == 'undefined') {
+        } else if ($scope.issueData.latestDecision == undefined) {
             span.begin = $scope.issueData.firstMessage;
             span.end = $scope.issueData.latestMessage;
         } else {
@@ -577,7 +547,6 @@ app.controller('replyController', function($scope, MessageService, UserData) {
         if ($scope.isTextLongEnough()){
             $scope.showReplyControls.value = false;
             MessageService.replyToMessage(message, $scope.replyText.value, true).then(function(response) {
-                $scope.replies.push(response.data);
                 $scope.replyText.value = "";
             });
         }
