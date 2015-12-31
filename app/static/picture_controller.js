@@ -3,7 +3,7 @@
  */
 
 
-app.controller('pictureController', ['$scope', '$http', 'UserData', 'Upload', function($scope, $http, UserData, Upload){
+app.controller('pictureController', ['$scope', '$http', 'UserData', 'Upload', '$timeout', function($scope, $http, UserData, Upload, $timeout){
 
     $scope.changePicture = function(file) {
         file.upload = Upload.upload({
@@ -15,6 +15,7 @@ app.controller('pictureController', ['$scope', '$http', 'UserData', 'Upload', fu
           $timeout(function () {
             file.result = response.data;
           });
+            UserData.reloadProfilePictures();
         }, function (response) {
           if (response.status > 0)
             $scope.errorMsg = response.status + ': ' + response.data;
