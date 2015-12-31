@@ -17,16 +17,16 @@
                   <i ng-show="myForm.picture.$error.required"></i><br>
                   <i ng-show="myForm.picture.$error.maxSize">File too large
                       {{errorFiles[0].size / 1000000|number:1}}MB: max 2M</i>
-                  <img ng-show="myForm.file.$valid" ngf-thumbnail="file" class="thumb"> <button ng-click="file = null" ng-show="file">Remove</button>
+                <button ng-click="file = null" ng-show="file">Remove</button>
                   <br>
                   <button class="blue-button" ng-disabled="!myForm.$valid"
                           ng-click="changePicture(file)">Submit</button>
                   <span class="progress" ng-show="file.progress >= 0">
-                    <div style="width:{{file.progress}}%"
-                        ng-bind="file.progress + '%'"></div>
+                    <p style="width:{{file.progress}}%"
+                        ng-bind="file.progress + '%'"></p>
                   </span>
-                  <span ng-show="file.result">Upload Successful</span>
-                  <span class="err" ng-show="errorMsg">{{errorMsg}}</span>
+                  <p ng-show="file.result">Upload Successful</p>
+                  <p class="err" ng-show="errorMsg">{{errorMsg}}</p>
 
                 <br>
             </form>
