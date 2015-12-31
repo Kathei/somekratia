@@ -874,3 +874,7 @@ input[type="password"]:focus {
     font-size: 16px;
 }
 
+.reset-link {
+    color: #FFF;
+    text-decoration: none;
+}
