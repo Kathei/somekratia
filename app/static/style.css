@@ -114,7 +114,7 @@ h1 {
 }
 
 
-#mainnav li a:focus, #mainnav li ul li .selectedCategory {
+#mainnav li .orange:focus, #mainnav li ul li .selectedCategory {
     color: #d8752f;
 }
 
