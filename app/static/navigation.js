@@ -99,6 +99,7 @@ app.factory('UiState', function() {
 
 app.factory('UserData', function($http, MapHolder){
     var subscriptions = {};
+    var pictureUpdatedTime = new Date().getTime();
     var data = {
         'userId': 0,
         'username': undefined,
@@ -114,9 +115,12 @@ app.factory('UserData', function($http, MapHolder){
     data.isLoggedIn = function() {
         return data.username != undefined && data.userId != 0;
     };
+    data.reloadProfilePictures = function() {
+        pictureUpdatedTime = new Date().getTime();
+    },
     data.profilePictureUrl = function() {
         if (data.userId != 0) {
-            return "/user/" + data.userId + "/picture";
+            return "/user/" + data.userId + "/picture?time="+pictureUpdatedTime;
         } else {
             return;
         }
