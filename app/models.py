@@ -7,7 +7,7 @@ from django.conf import settings
 class UserWithProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True)
     description = models.TextField()
-    picture = models.ImageField(upload_to='image_uploads', default='app/static/img/default_profile.jpg')
+    picture = models.ImageField(upload_to='image_uploads', default='defaults/default_profile.jpg')
 
 
 class Issue(models.Model):
