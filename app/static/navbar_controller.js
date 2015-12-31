@@ -9,14 +9,9 @@ angular.module('myApp').controller('navbarController', ['$scope', '$http', 'MapH
     $http.get('/categories').success(function(response) {
         $scope.categories = response['objects'];
         $scope.categories.unshift({ id: 0, name: "Kaikki kategoriat", origin_id: "" });
-        console.log(response);
     }).error(function(foo, bar, baz){
-        alert("Post doesn't work");
     });
     $scope.categoryChanged = function(category) {
-        /*var searchController = document.getElementById('map-container');
-        var searchScope = angular.element(searchController).scope();
-        searchScope.category = $scope.categorySelect;*/
         MapHolder.categorySelected(category);
     };
 

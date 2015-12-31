@@ -128,7 +128,6 @@ app.factory('UserData', function($http, MapHolder){
     $http.get('/user/subscriptions').success(function(response) {
         data.subscriptions = response.subscriptions;
     }).error(function(){
-        alert('ei saa tilauksia');
     });
     return data;
 });
@@ -157,7 +156,6 @@ app.factory('IssueData', function($http, $q, UserData) {
             data.messages = response.data.messages;
             data.updateFirstAndLatestMessageInfo()
         }, function (response) {
-            alert("Could not load messages for issue: " + data.issueId);
         });
 
         $http.get('/issue/' + issueId + '/decisions').then(function(response) {
@@ -167,7 +165,6 @@ app.factory('IssueData', function($http, $q, UserData) {
                 var d = data.decisions[i];
                 d.attachmentsShow = [value];
             }
-            //console.log(data.decisions);
             data.updateFirstAndLatestDecisionInfo();
         });
     }
@@ -237,8 +234,6 @@ app.factory('IssueData', function($http, $q, UserData) {
             data.firstMessage = first;
             data.latestMessage = last;
             data.messagesAndReplies = messagesAndReplies;
-            console.log("first: " + data.firstMessage);
-            console.log("last: " + data.latestMessage);
         }
 
     };
@@ -261,8 +256,6 @@ app.factory('IssueData', function($http, $q, UserData) {
             });
             data.firstDecision = first;
             data.latestDecision = last;
-            console.log("first: " + data.firstDecision);
-            console.log("last: " + data.latestDecision);
         }
     };
     return data;
@@ -287,7 +280,6 @@ app.service('MessageService', function($http, IssueData) {
             IssueData.addMessage(response);
             IssueData.reloadRecentlyCommentedIssues();
         }).error(function(){
-            alert("Post doesn't work");
         });
     };
 
@@ -298,7 +290,6 @@ app.service('MessageService', function($http, IssueData) {
             url: "/message/" + message.id + "/reply",
             data: { replyfield: text, }
         };
-        console.log("nappia painettu");
         return $http(config).success(function(response) {
             if(IssueData.issueId == message.issue) {
                 message.replies.push(response);
@@ -306,12 +297,10 @@ app.service('MessageService', function($http, IssueData) {
             }
             IssueData.reloadRecentlyCommentedIssues();
         }).error(function() {
-            alert("vastaus ei toimi");
         });
     };
     this.deleteMessage = function(messageId) {
        var messages = IssueDatassueData.messages;
-        console.log("test");
         var config = {
             method: 'DELETE',
             url: "/message/" + messageId + '/',
@@ -325,9 +314,7 @@ app.service('MessageService', function($http, IssueData) {
                         break;
                     }
                 }
-                //alert("deleted: " + messageId);
             }).error(function() {
-                alert("delete failed!");
             });
     }
 });
@@ -376,7 +363,6 @@ app.service('IssueService', function($http, IssueData){
             }
 
         }, function(data) {
-            alert("Loading text search results failed: " + data);
         });
     };
     this.loadMoreTextResults = function() {
@@ -444,9 +430,7 @@ app.controller('messageController', function($scope, $http, $location, $anchorSc
     };
 
     $scope.getDecisions = function(issueID) {
-        console.log("getDecisions");
         $http.get("/issue/" + issueID + "/decisions/").success(function (response) {
-            console.log(response);
             var decisions = response.objects;
             if (decisions.length == 0) {
                 $scope.latestDecision = undefined;
@@ -471,9 +455,7 @@ app.controller('messageController', function($scope, $http, $location, $anchorSc
                 }
             }
             $scope.decisions = decisions;
-            console.log("first decision: " + $scope.firstDecision);
         }).error(function (foo, bar, baz) {
-            alert("Error getting decisions!");
         });
     }
 
@@ -494,18 +476,15 @@ app.controller('messageController', function($scope, $http, $location, $anchorSc
     }
 
     $scope.getStyle = function(index, timing) {
-        //console.log("style");
         var timeStamp = Date.parse(timing);
         var firstAndLast = getTimeSpan();
         var timeSpan = firstAndLast.end - firstAndLast.begin;
-        //console.log(firstAndLast);
         var position = 0;
         if (timeSpan != 0) {
             position = (timeStamp - firstAndLast.begin) / timeSpan;
         }
         var offset = 4;
         var percentage = position * 92 + offset;
-        // console.log(position);
         return {
             'left': percentage + '%'
         }
@@ -540,14 +519,12 @@ app.controller('messageController', function($scope, $http, $location, $anchorSc
             if (config.method == 'POST') {
                 likes.push(UserData.userId)
             } else {
-                // Delete like
                 var idx = likes.indexOf(UserData.userId);
                 if (idx > -1) {
                     likes.splice(idx, 1);
                 }
             }
         }).error(function(foo, bar, baz) {
-            alert((message.liked ? "" : "un") + "like failed");
         });
     };
 });
@@ -606,7 +583,6 @@ app.controller('subController', function($scope, $http, UserData, IssueData, Map
                     feature.setProperty('subscribed', true);
                 }
             }).error(function(foo, bar, baz) {
-                alert("subscribe failed")
             });
         } else {
             var config = {
@@ -619,7 +595,6 @@ app.controller('subController', function($scope, $http, UserData, IssueData, Map
                 delete UserData.subscriptions[issue.id.toString()];
                 MapHolder.map.data.getFeatureById(issue.id).setProperty('subscribed', false);
             }).error(function(foo, bar, baz) {
-                alert("unsubscribe failed");
             });
         }
 
@@ -628,19 +603,13 @@ app.controller('subController', function($scope, $http, UserData, IssueData, Map
 });
 
 app.controller('attachmentsController', function($scope, $sce, IssueData){
-        //$scope.attachmentsShow = {value:false};
         $scope.toggleAttachments = function(id) {
-            //console.log(IssueData.decisions);
-            //IssueData.decisions[id]
             for (i = 0; i < IssueData.decisions.length; i++) {
-                //console.log(IssueData.decisions[i]);
                 var d = IssueData.decisions[i];
                 if (d.id == id) {
                     d.attachmentsShow.value = !d.attachmentsShow.value;
-                    //console.log(d.attachmentsShow.value);
                 }
             }
-            //$scope.attachmentsShow.value = !$scope.attachmentsShow.value;
         };
         $scope.to_trusted = function (html) {
             return $sce.trustAsHtml(html);
@@ -651,7 +620,6 @@ app.controller('attachmentsController', function($scope, $sce, IssueData){
 app.controller('recentDecisionsController', function($scope, $http) {
     $http.get('/issues/recent').success(function(response){
         $scope.recentIssues = response.recent_decisions;
-        console.log(response);
     });
 });
 
@@ -732,7 +700,6 @@ app.controller('searchController', function($scope, $http, $timeout, IssueData, 
         $scope.templateUrl = '/static/infowindow.html';
         IssueData.issueId = feature.getId();
         $scope.content = {issueId: feature.getId()};
-        console.log($scope.content);
         if($scope.map.window.marker.id != feature.getId()) {
             $scope.map.window.show = true;
         } else {
@@ -830,8 +797,6 @@ app.controller('windowController', function($scope, $http, IssueData, UiState) {
             }
         }
         $scope.uiState.showDetails = true;
-        //console.log(issue);
-        //console.log("täällä! showIssue: " + UiState.showIssue);
     };
 
 });
@@ -844,7 +809,6 @@ app.controller('closeController', function($scope, IssueData, UiState){
     $scope.uiState = UiState;
     $scope.issueData = IssueData;
     $scope.closeIssue = function() {
-        //console.log('ruksia klikattiin');
         $scope.uiState.showDetails = false;
     }
 
@@ -860,27 +824,22 @@ app.controller('closeController', function($scope, IssueData, UiState){
 app.controller('profileController', function($scope, $http, UserData, UiState) {
     $scope.userData = UserData;
     $scope.uiState = UiState;
-    //console.log(UiState.showProfile);
 
     $http.get("/user/").success(function(response){
         $scope.user = response;
         $scope.subscriptions = $scope.user.subscriptions;
     }).error(function(foo, bar, baz){
-        //alert("User not found");
     });
 });
 
 app.controller('profileNavController', function($scope, $http, UserData, UiState){
-    //profileScope.showProfile = false;
     $scope.uiState = UiState;
     $scope.userData = UserData;
     $http.get("/user/").success(function(response){
         $scope.userData.userId = response.id;
         $scope.userData.username = response.name;
         $scope.user = response;
-        //$scope.getPicture($scope.user.id);
     }).error(function(foo, bar, baz){
-        //alert("User not found");
     });
 
 
@@ -900,7 +859,6 @@ app.controller('closeProfileController', function($scope, UiState){
     $scope.uiState = UiState;
 
     $scope.closeProfile = function() {
-        //console.log('ruksia klikattiin');
         $scope.uiState.showProfile = false;
     }
 });
@@ -910,9 +868,7 @@ app.controller('subscriptionController', function($scope, $http, UserData){
     $http.get("/user/").success(function(response){
         $scope.user = response;
         $scope.subscriptions = UserData.subscriptions;
-        console.log($scope.user);
     }).error(function(foo, bar, baz){
-        //alert("User not found");
     });
 
 });

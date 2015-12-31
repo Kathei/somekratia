@@ -14,13 +14,11 @@ app.controller('loginWindowController', ['$scope', '$http', 'UserData', 'UiState
     $scope.toggleShow = function() {
         if($scope.uiState.inputClick) {
             $scope.uiState.inputClick = false;
-            console.log("if");
             return;
         }
         else {
             $scope.uiState.showLoginWindow = !$scope.uiState.showLoginWindow;
              $scope.uiState.showLogin = !$scope.uiState.showLogin;
-            console.log("else");
         }
     }
 
@@ -41,28 +39,6 @@ app.controller('loginWindowController', ['$scope', '$http', 'UserData', 'UiState
       r. readAsArrayBuffer(f);
     }
 
-/*var config = {
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded'},
-            method: 'POST',
-            data: {
-                username: username,
-                password: password,
-                email: email,
-                file: $scope.file,
-            },
-            transformRequest: function (data, headersGetter) {
-                var formData = new FormData();
-                angular.forEach(data, function (value, key) {
-                    formData.append(key, value);
-                });
-
-                var headers = headersGetter();
-                delete headers['Content-Type'];
-
-                return formData;
-            },
-            url: '/register/'
-        };*/
 
     $scope.register = function(username, email, password, file) {
 
@@ -80,7 +56,6 @@ app.controller('loginWindowController', ['$scope', '$http', 'UserData', 'UiState
             },
 
         }).success(function(response){
-            alert("Rekisteröityminen onnistui!");
             $scope.userData.username = response.name;
             $scope.userData.userId = response.id;
             $scope.uiState.showLoginWindow = false;
@@ -101,14 +76,11 @@ app.controller('loginWindowController', ['$scope', '$http', 'UserData', 'UiState
             url: "/login"
         };
         $http(config).success(function(response){
-            alert("Tervetuloa "+ username);
             $scope.userData.username = response.name;
             $scope.userData.userId = response.id;
             $scope.userData.subscriptions = response.subscriptions;
             $scope.uiState.showLoginWindow = false;
-            console.log($scope.userData.username);
         }).error(function(){
-            alert("Kirjautumisessa tapahtui virhe, yritäthän uudelleen!");
         })
     };
 
@@ -124,40 +96,12 @@ angular.module('myApp').controller('logoutController', ['$scope', '$http', 'User
             method: 'POST',
         };
         $http.post("/logout", config).success(function(response){
-            //alert("Uloskirjautuminen onnistui.");
             $scope.userData.username = undefined;
             $scope.userData.userId = 0;
             $scope.userData.subscriptions = {};
         }).error(function(){
-            alert("Uloskirjautumisessa tapahtui virhe, yritäthän uudelleen!");
         })
     };
 }
 ]);
 
-/*app.controller('loginController', function($scope, UserData){
-    $scope.userData = UserData;
-    var loginbutton = document.querySelector('[ng-controller="loginShowController"]');
-    var loginscope = angular.element(loginbutton).scope();
-
-
-    $scope.toggleShow = function() {
-        loginscope.toggleShow();
-    }
-
-});
-
-app.controller('loginShowController', function($scope, $rootScope, UserData){
-    $scope.userData = UserData;
-    $scope.inputClick = false;
-
-    $scope.toggleShow = function() {
-        if($scope.inputClick) {
-            $scope.inputClick = false;
-            return;
-        }
-        else {
-            $rootScope.showLogin = !$rootScope.showLogin;
-        }
-    }
-});     */
