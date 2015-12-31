@@ -7,7 +7,7 @@
     <div ng-repeat="m in issueData.messagesAndReplies">
         <div title="Katso kommentti klikkaamalla tästä" class="timeline-message" ng-style="getStyle($index, m.created);" ng-click="gotoMessage(m.id)">
             <div class="timeline-m-picture-container">
-                <img class="timeline-message-picture" ng-src="/user/{{ m.poster.id }}/picture"/>
+                <img id="{{ $index }}" class="timeline-message-picture" ng-style="getPictureStyle($index)" ng-src="/user/{{ m.poster.id }}/picture"/>
             </div>
         </div>
     </div>
@@ -68,7 +68,7 @@
                 <a ng-attr-id="{{ m.id }}"></a>
                 <div class="poster-picture-wrapper">
                     <div class="poster-picture-container">
-                        <img class="poster-picture" ng-src="/user/{{ m.poster.id }}/picture"/>
+                        <img id="{{ m.created }}" class="poster-picture" ng-style="getPictureStyle(m.created)" ng-src="/user/{{ m.poster.id }}/picture"/>
                     </div>
                 </div>
                 <div class="messageInfo">
@@ -92,7 +92,7 @@
                 <div class="replyBubble">
                     <div class="poster-picture-wrapper">
                         <div class="poster-picture-container">
-                            <img class="poster-picture" ng-src="/user/{{ r.poster.id }}/picture"/>
+                            <img id="{{ r.created }}" class="poster-picture" ng-style="getPictureStyle(r.created)" ng-src="/user/{{ r.poster.id }}/picture"/>
                         </div>
                     </div>
                     <h3 class="poster">{{r.poster.username}}</h3>

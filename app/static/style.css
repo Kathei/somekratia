@@ -320,7 +320,6 @@ form {
 }
 
 .timeline-message-picture {
-    height: 100%;
     margin: 0 auto;
     position: absolute;
 }
@@ -502,7 +501,6 @@ textarea:focus {
 }
 
 .poster-picture {
-    height: 3vw;
     position: absolute;
 
 }

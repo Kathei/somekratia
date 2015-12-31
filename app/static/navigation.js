@@ -507,6 +507,19 @@ app.controller('messageController', function($scope, $http, $location, $anchorSc
         }
     };
 
+    $scope.getPictureStyle = function(index) {
+        var picture = document.getElementById(index);
+        if(picture.naturalHeight > picture.naturalWidth) {
+            return {
+                'width': '100%',
+                'height' : 'auto'
+            }
+        } return {
+            'height' : '100%',
+            'width' : 'auto'
+        }
+    };
+
     $scope.likeMessage = function(message) {
         var messageLiked =  IssueData.isMessageLiked(message);
         var config = {
