@@ -62,6 +62,6 @@ urlpatterns = [
     url(r'^issue/(?P<issueID>[0-9]+)/messages', messages),
     url(r'^message/(?P<messageID>[0-9]+)/reply$', reply_to_message),
     url(r'^accounts/login/$', RedirectView.as_view(url='/')),
-    url(r'^reset_password', 'django.contrib.auth.views.password_reset', {'post_reset_redirect': 'index.html'}),
+    url(r'^reset_password', 'django.contrib.auth.views.password_reset'),
     url('^', include('django.contrib.auth.urls')),
 ]
